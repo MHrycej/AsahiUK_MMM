@@ -5,10 +5,11 @@ library(readxl)
 #--------------------Read in all necessary files------------------
 #-----------------------------------------------------------------
 
-# Specify the directory path
-directory_path <- "C:/Users/MMutso/OneDrive - AEI/Desktop/R modelling"
 
-# Read the import file
+# Specify the directory path
+directory_path <- getwd()
+
+  # Read the import file
 import_file <- read.csv(file.path(directory_path, "import_file_test.csv"))
 import_file$Date <- as.Date(import_file$Date, format = "%d-%b-%y")
 
