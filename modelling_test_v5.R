@@ -5,6 +5,7 @@ library(readxl)
 #--------------------Read in all necessary files------------------
 #-----------------------------------------------------------------
 
+#comment comment
 
 # Specify the directory path
 directory_path <- getwd()
@@ -67,7 +68,6 @@ model1 <- lm(
     p_peroni_btl_12p_330_bp+
     p_peroni_btl_12p_330_dis+
     s_fathers_day+
-    gt_peroni+
     s_ny_day+
     atan(m_press_spend30/140000)+
     s_xmas_day+
