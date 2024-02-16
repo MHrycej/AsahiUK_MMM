@@ -109,7 +109,17 @@ plot_media_curve(import_file, media_var = "m_press_spend30", dim_ret = 2000)
 auto_variable_selection(model1, import_file, "x_")
 
 # Media heatmap
-
+## Martin - here is the aesthetics part of the heat map code 
+### Let me know if you need more info about the data feeding into the plot
+# pick a nice colour scheme
+col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
+                              max=255)))(100)
+# plot the data
+p <- ggplot(DATA)
+p <- p + geom_tile(aes(x=x.pos, y=y.pos, fill=density, height=1000, width=1000))+
+  scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
+                       guide="colourbar")
+p + theme_bw() + coord_equal()
 
 #-----------------------------------------------------------------
 #----------------------Decomposition------------------------------
