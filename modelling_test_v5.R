@@ -21,6 +21,18 @@ dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 # Read the taxonomy file
 taxonomy <- read_excel(file.path(directory_path, "taxonomy_test.xlsx"))
 
+
+# MARTIN: new function to read sellout data
+source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+
+taxonomy = taxonomy = taxonomy.creation(
+  "PNA_MULTIPLES_GLASS_330ML_10PACK",  # selection of model
+  c("grolsch", "carlsberg", "peroni"), # BRAND aggregation brand strings to search for
+  c("grolsch", "carlsberg", "peroni"), # SKU aggregation brand strings to limit our SKUs
+  "Btl 330 Ml 10 Pack"                 # SKU aggregation SKU strings to search for
+)
+
+
 # Read the spends file
 
 
