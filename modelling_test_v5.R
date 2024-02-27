@@ -1,5 +1,6 @@
 #MARKETING MIX MODELLING TOOL
 library(readxl)
+library(here)
 
 #-----------------------------------------------------------------
 #--------------------Read in all necessary files------------------
@@ -8,6 +9,7 @@ library(readxl)
 #comment comment comment_mhr
 
 # Specify the directory path
+setwd(here())
 directory_path <- getwd()
 
   # Read the import file
