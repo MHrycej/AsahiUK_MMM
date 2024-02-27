@@ -47,10 +47,14 @@ taxonomy.creation = function(
   require(arrow)
   require(dplyr)
   require(ggplot2)
+  library(here)
   
   #### 1 READING PARQUET DATA FILES FROM AZURE                                    ####
   # BRAND
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_brand.parquet")
+  setwd(here("uk_sellout_fact_brand.parquet"))
+  #getwd()
+  
+  #setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_brand.parquet")
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
@@ -62,7 +66,8 @@ taxonomy.creation = function(
   }
   
   # SKU
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_sku.parquet")
+  setwd(here("uk_sellout_fact_sku.parquet"))
+  #setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_sku.parquet")
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
@@ -74,7 +79,8 @@ taxonomy.creation = function(
   }
   
   # MODEL
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_model.parquet")
+  setwd(here("uk_sellout_fact_model.parquet"))
+  #setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_model.parquet")
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
