@@ -25,14 +25,14 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy_test.xlsx"))
 
 
 # MARTIN: new function to read sellout data
-source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
-
-taxonomy = taxonomy = taxonomy.creation(
-  "PNA_MULTIPLES_GLASS_330ML_10PACK",  # selection of model
-  c("grolsch", "carlsberg", "peroni"), # BRAND aggregation brand strings to search for
-  c("grolsch", "carlsberg", "peroni"), # SKU aggregation brand strings to limit our SKUs
-  "Btl 330 Ml 10 Pack"                 # SKU aggregation SKU strings to search for
-)
+# source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+# 
+# taxonomy = taxonomy = taxonomy.creation(
+#   "PNA_MULTIPLES_GLASS_330ML_10PACK",  # selection of model
+#   c("grolsch", "carlsberg", "peroni"), # BRAND aggregation brand strings to search for
+#   c("grolsch", "carlsberg", "peroni"), # SKU aggregation brand strings to limit our SKUs
+#   "Btl 330 Ml 10 Pack"                 # SKU aggregation SKU strings to search for
+# )
 
 
 # Read the spends file
@@ -126,14 +126,14 @@ auto_variable_selection(model1, import_file, "x_")
 ## Martin - here is the aesthetics part of the heat map code 
 ### Let me know if you need more info about the data feeding into the plot
 # pick a nice colour scheme
-col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
-                              max=255)))(100)
+#col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
+#                              max=255)))(100)
 # plot the data
-p <- ggplot(DATA)
-p <- p + geom_tile(aes(x=x.pos, y=y.pos, fill=density, height=1000, width=1000))+
-  scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
-                       guide="colourbar")
-p + theme_bw() + coord_equal()
+# p <- ggplot(DATA)
+# p <- p + geom_tile(aes(x=x.pos, y=y.pos, fill=density, height=1000, width=1000))+
+#   scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
+#                        guide="colourbar")
+# p + theme_bw() + coord_equal()
 
 #-----------------------------------------------------------------
 #----------------------Decomposition------------------------------
@@ -269,8 +269,6 @@ model_stats <- function(model, date_var = NULL) {
 
 ###############################################################
 #####-----Model decomposition-----###
-# Need to create functionality that let's us save media variables into taxonomy file, so it will be mapped against media channel
-# modify mod_coeffs file so that it will take slope number off from the label and in taxonomy we map all the media channels with adstocks, slopes aren't necessary in this case
 
 library(janitor)
 library(scales)
