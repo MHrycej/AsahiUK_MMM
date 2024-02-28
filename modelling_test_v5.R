@@ -24,6 +24,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy_test.xlsx"))
 
 # MARTIN: new function to read sellout data
 source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+source(paste(directory_path, "functions/sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
 
 taxonomy = taxonomy = taxonomy.creation(
 nielsen = nielsen.creation(
