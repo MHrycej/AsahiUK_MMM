@@ -26,6 +26,8 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy_test.xlsx"))
 source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
 
 taxonomy = taxonomy = taxonomy.creation(
+nielsen = nielsen.creation(
+  "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/", # folder path to where this project resides
   "PNA_MULTIPLES_GLASS_330ML_10PACK",  # selection of model
   c("grolsch", "carlsberg", "peroni"), # BRAND aggregation brand strings to search for
   c("grolsch", "carlsberg", "peroni"), # SKU aggregation brand strings to limit our SKUs

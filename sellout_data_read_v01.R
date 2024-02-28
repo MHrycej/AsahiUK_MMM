@@ -1,7 +1,7 @@
-#### - TAXONOMY TABLE CREATION FUNCTION DEFINITION                              ####
+#### - NIELSEN TABLE CREATION FUNCTION DEFINITION                              ####
 #### 0 SETUP & FUNCTION INPUT DEFINITION                                        ####
 
-# Taxonomy is created on our parquet files coming from AZURE SYNAPSE as of now
+# nielsen is created on our parquet files coming from AZURE SYNAPSE as of now
 #
 # 1 MODEL FILE containing our defined (18) data groups we are interested in
 # 2 BRAND FILE containing brand aggregation of data
@@ -19,8 +19,10 @@
 #   - ....and we are filtering solely on SKU basis :)
 #
 
-taxonomy.creation = function(
+nielsen.creation = function(
     # SO PLEASE SET UP THE FOLLOWING PARAMETERS:
+    # 0 PATH
+    folder.path, 
     # 1 DEFINE MODEL
     def.model, # = "PNA_MULTIPLES_GLASS_330ML_10PACK"
     # CHOOSE FROM THE FOLLOWING:
@@ -50,7 +52,7 @@ taxonomy.creation = function(
   
   #### 1 READING PARQUET DATA FILES FROM AZURE                                    ####
   # BRAND
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_brand.parquet")
+  setwd(paste(folder.path, "uk_sellout_fact_brand.parquet", sep = ""))
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
@@ -62,7 +64,7 @@ taxonomy.creation = function(
   }
   
   # SKU
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_sku.parquet")
+  setwd(paste(folder.path, "uk_sellout_fact_sku.parquet", sep = ""))
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
@@ -74,7 +76,7 @@ taxonomy.creation = function(
   }
   
   # MODEL
-  setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/uk_sellout_fact_model.parquet")
+  setwd(paste(folder.path, "uk_sellout_fact_model.parquet", sep = ""))
   for(i in 2:length(list.files())){
     sub = read_parquet(list.files()[i])
     if(i == 2){
@@ -135,16 +137,16 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
   
   # def.model = unique(model$model_agg)[5] # !!! PLEASE DEFINE THIS FIELD - MODEL GROUP SELECTION !!!
   
-  taxonomy.dev = model[model$model_agg == def.model, ]
+  nielsen.dev = model[model$model_agg == def.model, ]
   
-  colnames(taxonomy.dev) = replace.colnames(
-    colnames(taxonomy.dev), 
+  colnames(nielsen.dev) = replace.colnames(
+    colnames(nielsen.dev), 
     "dep_", # !!! PREFIX CAN BE ADJUSTED HERE !!!
     c("_Key_Period", "market_agg", "Year", "Month", "Week")
   )
   
   # we also use market_agg to correctly filter other datasets
-  current.market_agg = taxonomy.dev$market_agg[1]
+  current.market_agg = nielsen.dev$market_agg[1]
   brand = brand[brand$market_agg == current.market_agg, ]
   sku = sku[sku$market_agg == current.market_agg, ]
   
@@ -185,7 +187,7 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
         c("market_agg", "_Key_Period")
       )
       
-      taxonomy.dev = merge(x = taxonomy.dev, y = sub, by.x = c("market_agg", "_Key_Period"), by.y = c("market_agg", "_Key_Period"), 
+      nielsen.dev = merge(x = nielsen.dev, y = sub, by.x = c("market_agg", "_Key_Period"), by.y = c("market_agg", "_Key_Period"), 
                        all.x = T, all.y = F)
       
       remove(current.brand, sub)
@@ -249,7 +251,7 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
         c("market_agg", "_Key_Period")
       )
       
-      taxonomy.dev = merge(x = taxonomy.dev, y = sub, by.x = c("market_agg", "_Key_Period"), by.y = c("market_agg", "_Key_Period"), 
+      nielsen.dev = merge(x = nielsen.dev, y = sub, by.x = c("market_agg", "_Key_Period"), by.y = c("market_agg", "_Key_Period"), 
                            all.x = T, all.y = F)
       
       remove(current.sku, sub)
@@ -257,9 +259,9 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
     remove(bb)
   }
   
-  #### 5 Now we have (not so)wide taxonomy table, containing all vars; cleanup    ####
+  #### 5 Now we have (not so)wide nielsen table, containing all vars; cleanup    ####
   
-  print(colnames(taxonomy.dev))
+  print(colnames(nielsen.dev))
   remove(brand, sku, model, 
          brand.list.out, sku.list.out, sku.brand.list.out, 
          comp.brand.i, comp.sku.i, 
@@ -267,7 +269,7 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
          def.brand.list, def.sku.list, def.sku.brand.list, 
          i, def.model, replace.colnames)
   
-  return(taxonomy.dev)
+  return(nielsen.dev)
   
   #### 6 END WITHIN FUNCTION                                                      ####
   
@@ -277,7 +279,7 @@ replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
 
 # function usage example:
 
-# taxonomy = taxonomy.creation(
+# nielsen = nielsen.creation(
 #   "PNA_MULTIPLES_GLASS_330ML_10PACK", 
 #   c("grolsch", "carlsberg", "peroni"), 
 #   c("grolsch", "carlsberg", "peroni"), 
