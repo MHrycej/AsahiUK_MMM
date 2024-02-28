@@ -56,7 +56,7 @@ nielsen.creation = function(
   # setwd(paste(folder.path, "uk_sellout_fact_brand.parquet", sep = ""))
 
   for(i in 2:length(list.files("uk_sellout_fact_brand.parquet"))){
-    sub = read_parquet(list.files("uk_sellout_fact_brand.parquet")[i])
+    sub = read_parquet(paste("uk_sellout_fact_brand.parquet", list.files("uk_sellout_fact_brand.parquet")[i], sep = "/"))
     if(i == 2){
       brand = sub
     }else{
@@ -69,7 +69,7 @@ nielsen.creation = function(
   # setwd(paste(folder.path, "uk_sellout_fact_sku.parquet", sep = ""))
 
   for(i in 2:length(list.files("uk_sellout_fact_sku.parquet"))){
-    sub = read_parquet(list.files("uk_sellout_fact_sku.parquet")[i])
+    sub = read_parquet(paste("uk_sellout_fact_sku.parquet", list.files("uk_sellout_fact_sku.parquet")[i], sep = "/"))
     if(i == 2){
       sku = sub
     }else{
@@ -82,7 +82,7 @@ nielsen.creation = function(
   # setwd(paste(folder.path, "uk_sellout_fact_model.parquet", sep = ""))
   
   for(i in 2:length(list.files("uk_sellout_fact_model.parquet"))){
-    sub = read_parquet(list.files("uk_sellout_fact_model.parquet")[i])
+    sub = read_parquet(paste("uk_sellout_fact_model.parquet", list.files("uk_sellout_fact_model.parquet")[i], sep = "/"))
     if(i == 2){
       model = sub
     }else{
