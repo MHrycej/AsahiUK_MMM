@@ -1,6 +1,9 @@
 #MARKETING MIX MODELLING TOOL
 library(readxl)
+<<<<<<< HEAD
 library(here)
+=======
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 
 #-----------------------------------------------------------------
 #--------------------Read in all necessary files------------------
@@ -9,7 +12,10 @@ library(here)
 #comment comment comment_mhr
 
 # Specify the directory path
+<<<<<<< HEAD
 setwd(here())
+=======
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 directory_path <- getwd()
 
   # Read the import file
@@ -25,8 +31,13 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy_test.xlsx"))
 
 
 # MARTIN: new function to read sellout data
+<<<<<<< HEAD
 <<<<<<< HEAD:modelling_test_v5.R
 source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+=======
+source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+source(paste(directory_path, "functions/sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 
 taxonomy = taxonomy = taxonomy.creation(
 nielsen = nielsen.creation(
@@ -36,6 +47,7 @@ nielsen = nielsen.creation(
   c("grolsch", "carlsberg", "peroni"), # SKU aggregation brand strings to limit our SKUs
   "Btl 330 Ml 10 Pack"                 # SKU aggregation SKU strings to search for
 )
+<<<<<<< HEAD
 =======
 # source(paste(directory_path, "sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
 # 
@@ -46,6 +58,8 @@ nielsen = nielsen.creation(
 #   "Btl 330 Ml 10 Pack"                 # SKU aggregation SKU strings to search for
 # )
 >>>>>>> b046f48d844269fb31f65f54a1f106f3d66c3abf:!Archive/modelling_test_v5.R
+=======
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 
 
 # Read the spends file
@@ -139,6 +153,7 @@ auto_variable_selection(model1, import_file, "x_")
 ## Martin - here is the aesthetics part of the heat map code 
 ### Let me know if you need more info about the data feeding into the plot
 # pick a nice colour scheme
+<<<<<<< HEAD
 #col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
 #                              max=255)))(100)
 # plot the data
@@ -147,6 +162,16 @@ auto_variable_selection(model1, import_file, "x_")
 #   scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
 #                        guide="colourbar")
 # p + theme_bw() + coord_equal()
+=======
+col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
+                              max=255)))(100)
+# plot the data
+p <- ggplot(DATA)
+p <- p + geom_tile(aes(x=x.pos, y=y.pos, fill=density, height=1000, width=1000))+
+  scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
+                       guide="colourbar")
+p + theme_bw() + coord_equal()
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 
 #-----------------------------------------------------------------
 #----------------------Decomposition------------------------------
@@ -282,6 +307,11 @@ model_stats <- function(model, date_var = NULL) {
 
 ###############################################################
 #####-----Model decomposition-----###
+<<<<<<< HEAD
+=======
+# Need to create functionality that let's us save media variables into taxonomy file, so it will be mapped against media channel
+# modify mod_coeffs file so that it will take slope number off from the label and in taxonomy we map all the media channels with adstocks, slopes aren't necessary in this case
+>>>>>>> 97b9153639992eddbb4f40cbf48cca5f83e1aebd
 
 library(janitor)
 library(scales)
