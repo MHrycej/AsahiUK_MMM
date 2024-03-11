@@ -183,8 +183,8 @@ nielsen.creation = function(
         sep = ""
       ), 
       paste(  # !!! SUFFIX CAN BE ADJUSTED HERE !!!
-        "_", 
-        mar.agg, 
+        # "_", 
+        # mar.agg, 
         "_", 
         mod.agg, 
         sep = ""

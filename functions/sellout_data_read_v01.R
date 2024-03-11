@@ -115,27 +115,27 @@ nielsen.creation = function(
   # unique(model$model_agg)
   
   #### 3 Function to define and merge our dataset                                 ####
-# first we define function to replace our colnames; it has three parameters:
-# original column of names to be adjusted
-# prefix to be used
-# specific columns not to be adjusted (e.g. group by colums such as period/week...)
-
-replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
-  col.out = rep(NA, length(colnames.in))
-  if(length(columns.to.not.replace) > 0){
-    col.out[match(columns.to.not.replace, colnames.in)] = columns.to.not.replace
+  # first we define function to replace our colnames; it has three parameters:
+  # original column of names to be adjusted
+  # prefix to be used
+  # specific columns not to be adjusted (e.g. group by colums such as period/week...)
+  
+  replace.colnames = function(colnames.in, prefix, columns.to.not.replace){
+    col.out = rep(NA, length(colnames.in))
+    if(length(columns.to.not.replace) > 0){
+      col.out[match(columns.to.not.replace, colnames.in)] = columns.to.not.replace
+    }
+  
+    other.cols = paste(rep(prefix, length(colnames.in)), colnames.in, sep = "")
+    other.cols.to.replace = (!(colnames.in %in% columns.to.not.replace)) * c(1:length(colnames.in))
+    other.cols.to.replace = other.cols.to.replace[other.cols.to.replace != 0]
+    
+    col.out[other.cols.to.replace] = other.cols[other.cols.to.replace]
+    
+    return(col.out)
   }
   
-  other.cols = paste(rep(prefix, length(colnames.in)), colnames.in, sep = "")
-  other.cols.to.replace = (!(colnames.in %in% columns.to.not.replace)) * c(1:length(colnames.in))
-  other.cols.to.replace = other.cols.to.replace[other.cols.to.replace != 0]
   
-  col.out[other.cols.to.replace] = other.cols[other.cols.to.replace]
-  
-  return(col.out)
-}
-
-
   #### 4 Definition of our a) MODEL, b) BRANDs, c) SKUs                           ####
   #### 4.a selection of model is straightforward                                  ####
   
