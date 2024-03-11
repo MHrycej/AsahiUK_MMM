@@ -118,10 +118,15 @@ base_price = function(
     new.column = new.column[, c("_Key_Period", "final")]
     colnames(new.column)[2] = save.colname
     
+
     remove(start.to.end, end.to.start)
     
     output.dataset = merge(x = output.dataset, y = new.column, by.x = c("_Key_Period"), by.y = c("_Key_Period"), all.x = T, all.y = F)
     
+    ## Calculate discount
+    output.dataset$discount = abs(output.dataset[, ncol(output.dataset)] / output.dataset[, col.ns[col.n]] - 1)
+    colnames(output.dataset)[ncol(output.dataset)] = gsub("baseprice", "discount", save.colname)
+
     output.dataset = output.dataset[order(output.dataset$Year, output.dataset$Week), ]
     
     # Plot if you want
@@ -131,8 +136,11 @@ base_price = function(
       plot(x = output.dataset$`_Key_Period`, y = output.dataset[, col.ns[col.n]], main = save.colname, 
                type = "l", ylim = ylimvals, xlab = "", ylab = "")
       par(new = T)
-      plot(x = output.dataset$`_Key_Period`, y = output.dataset[, ncol(output.dataset)], main = "", col = "red", 
+      plot(x = output.dataset$`_Key_Period`, y = output.dataset[, ncol(output.dataset) - 1], main = "", col = "red", 
                type = "l", ylim = ylimvals, xlab = "", ylab = "")
+      par(new = T)
+      plot(x = output.dataset$`_Key_Period`, y = output.dataset[, ncol(output.dataset)], main = "", col = "blue", 
+           type = "l", ylim = c(0, 1), xlab = "", ylab = "", yaxt = "n")
     }
     
     print(paste(col.n, " out of ", length(col.ns), " runs", sep = ""))
