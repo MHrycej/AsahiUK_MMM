@@ -47,6 +47,8 @@ base_price = function(
     bp.active.counter = 0
     # Now we go through the data from top-to-bottom (start-to-end) and we fill bp
     
+    sub[1, "bp"] = sub[1, col.name]
+    
     for(rr in 2:nrow(sub)){
       prev.bp = sub[rr - 1, "bp"]
       prev.ap = sub[rr - 1, col.name]
@@ -77,6 +79,8 @@ base_price = function(
           out = act.ap
           bp.active.counter = 0
         }
+      }else if(is.na(act.ap) == F){
+        out = act.ap
       }else{
         out = NA
       }
@@ -116,6 +120,7 @@ base_price = function(
     new.column$final = apply(X = new.column, MARGIN = 1, FUN = minimizer)
     
     new.column = new.column[, c("_Key_Period", "final")]
+    new.column[is.infinite(new.column$final) == T, ] <- NA
     colnames(new.column)[2] = save.colname
     
 

@@ -32,7 +32,7 @@ source(paste(directory_path, "functions/sellout_data_read_v02.R", sep = "/")) # 
 
 nielsen = nielsen.creation(
   "historical mess, leave as it is", # legacy, feel free to leave as it is
-  "PNA_MULTIPLES_GLASS_330ML_10PACK",  # selection of model: "all" or specific model, e.g. 'PNA_MULTIPLES_GLASS_330ML_10PACK'
+  "MULTIPLES_PNA_GLASS_330ML_10PACK",  # selection of model: "all" or specific model, e.g. 'PNA_MULTIPLES_GLASS_330ML_10PACK'
   c("carlsberg", "peroni", "heineken"), # BRAND aggregation brand strings to search for
   c("carlsberg", "peroni", "heineken"), # SKU aggregation brand strings to limit our SKUs
   c("Btl 650 Ml single")                 # SKU aggregation SKU strings to search for; can be left as c("") to search for all
