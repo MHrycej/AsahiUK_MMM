@@ -24,7 +24,7 @@ nielsen = nielsen.creation(
   "all",  # selection of model
   c("ignore"), # BRAND aggregation brand strings to search for
   c("peroni", "moretti", "madri", "estrella", "asd", "san miguel", "heineken", "cruzcampo", "corona", "stella","budweiser"), # SKU aggregation brand strings to limit our SKUs
-  c("Birra Moretti Btl 660 Ml single","Heineken (5%) Btl 650 Ml single", "Stella Artois Btl 660 Ml single","San Miguel Btl 660 Ml single", "Corona Btl 620 Ml single","Madri Exceptional Btl 660 Ml single","Madri Exceptional Btl 660 Ml single", "Budweiser Btl 660 Ml single", "Stella Artois Unfiltered Btl 620 Ml single","Estrella Damm Barcelona Btl 660 Ml single", "Stella Artois Can 568 Ml 4 pack", "San Miguel Can 440 Ml 4 pack","Budweiser Can 440 Ml 4 pack","Corona Btl 330 Ml 4 pack","Madri Exceptional Can 440 Ml 4 pack","San Miguel Can 568 Ml 4 pack","Budweiser Can 568 Ml 4 pack","Birra Moretti Btl 330 Ml 4 pack","Birra Moretti Can 440 Ml 4 pack","Stella Artois Can 440 Ml 4 pack","Corona Cero Btl 330 Ml 4 pack","San Miguel 0.0% Btl 330 Ml 4 pack","Birra Moretti Zero Btl 330 Ml 4 pack","Budweiser Btl 300 Ml 4 pack","San Miguel Btl 330 Ml 4 pack","Corona Can 440 Ml 4 pack","Heineken (5%) Can 440 Ml 4 pack","Stella Artois Alcohol Free 0.0% Btl 330 Ml 4 pack","Peroni Libera 0.0% Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Can 330 Ml 6 pack","Heineken (5%) Can 330 Ml 6 pack","Birra Moretti Can 330 Ml 6 pack","Estrella Damm Barcelona Can 330 Ml 6 pack","Budweiser Btl 300 Ml 6 pack","Stella Artois Btl 330 Ml 6 pack","Corona Can 330 Ml 6 pack","Budweiser Budvar Can 330 Ml 6 pack","San Miguel Can 330 Ml 6 pack","Stella Artois Can 440 Ml 10 pack","San Miguel Can 440 Ml 10 pack","Birra Moretti Can 330 Ml 10 pack","Budweiser Can 440 Ml 10 pack","Cruzcampo Can 440 Ml 10 pack","Madri Exceptional Can 440 Ml 10 pack","Corona Can 330 Ml 10 pack","Peroni Nastro Azzurro Stile Capri Btl 330 Ml 10 pack","Stella Artois Unfiltered Can 440 Ml 10 pack","Corona Btl 330 Ml 12 pack","Birra Moretti Btl 330 Ml 12 pack","San Miguel Btl 330 Ml 12 pack","Madri Exceptional Btl 330 Ml 12 pack","Estrella Damm Barcelona Btl 330 Ml 12 pack","Stella Artois Btl 330 Ml 12 pack","Heineken (5%) Btl 330 Ml 12 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 12 pack","Stella Artois Unfiltered Btl 330 Ml 12 pack","Stella Artois Btl 284 Ml 12 pack","Stella Artois Can 440 Ml 18 pack","Corona Btl 330 Ml 18 pack","Budweiser Can 440 Ml 18 pack","Stella Artois Btl 284 Ml 18 pack","Birra Moretti Btl 330 Ml 18 pack","San Miguel Btl 330 Ml 18 pack","Corona Btl 330 Ml 24 pack","Stella Artois Can 568 Ml single","Budweiser Can 440 Ml single","Corona Btl 330 Ml single","Budweiser Can 568 Ml single","Budweiser Budvar Btl 500 Ml single","Peroni Red Btl 330 Ml single","Heineken Silver Btl 650 Ml single","Heineken (5%) Can 568 Ml 4 pack","San Miguel Can 500 Ml 4 pack","Stella Artois Unfiltered Can 440 Ml 4 pack","Estrella Damm Barcelona Btl 330 Ml 4 pack","Madri Exceptional Btl 330 Ml 4 pack","Stella Artois Btl 330 Ml 4 pack","Budweiser Zero Can 330 Ml 4 pack","Stella Artois Unfiltered Can 330 Ml 6 pack","Heineken (5%) Can 440 Ml 10 pack","Corona Btl 330 Ml 10 pack","Budweiser Btl 300 Ml 10 pack","Estrella Damm Barcelona Can 330 Ml 10 pack","Heineken Silver Btl 330 Ml 12 pack","Corona Cero Btl 330 Ml 12 pack","Cruzcampo Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 24 pack","Birra Moretti Btl 330 Ml 24 pack","San Miguel 0.0% Btl 330 Ml 12 pack")                 # SKU aggregation SKU strings to search for
+  c("Peroni Nastro Azzurro Btl 620 Ml single", "Peroni Nastro Azzurro Btl 500 Ml single", "Peroni Nastro Azzurro Btl 330 Ml 4 pack", "Peroni Nastro Azzurro Btl 330 Ml single", "Peroni Nastro Azzurro Btl 330 Ml 10 pack", "Peroni Nastro Azzurro Btl 330 Ml 12 pack", "Peroni Nastro Azzurro Btl 330 Ml 18 pack", "Peroni Nastro Azzurro Btl 330 Ml 24 pack", "Peroni Nastro Azzurro Can 330 Ml 10 pack", "Peroni Nastro Azzurro Can 330 Ml 6 pack", "Peroni Nastro Azzurro Can 330 Ml single", "Peroni Nastro Azzurro 0.0% Btl 330 Ml 4 pack", "Peroni Nastro Azzurro 0.0% Btl 330 Ml 12 pack", "Peroni Nastro Azzurro 0.0% Btl 330 Ml single", "Peroni Nastro Azzurro Can 440 Ml 4 pack", "Peroni Nastro Azzurro Btl 250 Ml 4 pack","Birra Moretti Btl 660 Ml single","Heineken (5%) Btl 650 Ml single", "Stella Artois Btl 660 Ml single","San Miguel Btl 660 Ml single", "Corona Btl 620 Ml single","Madri Exceptional Btl 660 Ml single","Madri Exceptional Btl 660 Ml single", "Budweiser Btl 660 Ml single", "Stella Artois Unfiltered Btl 620 Ml single","Estrella Damm Barcelona Btl 660 Ml single", "Stella Artois Can 568 Ml 4 pack", "San Miguel Can 440 Ml 4 pack","Budweiser Can 440 Ml 4 pack","Corona Btl 330 Ml 4 pack","Madri Exceptional Can 440 Ml 4 pack","San Miguel Can 568 Ml 4 pack","Budweiser Can 568 Ml 4 pack","Birra Moretti Btl 330 Ml 4 pack","Birra Moretti Can 440 Ml 4 pack","Stella Artois Can 440 Ml 4 pack","Corona Cero Btl 330 Ml 4 pack","San Miguel 0.0% Btl 330 Ml 4 pack","Birra Moretti Zero Btl 330 Ml 4 pack","Budweiser Btl 300 Ml 4 pack","San Miguel Btl 330 Ml 4 pack","Corona Can 440 Ml 4 pack","Heineken (5%) Can 440 Ml 4 pack","Stella Artois Alcohol Free 0.0% Btl 330 Ml 4 pack","Peroni Libera 0.0% Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Can 330 Ml 6 pack","Heineken (5%) Can 330 Ml 6 pack","Birra Moretti Can 330 Ml 6 pack","Estrella Damm Barcelona Can 330 Ml 6 pack","Budweiser Btl 300 Ml 6 pack","Stella Artois Btl 330 Ml 6 pack","Corona Can 330 Ml 6 pack","Budweiser Budvar Can 330 Ml 6 pack","San Miguel Can 330 Ml 6 pack","Stella Artois Can 440 Ml 10 pack","San Miguel Can 440 Ml 10 pack","Birra Moretti Can 330 Ml 10 pack","Budweiser Can 440 Ml 10 pack","Cruzcampo Can 440 Ml 10 pack","Madri Exceptional Can 440 Ml 10 pack","Corona Can 330 Ml 10 pack","Peroni Nastro Azzurro Stile Capri Btl 330 Ml 10 pack","Stella Artois Unfiltered Can 440 Ml 10 pack","Corona Btl 330 Ml 12 pack","Birra Moretti Btl 330 Ml 12 pack","San Miguel Btl 330 Ml 12 pack","Madri Exceptional Btl 330 Ml 12 pack","Estrella Damm Barcelona Btl 330 Ml 12 pack","Stella Artois Btl 330 Ml 12 pack","Heineken (5%) Btl 330 Ml 12 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 12 pack","Stella Artois Unfiltered Btl 330 Ml 12 pack","Stella Artois Btl 284 Ml 12 pack","Stella Artois Can 440 Ml 18 pack","Corona Btl 330 Ml 18 pack","Budweiser Can 440 Ml 18 pack","Stella Artois Btl 284 Ml 18 pack","Birra Moretti Btl 330 Ml 18 pack","San Miguel Btl 330 Ml 18 pack","Corona Btl 330 Ml 24 pack","Stella Artois Can 568 Ml single","Budweiser Can 440 Ml single","Corona Btl 330 Ml single","Budweiser Can 568 Ml single","Budweiser Budvar Btl 500 Ml single","Peroni Red Btl 330 Ml single","Heineken Silver Btl 650 Ml single","Heineken (5%) Can 568 Ml 4 pack","San Miguel Can 500 Ml 4 pack","Stella Artois Unfiltered Can 440 Ml 4 pack","Estrella Damm Barcelona Btl 330 Ml 4 pack","Madri Exceptional Btl 330 Ml 4 pack","Stella Artois Btl 330 Ml 4 pack","Budweiser Zero Can 330 Ml 4 pack","Stella Artois Unfiltered Can 330 Ml 6 pack","Heineken (5%) Can 440 Ml 10 pack","Corona Btl 330 Ml 10 pack","Budweiser Btl 300 Ml 10 pack","Estrella Damm Barcelona Can 330 Ml 10 pack","Heineken Silver Btl 330 Ml 12 pack","Corona Cero Btl 330 Ml 12 pack","Cruzcampo Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 24 pack","Birra Moretti Btl 330 Ml 24 pack","San Miguel 0.0% Btl 330 Ml 12 pack")                 # SKU aggregation SKU strings to search for
 )
 
 # calculating base prices and discounts
@@ -43,7 +43,9 @@ nielsen.bp = base_price(
 nielsen_data <- nielsen.bp %>%
   select(matches("Year|Week|_distribution_w|baseprice|mod_Volume_|discount")) %>%
   select(-matches("OTHER")) %>%
-  rename_all(~str_replace(., "^sku_", "c_"))
+  rename_all(
+    ~ ifelse(grepl("Peroni Nastro", .), str_replace(., "^sku_", "own_"), .)) %>%   # change peroni sku level data prefix to "own_"
+  rename_all(~str_replace(., "^sku_", "c_")) # everything else is competitors "c_"
 
 # Convert 'Week' column to numeric, Format the week number with two digits; Trim the dates range by joining it with dates_file
 nielsen_data$Week <- as.numeric(nielsen_data$Week)
@@ -81,10 +83,13 @@ sku_names_long <- gather(nielsen_data[-1], key = "Variable") %>%
     decomp = case_when(
       grepl("mod_dist", abbreviation) ~ "distribution", #map to decomps
       grepl("c_dist", abbreviation) ~ "comp_distribution", #map to decomps
+      grepl("own_dist", abbreviation) ~ "cannibal_distribution", #map to decomps
       grepl("mod_bp_", abbreviation) ~ "price", #map to decomps
       grepl("c_bp_", abbreviation) ~ "comp_price", #map to decomps
+      grepl("own_bp_", abbreviation) ~ "cannibal_price", #map to decomps
       grepl("c_discount_", abbreviation) ~ "comp_promo", #map to decomps
       grepl("mod_discount", abbreviation) ~ "promo", #map to decomps
+      grepl("own_discount", abbreviation) ~ "cannibal_promo", #map to decomps
       grepl("mod_vol", abbreviation) ~ "kpi", #map to decomps
       TRUE ~ "other"
     )
@@ -103,6 +108,9 @@ taxonomy <- sku_names_long %>%
       grepl("c_Distribution_w_", Variable) ~ gsub(".*c_Distribution_w_", "", Variable),
       grepl("c_baseprice_", Variable) ~ gsub(".*c_baseprice_", "", Variable),
       grepl("c_discount_", Variable) ~ gsub(".*c_discount_", "", Variable),
+      grepl("own_Distribution_w_", Variable) ~ gsub(".*own_Distribution_w_", "", Variable),
+      grepl("own_baseprice_", Variable) ~ gsub(".*own_baseprice_", "", Variable),
+      grepl("own_discount_", Variable) ~ gsub(".*own_discount_", "", Variable),
       TRUE ~ NA_character_
     ),
     abbreviation1 = gsub("^(.*?_.*?_).*", "\\1", variable_name),
@@ -115,6 +123,9 @@ taxonomy <- sku_names_long %>%
       grepl("c_dist_", abbreviation1) ~ "competitor_distribution",
       grepl("c_bp_", abbreviation1) ~ "competitor_pricing",
       grepl("c_discount_", abbreviation1) ~ "competitor_promo",
+      grepl("own_dist_", abbreviation1) ~ "cannibal_distribution",
+      grepl("own_bp_", abbreviation1) ~ "cannibal_pricing",
+      grepl("own_discount_", abbreviation1) ~ "cannibal_promo",
       TRUE ~ NA_character_
     ),
     metric = NA_character_,  # New empty column "metric"
