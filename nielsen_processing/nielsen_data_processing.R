@@ -41,7 +41,7 @@ nielsen.bp = base_price(
 
 # Extracting needed columns from one big table
 nielsen_data <- nielsen.bp %>%
-  select(matches("Year|Week|_distribution_w|baseprice|mod_Volume_|discount")) %>%
+  select(matches("Year|Week|_distribution_w|Price_pl|baseprice|mod_Volume_|discount")) %>%
   select(-matches("OTHER")) %>%
   rename_all(
     ~ ifelse(grepl("Peroni Nastro", .), str_replace(., "^sku_", "own_"), .)) %>%   # change peroni sku level data prefix to "own_"
@@ -78,6 +78,7 @@ sku_names_long <- gather(nielsen_data[-1], key = "Variable") %>%
       grepl("_volume", abbreviation) ~ gsub("_volume", "_vol", abbreviation),
       grepl("_distribution_w", abbreviation) ~ gsub("_distribution_w", "_dist", abbreviation),
       grepl("_baseprice", abbreviation) ~ gsub("_baseprice", "_bp", abbreviation),
+      grepl("_price_pl", abbreviation) ~ gsub("_price_pl", "_avp", abbreviation),
       TRUE ~ abbreviation
     ),
     abbreviation = str_replace_all(abbreviation, "__", "_"),  # Remove duplicated underscores
@@ -86,8 +87,11 @@ sku_names_long <- gather(nielsen_data[-1], key = "Variable") %>%
       grepl("c_dist", abbreviation) ~ "comp_distribution", #map to decomps
       grepl("own_dist", abbreviation) ~ "cannibal_distribution", #map to decomps
       grepl("mod_bp_", abbreviation) ~ "price", #map to decomps
+      grepl("mod_avp_", abbreviation) ~ "price", #map to decomps
       grepl("c_bp_", abbreviation) ~ "comp_price", #map to decomps
+      grepl("c_avp_", abbreviation) ~ "comp_price", #map to decomps
       grepl("own_bp_", abbreviation) ~ "cannibal_price", #map to decomps
+      grepl("own_avp_", abbreviation) ~ "cannibal_price", #map to decomps
       grepl("c_discount_", abbreviation) ~ "comp_promo", #map to decomps
       grepl("mod_discount", abbreviation) ~ "promo", #map to decomps
       grepl("own_discount", abbreviation) ~ "cannibal_promo", #map to decomps
@@ -106,12 +110,15 @@ taxonomy <- sku_names_long %>%
       grepl("mod_distribution_w_", Variable) ~ gsub(".*mod_distribution_w_", "", Variable),
       grepl("mod_baseprice_", Variable) ~ gsub(".*mod_baseprice_", "", Variable),
       grepl("mod_discount_", Variable) ~ gsub(".*mod_discount_", "", Variable),
+      grepl("mod_Price_pl_", Variable) ~ gsub(".*mod_Price_pl_", "", Variable),
       grepl("c_Distribution_w_", Variable) ~ gsub(".*c_Distribution_w_", "", Variable),
       grepl("c_baseprice_", Variable) ~ gsub(".*c_baseprice_", "", Variable),
       grepl("c_discount_", Variable) ~ gsub(".*c_discount_", "", Variable),
+      grepl("c_Price_pl_", Variable) ~ gsub(".*c_Price_pl_", "", Variable),
       grepl("own_Distribution_w_", Variable) ~ gsub(".*own_Distribution_w_", "", Variable),
       grepl("own_baseprice_", Variable) ~ gsub(".*own_baseprice_", "", Variable),
-      grepl("own_discount_", Variable) ~ gsub(".*own_discount_", "", Variable),
+      grepl("own_Price_pl_", Variable) ~ gsub(".*own_Price_pl_", "", Variable),
+      
       TRUE ~ NA_character_
     ),
     abbreviation1 = gsub("^(.*?_.*?_).*", "\\1", variable_name),
@@ -120,25 +127,29 @@ taxonomy <- sku_names_long %>%
       grepl("mod_vol_", abbreviation1) ~ "sales",
       grepl("mod_dist_", abbreviation1) ~ "distribution",
       grepl("mod_bp_", abbreviation1) ~ "pricing",
+      grepl("mod_avp_", abbreviation1) ~ "pricing",
       grepl("mod_discount_", abbreviation1) ~ "promo",
-      grepl("c_dist_", abbreviation1) ~ "competitor_distribution",
-      grepl("c_bp_", abbreviation1) ~ "competitor_pricing",
-      grepl("c_discount_", abbreviation1) ~ "competitor_promo",
-      grepl("own_dist_", abbreviation1) ~ "cannibal_distribution",
-      grepl("own_bp_", abbreviation1) ~ "cannibal_pricing",
-      grepl("own_discount_", abbreviation1) ~ "cannibal_promo",
+      grepl("c_dist_", abbreviation1) ~ "competitor - distribution",
+      grepl("c_bp_", abbreviation1) ~ "competitor - pricing",
+      grepl("c_avp_", abbreviation1) ~ "competitor - pricing",
+      grepl("c_discount_", abbreviation1) ~ "competitor - promo",
+      grepl("own_dist_", abbreviation1) ~ "cannibalisation - distribution",
+      grepl("own_bp_", abbreviation1) ~ "cannibalisation - pricing",
+      grepl("own_avp_", abbreviation1) ~ "cannibalisation - pricing",
+      grepl("own_discount_", abbreviation1) ~ "cannibalisation - promo",
       TRUE ~ NA_character_
     ),
     metric = NA_character_,  # New empty column "metric"
     abbreviation3 = NA_character_  # New empty column "abbreviation3"
   ) %>%
   select(variable_name, category, abbreviation1, classification, abbreviation2, metric, abbreviation3, decomp_group = decomp, Variable) %>%
-  arrange(category)
+  arrange(variable_name)
 
 
 # map Nielsen sku names to our variable names using created taxonomy table
 nielsen_data_mapped <- nielsen_data %>%
-  rename_with(~taxonomy$variable_name[match(., taxonomy$Variable)], -1)
+  rename_with(~taxonomy$variable_name[match(., taxonomy$Variable)], -1) %>%
+  select(Date, sort(names(.)[-1]))
 
 
 write_xlsx(taxonomy, path = file.path(directory_path, "nielsen_taxonomy.xlsx"))
