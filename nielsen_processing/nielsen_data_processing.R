@@ -49,7 +49,7 @@ nielsen_data <- nielsen.bp %>%
 
 # Convert 'Week' column to numeric, Format the week number with two digits; Trim the dates range by joining it with dates_file
 nielsen_data$Week <- as.numeric(nielsen_data$Week)
-nielsen_data$Date <- as.Date(ISOweek::ISOweek2date(paste(nielsen_data$Year, sprintf("W%02d", nielsen_data$Week), "1", sep="-")))
+nielsen_data$Date <- as.Date(ISOweek::ISOweek2date(paste(nielsen_data$Year, sprintf("W%02d", nielsen_data$Week), "1", sep="-")))-1
 
 
 nielsen_data <- left_join(dates_file, nielsen_data, by = "Date")
@@ -80,6 +80,7 @@ sku_names_long <- gather(nielsen_data[-1], key = "Variable") %>%
       grepl("_baseprice", abbreviation) ~ gsub("_baseprice", "_bp", abbreviation),
       TRUE ~ abbreviation
     ),
+    abbreviation = str_replace_all(abbreviation, "__", "_"),  # Remove duplicated underscores
     decomp = case_when(
       grepl("mod_dist", abbreviation) ~ "distribution", #map to decomps
       grepl("c_dist", abbreviation) ~ "comp_distribution", #map to decomps
@@ -100,8 +101,8 @@ sku_names_long <- gather(nielsen_data[-1], key = "Variable") %>%
 taxonomy <- sku_names_long %>%
   rename(variable_name = abbreviation) %>%
   mutate(
-    classification = case_when(
-      grepl("mod_Volume_", Variable) ~ gsub(".*mod_Volume_", "", Variable),
+    classification = case_when( #create classification column so they could be mapped against Martin's original sku names
+      grepl("mod_Volume_", Variable) ~ gsub(".*mod_Volume_", "", Variable), #take text after specified prefixes
       grepl("mod_distribution_w_", Variable) ~ gsub(".*mod_distribution_w_", "", Variable),
       grepl("mod_baseprice_", Variable) ~ gsub(".*mod_baseprice_", "", Variable),
       grepl("mod_discount_", Variable) ~ gsub(".*mod_discount_", "", Variable),

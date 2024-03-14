@@ -7,18 +7,18 @@ setwd(here())
 directory_path <- getwd()
 
 # Read the dates file
-dates_file <- read.csv(file.path(directory_path, "dates_lookup_real.csv"))
+dates_file <- read.csv(file.path(directory_path, "dates_lookup.csv"))
 dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 
 
 #new function to read sellout data
-source(paste(directory_path, "functions/sellout_data_read_v01.R", sep = "/")) # look into specific file for more details
+source(paste(directory_path, "functions/sellout_data_read_v02.R", sep = "/")) # look into specific file for more details
 
 nielsen = nielsen.creation(
   "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM", 
-  "PNA_MULTIPLES_GLASS_330ML_4PACK",  # selection of model
-  c("peroni"), # BRAND aggregation brand strings to search for
-  c("peroni", "moretti", "madri", "estrella", "asd", "san miguel", "heineken", "cruzcampo", "corona", "stella","budweiser"), # SKU aggregation brand strings to limit our SKUs
+  "all",  # selection of model
+  c(""), # BRAND aggregation brand strings to search for
+  c(""), # SKU aggregation brand strings to limit our SKUs
   ""                 # SKU aggregation SKU strings to search for
 
 )
@@ -27,7 +27,7 @@ nielsen = nielsen.creation(
 #exploring nielsen
 
 # Extracting the columns with "_Volume" in their names
-selected_columns <- grep("_Volume$", colnames(nielsen), value = TRUE)
+selected_columns <- grep("Volume_", colnames(nielsen), value = TRUE)
 
 # Selecting Year and Week columns as the first columns
 selected_columns <- c("Year", "Week", selected_columns)
@@ -65,3 +65,30 @@ result_transposed <- result %>%
 
 # Write result_transposed to an Excel file in the specified directory
 write_xlsx(result_transposed, path = file.path(directory_path, "result_transposed_v1.xlsx"))
+
+
+##############################################################
+#sku level
+
+for(i in 2:length(list.files("uk_sellout_fact_sku.parquet"))){
+  sub = read_parquet(paste("uk_sellout_fact_sku.parquet", list.files("uk_sellout_fact_sku.parquet")[i], sep = "/"))
+  if(i == 2){
+    sku = sub
+  }else{
+    sku = rbind(sku, sub)
+  }
+  print(i)
+}
+sku = sku[sku$Channel == "Off Trade", ]
+
+sku1 <- sku %>%
+  filter(grepl("peroni", SKU, ignore.case = TRUE)) %>%
+  select(market_agg, SKU, Year, Volume) %>%
+  mutate_all(~replace_na(., 0)) %>%
+  group_by(market_agg, SKU, Year) %>%
+  summarize(Total_Volume = sum(Volume))
+
+summary <- sku1 %>%
+  pivot_wider(names_from = Year, values_from = Total_Volume, values_fill = 0)
+
+write_xlsx(summary, path = file.path(directory_path, "summary_sku.xlsx"))
