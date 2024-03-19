@@ -1,5 +1,4 @@
 #MARKETING MIX MODELLING TOOL
-library(readxl)
 library(here)
 
 #-----------------------------------------------------------------
@@ -19,6 +18,8 @@ import_file$Date <- as.Date(import_file$Date, format = "%d-%b-%y")
 # Read the dates file
 dates_file <- read.csv(file.path(directory_path, "dates_lookup.csv"))
 dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
+
+import_file <- merge(import_file, dates_file, by = "Date", all.x = TRUE)
 
 # Read the taxonomy file
 taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"))
@@ -86,12 +87,13 @@ model1 <- lm(
     #c_bp_multiples_budweiser_btl_300_ml_6_pack+
     #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
     c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-    c_discount_multiples_corona_btl_330_ml_24_pack
-
+    c_discount_multiples_corona_btl_330_ml_24_pack+
     #e_cci
     #s_fathers_day+
     #s_school_christmas_holidays+
     #w_deviation_max_temp_c+
+    atan(m_vod_peroni_first_dates_sponsor_sp_adstock50/70000)+
+    atan(m_youtube_peroni_sp_adstock10/10000)
 
   
   ,data = import_file)
@@ -111,11 +113,11 @@ model_stats(model1, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # Automatic variable selection
-auto_variable_selection(model1, import_file, "dummy_month_")
+auto_variable_selection(model1, import_file, "m_ooh_peroni")
 
 # Chart variables
 plot_line1((atan(import_file$m_press_spend30/30000)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "c_bp_multiples_corona_btl_330_ml_10_pack", import_file)
+plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "m_vod_peroni_first_dates_sponsor_sp_adstock50", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
 actual_vs_fitted_plot(model1, import_file, "")
@@ -126,25 +128,13 @@ residuals_vs_variable_plot(model1, import_file, "gt_peroni")
 create_residuals_histogram(model1, import_file)
 
 # Price elasticity
-calculate_price_elasticity(model1, "dep_peroni_btl_12p_330_vol", "p_peroni_btl_12p_330_bp", import_file)
+calculate_price_elasticity(model1, "mod_vol_multiples_pna_glass_330ml_10pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_press_spend30", dim_ret = 2000)
 
 
 
-# Media heatmap
-## Martin - here is the aesthetics part of the heat map code 
-### Let me know if you need more info about the data feeding into the plot
-# pick a nice colour scheme
-#col <- colorRampPalette(rev(rgb(c(231,117,27),c(41,112,158),c(138,179,119),
-#                              max=255)))(100)
-# plot the data
-# p <- ggplot(DATA)
-# p <- p + geom_tile(aes(x=x.pos, y=y.pos, fill=density, height=1000, width=1000))+
-#   scale_fill_gradientn(colours=col, space="Lab", na.value="grey50",
-#                        guide="colourbar")
-# p + theme_bw() + coord_equal()
 
 #-----------------------------------------------------------------
 #----------------------Decomposition------------------------------
