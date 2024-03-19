@@ -4,12 +4,6 @@
 ###############################################################
 #Updated: 27/02/2024
 
-library(dplyr)
-library(car)
-library(DT)
-library(skedastic)
-library(tidyr)
-library(stringr)
 
 model_stats <- function(model, date_var = NULL) {
   

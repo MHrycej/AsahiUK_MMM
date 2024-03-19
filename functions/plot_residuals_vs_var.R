@@ -2,8 +2,6 @@
 # Updated: 27/02/2024
 
 
-library(plotly)
-
 residuals_vs_variable_plot <- function(model, import_file, second_variable) {
   # getting residuals from the model
   model_augmented <- augment(model)

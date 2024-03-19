@@ -2,8 +2,7 @@
 ### plot_line1
 #Updated: 27/02/2024
 
-library(ggplot2)
-library(plotly)
+
 
 plot_line1 <- function(formula, data) {
   # Apply the formula to create a new variable

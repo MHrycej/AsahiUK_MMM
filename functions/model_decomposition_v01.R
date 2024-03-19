@@ -1,12 +1,6 @@
 #####-----Model decomposition-----###
 #Update date: 19/03/2024
 
-library(janitor)
-library(scales)
-library(DT)
-library(broom)
-library(forcats)
-
 
 model_decomp <- function(model) {
   

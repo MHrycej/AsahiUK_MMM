@@ -2,8 +2,6 @@
 #Updated: 27/02/2024
 
 
-library(plotly)
-
 actual_vs_fitted_plot <- function(model, import_file, third_variable_name) {
   # getting variables used in the model
   model_augmented <- augment(model)
