@@ -16,7 +16,7 @@ auto_variable_selection <- function(model, data, search_term) {
   
   # Filter based on the search term
   filtered_column_names <- long_format_column_names %>%
-    filter(str_detect(variable, search_term))
+    filter(str_starts(variable, search_term)) 
   
   # Get the existing independent variables from the model
   existing_variables <- names(model$model)[-1]

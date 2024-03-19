@@ -29,9 +29,6 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"))
 
 
 
-
-
-
 #-----------------------------------------------------------------
 #-----------------------Variable creation-------------------------
 #-----------------------------------------------------------------
@@ -68,15 +65,34 @@ taxonomy <- dplyr::bind_rows(
 #-----------------------------------------------------------------
 
 model1 <- lm(
-  mod_vol_multiples_pna_can_440ml_4pack ~ #dependent variable
-    mod_dist_multiples_pna_can_440ml_4pack+
-    mod_bp_multiples_pna_can_440ml_4pack+
-    mod_discount_multiples_pna_can_440ml_4pack+
-    mod_featdisp_multiples_pna_can_440ml_4pack+
+  mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
+    #mod_dist_multiples_pna_glass_330ml_10pack+
+    mod_bp_multiples_pna_glass_330ml_10pack+
+    mod_discount_multiples_pna_glass_330ml_10pack+
+    mod_featdisp_multiples_pna_glass_330ml_10pack+
     s_christmas+
-    s_fathers_day+
-    s_school_christmas_holidays+
-    w_deviation_max_temp_c
+    s_spring_bank_holiday+
+    s_good_friday+
+    # dummy_month_may+
+    # dummy_month_apr+
+    # dummy_month_dec+
+    #w_wtd_max_temp_c+
+    gt_peroni+
+    covid_mobility_residential+
+    events_peroni_uefa_21+
+    events_peroni_all_racing+
+    events_peroni_fifa_world_cup_22+
+    #c_bp_multiples_corona_btl_330_ml_10_pack+
+    #c_bp_multiples_budweiser_btl_300_ml_6_pack+
+    #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
+    c_discount_multiples_stella_artois_btl_284_ml_12_pack+
+    c_discount_multiples_corona_btl_330_ml_24_pack
+
+    #e_cci
+    #s_fathers_day+
+    #s_school_christmas_holidays+
+    #w_deviation_max_temp_c+
+
   
   ,data = import_file)
 
@@ -91,12 +107,15 @@ model_stats(model1, date_var = import_file$Date)
 
 
 #-----------------------------------------------------------------
-#----------------------Visual analysis----------------------------
+#----------------------Functions----------------------------
 #-----------------------------------------------------------------
+
+# Automatic variable selection
+auto_variable_selection(model1, import_file, "dummy_month_")
 
 # Chart variables
 plot_line1((atan(import_file$m_press_spend30/30000)), import_file)
-plot_line2("p_peroni_btl_12p_330_ap", "bt_peroni_difference_ind", import_file)
+plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "c_bp_multiples_corona_btl_330_ml_10_pack", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
 actual_vs_fitted_plot(model1, import_file, "")
@@ -104,14 +123,15 @@ actual_vs_fitted_plot(model1, import_file, "")
 # Residual plot
 residuals_vs_variable_plot(model1, import_file, "gt_peroni")
 
+create_residuals_histogram(model1, import_file)
+
 # Price elasticity
 calculate_price_elasticity(model1, "dep_peroni_btl_12p_330_vol", "p_peroni_btl_12p_330_bp", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_press_spend30", dim_ret = 2000)
 
-# Automatic variable selection
-auto_variable_selection(model1, import_file, "e_")
+
 
 # Media heatmap
 ## Martin - here is the aesthetics part of the heat map code 
@@ -131,10 +151,5 @@ auto_variable_selection(model1, import_file, "e_")
 #-----------------------------------------------------------------
 
 model_decomp(model1)
-
-
-
-
-
 
 
