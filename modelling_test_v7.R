@@ -19,6 +19,8 @@ import_file$Date <- as.Date(import_file$Date, format = "%d-%b-%y")
 dates_file <- read.csv(file.path(directory_path, "dates_lookup.csv"))
 dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 
+import_file <- merge(import_file, dates_file, by = "Date", all.x = TRUE)
+
 # Read the taxonomy file
 taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"))
 
