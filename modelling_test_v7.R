@@ -113,9 +113,15 @@ model_stats(model1, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # adstock & dr heatmap
-crit.out = heatmap(
-  dataset = import_file,
-  formula.input = "mod_vol_multiples_pna_glass_330ml_10pack ~
+
+formik1 = "mod_vol_multiples_pna_glass_330ml_10pack ~
+    mod_bp_multiples_pna_glass_330ml_10pack + 
+    atan(m_ooh_peroni_digital_imp_adstock50 / 56756368)"
+
+formik2 = "mod_vol_multiples_pna_glass_330ml_10pack ~
+    mod_bp_multiples_pna_glass_330ml_10pack"
+
+formik3 = "mod_vol_multiples_pna_glass_330ml_10pack ~
     mod_bp_multiples_pna_glass_330ml_10pack +
     mod_discount_multiples_pna_glass_330ml_10pack +
     mod_featdisp_multiples_pna_glass_330ml_10pack +
@@ -127,12 +133,21 @@ crit.out = heatmap(
     events_peroni_all_racing +
     events_peroni_fifa_world_cup_22 +
     c_discount_multiples_stella_artois_btl_284_ml_12_pack +
-    c_discount_multiples_corona_btl_330_ml_24_pack",
+    c_discount_multiples_corona_btl_330_ml_24_pack + 
+    atan(m_ooh_peroni_digital_imp_adstock50 / 56756368)"
+
+import_file$adst50dr = atan(import_file$m_ooh_peroni_digital_imp_adstock50 / 56756368)
+
+summary(lm(data = import_file, formula = formik3))
+
+crit.out = heatmap(
+  dataset = import_file,
+  formula.input = formik3,
   expense_channel = "m_ooh_peroni_digital_imp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9),
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1),
-  criteria = c("R2")) # "R2", "t-stat"
+  criteria = c("t-stat")) # "R2", "t-stat"
 
 # Automatic variable selection
 auto_variable_selection(model1, import_file, "m_ooh_peroni")

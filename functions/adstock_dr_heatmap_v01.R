@@ -54,6 +54,8 @@ heatmap = function(
         for(time.var in 2:nrow(expense)){
           expense[time.var, 2] = sum(expense[time.var, 2], na.rm = T) + sum(expense[time.var - 1, 2], na.rm = T) * adstock
         }
+        
+        expense = expense[order(expense$time), ]
 
         # Now we apply the diminishing returns within loop starting with the beginning of our time axis
         if(dr_type == "exp"){
@@ -138,10 +140,10 @@ heatmap = function(
       )
     )
     
-    remove(criterion, adstock.i, dr_divisor.i, counter, max_dr)
+    remove(criterion, adstock.i, dr_divisor.i, counter, max_dr, gg.criterion)
   }
   
-  return(gg.criterion)
+  # return(gg.criterion)
 }
 
 
