@@ -25,7 +25,7 @@ heatmap = function(
   for(crit.i in 1:length(criteria)){
 
     # 1 We create time variable to order everything accordingly
-    dataset$time = paste(dataset$Year, dataset$Week, sep = "-")
+    dataset$time = dataset$Date #paste(dataset$Year, dataset$Week, sep = "-")
     dataset = dataset[order(dataset$time), ]
     
     # 2 We create virtual output matrices to store everything
@@ -51,6 +51,7 @@ heatmap = function(
         # We perform expense transformation via our selected adstock & dr_divisor
         sub = dataset
         expense = sub[, c("time", expense_channel)]
+        max_expense = max(sub[, c(expense_channel)], na.rm = T)
 
         # We apply the adstock within loop starting with the beginning of our time axis
         for(time.var in 2:nrow(expense)){
@@ -61,7 +62,7 @@ heatmap = function(
         if(dr_type == "exp"){
           expense[, 2] = expense[, 2] # please define exponential diminishing return
         }else if(dr_type == "atan"){
-          expense[, 2] = atan(expense[, 2] / dr_divisor)
+          expense[, 2] = atan(expense[, 2] / (dr_divisor * max_expense))
         }else{
 
         }
@@ -123,15 +124,27 @@ heatmap = function(
 
 
 
-
+import_file$m_ooh_peroni_digital_imp
 
 crit.out = heatmap(
-  dataset = taxonomy, 
-  formula.input = "dep_Volume ~ dep_distribution_w", 
-  expense_channel = "dep_VolumePromo", 
+  dataset = import_file, 
+  formula.input = "mod_vol_multiples_pna_glass_330ml_10pack ~ 
+    mod_bp_multiples_pna_glass_330ml_10pack +
+    mod_discount_multiples_pna_glass_330ml_10pack +
+    mod_featdisp_multiples_pna_glass_330ml_10pack +
+    s_christmas +
+    s_spring_bank_holiday +
+    s_good_friday +
+    covid_mobility_residential +
+    events_peroni_uefa_21 +
+    events_peroni_all_racing +
+    events_peroni_fifa_world_cup_22 +
+    c_discount_multiples_stella_artois_btl_284_ml_12_pack +
+    c_discount_multiples_corona_btl_330_ml_24_pack", 
+  expense_channel = "m_ooh_peroni_digital_imp", 
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), 
   dr_type = "atan", 
-  dr_divisors = c(100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000), 
+  dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5), 
   criteria = c("R2"))
 
 
