@@ -166,7 +166,7 @@ model_decomp <- function(model) {
   
   
   # Reverse the order of decomp_group levels
-  merged_decomp_final$decomp_group <- forcats::fct_rev(merged_decomp_final$decomp_group)
+  #merged_decomp_final$decomp_group <- forcats::fct_rev(merged_decomp_final$decomp_group)
   
   # Create the ggplot with reversed decomp_group
   p <- ggplot(merged_decomp_final, aes(x = Date, y = final_value, fill = decomp_group)) +
@@ -198,4 +198,10 @@ model_decomp <- function(model) {
     formatStyle(c("total_value", "percent_share"), `border-radius` = '8px')
   
   
+  model_name <- deparse(substitute(model))
+  
+  final_decomp_export <- merged_decomp_final %>%
+    mutate(model_name = model_name) %>%
+    select(model_name, decomp_group, date = Date, value = final_value)
+ 
 }
