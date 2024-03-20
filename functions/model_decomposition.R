@@ -1,9 +1,15 @@
 #####-----Model decomposition-----###
-#Update date: 19/03/2024
+#Update date: 20/03/2024
+
+library(janitor)
+library(scales)
+library(DT)
+library(broom)
+library(forcats)
 
 
 model_decomp <- function(model) {
-  
+  #model <- multiples_330_12pk
   #creating model coefficients table
   mod_coeffs <- broom::tidy(model) %>%
     select(term, estimate) %>%
@@ -51,7 +57,7 @@ model_decomp <- function(model) {
     # If not empty, proceed with merging decomp_df and decomp_media_df
     # adding Date column
     merged_atan_table <- bind_cols(atan_transformed_table, dates_file) %>%
-      select(-year)
+      select(-Year, -Week)
     
     # creating long format for transformed data  
     long_atan_transformed_table <- merged_atan_table %>%
@@ -166,6 +172,8 @@ model_decomp <- function(model) {
   wide_final_decomp <- merged_decomp_final %>%
     pivot_wider(names_from = decomp_group, values_from = final_value)
   
+ 
+  
   #######################################################################
   #-create stacked decomp chart
   
@@ -199,8 +207,17 @@ model_decomp <- function(model) {
     mutate(across(c(total_value, percent_share), ~round(., 1)))
   
   # Create an interactive DataTable with rounded values
-  datatable(summed_decomps, options = list(dom = 't', pageLength = nrow(summed_decomps))) %>%
-    formatStyle(c("total_value", "percent_share"), `border-radius` = '8px')
+  print(
+    datatable(summed_decomps, options = list(dom = 't', pageLength = nrow(summed_decomps))) %>%
+      formatStyle(c("total_value", "percent_share"), `border-radius` = '8px')
+  )
   
+  #################################################################
+  #Create final decomp table
+  model_name <- deparse(substitute(model))
+  
+  final_decomp_export <- merged_decomp_final %>%
+    mutate(model_name = model_name) %>%
+    select(model_name, decomp_group, date = Date, value = final_value)
   
 }

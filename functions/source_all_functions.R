@@ -1,6 +1,6 @@
 source('functions/load_packages.R')
 source('functions/model_stats_main.R')
-source('functions/model_decomposition_v01.R')
+source('functions/model_decomposition.R')
 source('functions/plot_lines.R')
 source('functions/price_elasticity.R')
 source('functions/create_dummy_var.R')
