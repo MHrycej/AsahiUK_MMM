@@ -1,5 +1,5 @@
 #####-----Model decomposition-----###
-#Update date: 27/02/2024
+#Update date: 20/03/2024
 
 library(janitor)
 library(scales)
@@ -51,7 +51,7 @@ model_decomp <- function(model) {
   
   #adding Date column
   merged_atan_table <- bind_cols(atan_transformed_table, dates_file) %>%
-    select(-year)
+    select(-Year, -Week)
   
   #creating long fromat for transformed data  
   long_atan_transformed_table <- merged_atan_table %>%

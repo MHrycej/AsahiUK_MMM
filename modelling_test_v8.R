@@ -102,7 +102,6 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
 
 model1 <- lm(formula = formula.01, data = import_file)
 
-
 # Model results
 model_stats(model1, date_var = import_file$Date)
 
@@ -124,7 +123,7 @@ heatmap(
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1), # c(.4)
-  criteria = c("R2")) # "R2", "t-stat"
+  criteria = c("t-stat")) # "R2", "t-stat"
 
 # Automatic variable selection
 auto_variable_selection(model1, import_file, "m_ooh_peroni")
