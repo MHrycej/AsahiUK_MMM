@@ -148,7 +148,7 @@ crit.out = heatmap(
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9),
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1),
-  criteria = c("t-stat")) # "R2", "t-stat"
+  criteria = c("R2")) # "R2", "t-stat"
 
 # Automatic variable selection
 auto_variable_selection(model1, import_file, "m_ooh_peroni")

@@ -112,64 +112,97 @@ model_stats(model1, date_var = import_file$Date)
 #-----------------------------------------------------------------
 #----------------------Functions----------------------------
 #-----------------------------------------------------------------
-
-# adstock & dr heatmap
-crit.out = heatmap(
-  dataset = import_file,
-  formula.input = " mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
-    #mod_dist_multiples_pna_glass_330ml_10pack+
-    mod_bp_multiples_pna_glass_330ml_10pack+
-    mod_discount_multiples_pna_glass_330ml_10pack+
-    mod_featdisp_multiples_pna_glass_330ml_10pack+
-    s_christmas+
-    s_spring_bank_holiday+
-    s_good_friday+
-    # dummy_month_may+
-    # dummy_month_apr+
-    # dummy_month_dec+
-    #w_wtd_max_temp_c+
-    gt_peroni+
-    covid_mobility_residential+
-    events_peroni_uefa_21+
-    events_peroni_all_racing+
-    events_peroni_fifa_world_cup_22+
-    #c_bp_multiples_corona_btl_330_ml_10_pack+
-    #c_bp_multiples_budweiser_btl_300_ml_6_pack+
-    #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
-    c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-    c_discount_multiples_corona_btl_330_ml_24_pack+
-    #e_cci
-    #s_fathers_day+
-    #s_school_christmas_holidays+
-    #w_deviation_max_temp_c+
-    atan(m_vod_peroni_first_dates_sponsor_sp_adstock50/70000)+
-    atan(m_youtube_peroni_sp_adstock10/10000)",
-  expense_channel = "m_ooh_peroni_digital_imp",
-  adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9),
-  dr_type = "atan",
-  dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1),
-  criteria = c("t-stat")) # "R2", "t-stat"
-
-# Automatic variable selection
-auto_variable_selection(model1, import_file, "m_ooh_peroni")
-
-# Chart variables
-plot_line1((atan(import_file$m_press_spend30/30000)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "m_vod_peroni_first_dates_sponsor_sp_adstock50", import_file)
-
-# Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(model1, import_file, "")
-
-# Residual plot
-residuals_vs_variable_plot(model1, import_file, "gt_peroni")
-
-create_residuals_histogram(model1, import_file)
-
-# Price elasticity
-calculate_price_elasticity(model1, "mod_vol_multiples_pna_glass_330ml_10pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
-
-# Plot media curve
-plot_media_curve(import_file, media_var = "m_press_spend30", dim_ret = 2000)
+# 
+# # adstock & dr heatmap
+# <<<<<<< HEAD
+# crit.out = heatmap(
+#   dataset = import_file,
+#   formula.input = " mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
+#     #mod_dist_multiples_pna_glass_330ml_10pack+
+#     mod_bp_multiples_pna_glass_330ml_10pack+
+#     mod_discount_multiples_pna_glass_330ml_10pack+
+#     mod_featdisp_multiples_pna_glass_330ml_10pack+
+#     s_christmas+
+#     s_spring_bank_holiday+
+#     s_good_friday+
+#     # dummy_month_may+
+#     # dummy_month_apr+
+#     # dummy_month_dec+
+#     #w_wtd_max_temp_c+
+#     gt_peroni+
+#     covid_mobility_residential+
+#     events_peroni_uefa_21+
+#     events_peroni_all_racing+
+#     events_peroni_fifa_world_cup_22+
+#     #c_bp_multiples_corona_btl_330_ml_10_pack+
+#     #c_bp_multiples_budweiser_btl_300_ml_6_pack+
+#     #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
+#     c_discount_multiples_stella_artois_btl_284_ml_12_pack+
+#     c_discount_multiples_corona_btl_330_ml_24_pack+
+#     #e_cci
+#     #s_fathers_day+
+#     #s_school_christmas_holidays+
+#     #w_deviation_max_temp_c+
+#     atan(m_vod_peroni_first_dates_sponsor_sp_adstock50/70000)+
+#     atan(m_youtube_peroni_sp_adstock10/10000)",
+# =======
+# 
+# formik1 = "mod_vol_multiples_pna_glass_330ml_10pack ~
+#     mod_bp_multiples_pna_glass_330ml_10pack + 
+#     atan(m_ooh_peroni_digital_imp_adstock50 / 56756368)"
+# 
+# formik2 = "mod_vol_multiples_pna_glass_330ml_10pack ~
+#     mod_bp_multiples_pna_glass_330ml_10pack"
+# 
+# formik3 = "mod_vol_multiples_pna_glass_330ml_10pack ~
+#     mod_bp_multiples_pna_glass_330ml_10pack +
+#     mod_discount_multiples_pna_glass_330ml_10pack +
+#     mod_featdisp_multiples_pna_glass_330ml_10pack +
+#     s_christmas +
+#     s_spring_bank_holiday +
+#     s_good_friday +
+#     covid_mobility_residential +
+#     events_peroni_uefa_21 +
+#     events_peroni_all_racing +
+#     events_peroni_fifa_world_cup_22 +
+#     c_discount_multiples_stella_artois_btl_284_ml_12_pack +
+#     c_discount_multiples_corona_btl_330_ml_24_pack + 
+#     atan(m_ooh_peroni_digital_imp_adstock50 / 56756368)"
+# 
+# import_file$adst50dr = atan(import_file$m_ooh_peroni_digital_imp_adstock50 / 56756368)
+# 
+# summary(lm(data = import_file, formula = formik3))
+# 
+# crit.out = heatmap(
+#   dataset = import_file,
+#   formula.input = formik3,
+# >>>>>>> 77918ed028192233784f46062b0b4324f40d3c54
+#   expense_channel = "m_ooh_peroni_digital_imp",
+#   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9),
+#   dr_type = "atan",
+#   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1),
+#   criteria = c("t-stat")) # "R2", "t-stat"
+# 
+# # Automatic variable selection
+# auto_variable_selection(model1, import_file, "m_ooh_peroni")
+# 
+# # Chart variables
+# plot_line1((atan(import_file$m_press_spend30/30000)), import_file)
+# plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "m_vod_peroni_first_dates_sponsor_sp_adstock50", import_file)
+# 
+# # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
+# actual_vs_fitted_plot(model1, import_file, "")
+# 
+# # Residual plot
+# residuals_vs_variable_plot(model1, import_file, "gt_peroni")
+# 
+# create_residuals_histogram(model1, import_file)
+# 
+# # Price elasticity
+# calculate_price_elasticity(model1, "mod_vol_multiples_pna_glass_330ml_10pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
+# 
+# # Plot media curve
+# plot_media_curve(import_file, media_var = "m_press_spend30", dim_ret = 2000)
 
 
 
