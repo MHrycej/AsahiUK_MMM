@@ -33,7 +33,7 @@ for (channel in colnames(media_data)[2:ncol(media_data)]) {
     adstock_col_name <- paste0(channel, "_adstock", adstock_coefficient * 100) # Multiply by 100 for naming
     
     # Assign adstocked values to the new data frame, including the last value
-    transformed_data[[adstock_col_name]] <- c(0, adstocked_values)[1:length(transformed_data$Date)]
+    transformed_data[[adstock_col_name]] <- adstocked_values
   }
 }
 
