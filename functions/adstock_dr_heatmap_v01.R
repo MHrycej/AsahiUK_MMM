@@ -22,7 +22,7 @@ heatmap = function(
   for(crit.i in 1:length(criteria)){
 
     # 1 We create time variable to order everything accordingly
-    dataset$time = paste(dataset$Year, dataset$Week, sep = "-") # dataset$Date
+    dataset$time = dataset$Date # paste(dataset$Year, dataset$Week, sep = "-")
     dataset = dataset[order(dataset$time), ]
     
     # 2 We create virtual output matrices to store everything
@@ -51,12 +51,13 @@ heatmap = function(
         max_expense = max(sub[, c(expense_channel)], na.rm = T)
 
         # We apply the adstock within loop starting with the beginning of our time axis
+        expense = expense[order(expense$time), ]
+        expense[1, 2] = sum(expense[1, 2], na.rm = T) + 0
+        
         for(time.var in 2:nrow(expense)){
           expense[time.var, 2] = sum(expense[time.var, 2], na.rm = T) + sum(expense[time.var - 1, 2], na.rm = T) * adstock
         }
         
-        expense = expense[order(expense$time), ]
-
         # Now we apply the diminishing returns within loop starting with the beginning of our time axis
         if(dr_type == "exp"){
           expense[, 2] = expense[, 2] # please define exponential diminishing return
@@ -92,6 +93,7 @@ heatmap = function(
           gg.criterion[counter, 5] = round(summary(model.temp)$coefficients[c(expense_channel), 3], 3)
           print(gg.criterion[counter, 5])
         }
+
         
         counter = counter + 1
         remove(adstock, dr_divisor, sub, expense, time.var, formula.final, model.temp)
