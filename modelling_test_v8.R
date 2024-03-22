@@ -100,6 +100,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
 
 #### end of formula def ####
 
+#Name the model correctly here: e.g. peroni_multiples_330_12pk
 model1 <- lm(formula = formula.01, data = import_file)
 
 # Model results

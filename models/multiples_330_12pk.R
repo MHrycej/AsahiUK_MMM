@@ -96,18 +96,18 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_sp_adstock30/170000)+
   #atan(m_vod_peroni_im_adstock60/952130)+
-  atan(m_youtube_peroni_im/10000000)+
+  atan(m_yt_peroni_im/10000000)+
   atan(m_spotify_peroni_im/420000)+
   dummy_20210627+
   dummy_20230402
 
 
 #### end of formula def ####
-
-multiples_330_12pk <- lm(formula = formula.01, data = import_file)
+#use the same name as in dependent variable without "mod_vol_"
+multiples_pna_glass_330ml_12pack <- lm(formula = formula.01, data = import_file)
 
 # Model results
-model_stats(multiples_330_12pk, date_var = import_file$Date)
+model_stats(multiples_pna_glass_330ml_12pack, date_var = import_file$Date)
 
 
 #-----------------------------------------------------------------
@@ -121,7 +121,7 @@ model_stats(multiples_330_12pk, date_var = import_file$Date)
 
 
 # Automatic variable selection
-auto_variable_selection(multiples_330_12pk, import_file, "dummy_")
+auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "dummy_")
 
 # adstock & dr heatmap
 heatmap(
@@ -138,15 +138,15 @@ plot_line1(import_file$mod_bp_multiples_pna_glass_330ml_12pack, import_file)
 plot_line2("mod_discount_multiples_pna_glass_330ml_12pack", "e_unemployment", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_330_12pk, import_file, "mod_bp_multiples_pna_glass_330ml_12pack")
+actual_vs_fitted_plot(peroni_multiples_330_12pk, import_file, "mod_bp_multiples_pna_glass_330ml_12pack")
 
 # Residual plot
-residuals_vs_variable_plot(multiples_330_12pk, import_file, "gt_peroni")
+residuals_vs_variable_plot(peroni_multiples_330_12pk, import_file, "gt_peroni")
 
-create_residuals_histogram(multiples_330_12pk, import_file)
+create_residuals_histogram(peroni_multiples_330_12pk, import_file)
 
 # Price elasticity
-calculate_price_elasticity(multiples_330_12pk, "mod_vol_multiples_pna_glass_330ml_12pack", "mod_bp_multiples_pna_glass_330ml_12pack", import_file)
+calculate_price_elasticity(peroni_multiples_330_12pk, "mod_vol_multiples_pna_glass_330ml_12pack", "mod_bp_multiples_pna_glass_330ml_12pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_ret = 2000)
@@ -158,7 +158,9 @@ plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_r
 #----------------------Decomposition------------------------------
 #-----------------------------------------------------------------
 
-model_decomp(multiples_330_12pk)
+model_decomp(multiples_pna_glass_330ml_12pack)
 
-final_decomp_export <- model_decomp(multiples_330_12pk)
-write_xlsx(final_decomp_export, path = file.path(directory_path, "/decomps/decomp_multiples_330_12pk.xlsx"))
+final_decomp_export <- model_decomp(multiples_pna_glass_330ml_12pack)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_330ml_12pack.csv"), row.names = FALSE)
+
+generate_roi_table()

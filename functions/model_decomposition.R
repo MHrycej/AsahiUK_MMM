@@ -1,5 +1,5 @@
 #####-----Model decomposition-----###
-#Update date: 20/03/2024
+#Update date: 22/03/2024
 
 library(janitor)
 library(scales)
@@ -216,8 +216,12 @@ model_decomp <- function(model) {
   #Create final decomp table
   model_name <- deparse(substitute(model))
   
-  final_decomp_export <- merged_decomp_final %>%
+  final_decomp_export <- merge(decomp_final_long_df, taxonomy, by = "variable_name") %>%
+    select(Date, variable_name, decomp_group, value) %>%
+    group_by(Date, variable_name, decomp_group) %>%
+    summarise(final_value = sum(value, na.rm = TRUE)) %>%
     mutate(model_name = model_name) %>%
-    select(model_name, decomp_group, date = Date, value = final_value)
+    select(model_name, variable_name, decomp_group, Date, value = final_value)
+
   
 }

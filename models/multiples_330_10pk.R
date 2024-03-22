@@ -94,16 +94,16 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   #s_fathers_day+
   #s_school_christmas_holidays+
   #w_deviation_max_temp_c+
-  atan(m_vod_peroni_first_dates_sponsor_sp_adstock50/70000)+
-  atan(m_youtube_peroni_sp_adstock10/10000)
+  atan(m_sponsor_peroni_firstdate_sp_adstock50/70000)+
+  atan(m_yt_peroni_sp_adstock10/10000)
 
 
 #### end of formula def ####
-
-multiples_330_10pk <- lm(formula = formula.01, data = import_file)
+#use the same name as in dependent variable without "mod_vol_"
+multiples_pna_glass_330ml_10pack <- lm(formula = formula.01, data = import_file)
 
 # Model results
-model_stats(multiples_330_10pk, date_var = import_file$Date)
+model_stats(multiples_pna_glass_330ml_10pack, date_var = import_file$Date)
 
 
 #-----------------------------------------------------------------
@@ -153,7 +153,7 @@ plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_r
 #----------------------Decomposition------------------------------
 #-----------------------------------------------------------------
 
-model_decomp(multiples_330_10pk)
+model_decomp(multiples_pna_glass_330ml_10pack)
 
-final_decomp_export <- model_decomp(multiples_330_10pk)
-write_xlsx(final_decomp_export, path = file.path(directory_path, "/decomps/decomp_multiples_330_10pk.xlsx"))
+final_decomp_export <- model_decomp(multiples_pna_glass_330ml_10pack)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_330ml_10pack.csv"), row.names = FALSE)
