@@ -1,6 +1,6 @@
 #Aggregate all individual model results together
 #Calculate ROI table
-#Updated: 22/03/2024
+#Updated: 27/03/2024
 
 
 generate_roi_table <- function() {
@@ -98,32 +98,33 @@ prices <- import_file %>%
 final_data <- left_join(final_media_contributions, final_media_spends,
                          by = c("Date", "channel", "brand", "campaign"))
 final_data <- final_data %>%
-  select(model_name, brand, channel, campaign, decomp_group, Year, Date, volume = value, spend)
+  select(model_name, brand, channel, campaign, decomp_group, Year, Date, volume = value,volume_tails = value_tails , spend)
 
 #join prices together with volume and spend table and calculate value
 final_data_w_values <- left_join(final_data, prices,
                                  by = c("Date", "model_name")) %>%
   mutate(value = volume * price) %>%
-  select(-volume, -price)
+  mutate(value_tails = volume_tails * price) %>%
+  select(-volume, -volume_tails, -price)
 
 
 #####################################
 #calculate ROIs
 
 aggregated_data <- final_data_w_values %>%
-  select(model_name, decomp_group, Year, value, spend) %>%
+  select(model_name, decomp_group, Year, value_tails, spend) %>%
   group_by(model_name, decomp_group, Year) %>%
-  summarize(total_value = sum(value, na.rm = TRUE),
+  summarize(total_value_tails = sum(value_tails, na.rm = TRUE),
             total_spend = sum(spend, na.rm = TRUE),
-            roi = total_value / total_spend) %>%
+            roi = total_value_tails / total_spend) %>%
   mutate(roi = ifelse(is.nan(roi) | is.infinite(roi), 0, roi))
 
 #calculate total ROIs, sum of all the models values
 aggregated_data_tot <- aggregated_data %>%
   group_by(decomp_group, Year) %>%
-  summarize(total_value = sum(total_value),
+  summarize(total_value_tails = sum(total_value_tails),
             total_spend = unique(total_spend),
-            roi = total_value / total_spend) %>%
+            roi = total_value_tails / total_spend) %>%
   mutate(roi = ifelse(is.nan(roi) | is.infinite(roi), 0, roi)) %>%
   ungroup() %>%
   mutate(model_name = "total")

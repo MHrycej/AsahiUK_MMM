@@ -1,5 +1,5 @@
 #####-----Model decomposition-----###
-#Update date: 22/03/2024
+#Update date: 25/03/2024
 
 library(janitor)
 library(scales)
@@ -8,8 +8,19 @@ library(broom)
 library(forcats)
 
 
+#1. Get model coefficients and raw variables used in the model for non-media variables: multiply
+#2. Get model coefficients and raw variables for media used in the model: multiply
+#3. Calculate reference points and add into sub-base if there are any specified in taxonomy
+#4. Group variables into decomp groups based on taxonomy mapping
+#5. Generate charts and tables
+#6. Calculate tails
+#7. Create final decomp table to export
+
 model_decomp <- function(model) {
-  #model <- multiples_330_12pk
+  #######################################################
+  #1. calculate non-media variable contributions
+  
+  #model <- multiples_pna_glass_330ml_12pack
   #creating model coefficients table
   mod_coeffs <- broom::tidy(model) %>%
     select(term, estimate) %>%
@@ -17,9 +28,6 @@ model_decomp <- function(model) {
       term == "(Intercept)" ~ "intercept",
       TRUE ~ term
     ))
-  
-  
-  
   
   # Melt import_file to long format
   import_file_long <- import_file %>%
@@ -40,8 +48,9 @@ model_decomp <- function(model) {
   
   #show(decomp_df)
   
+  ###################################################################
+  #2. Media decomping
   
-  # Media decomping
   # getting variables used in the model
   model_augmented <- augment(model)
   
@@ -84,8 +93,8 @@ model_decomp <- function(model) {
     total_decomp_df <- merge(decomp_df, decomp_media_df, by = "Date")
   }
   
-  ######################################################33
-  ##-------reference points
+  #######################################################
+  #3. Reference points
   
   # Melt decomp_df to long format
   decomp_long_df <- total_decomp_df %>%
@@ -158,7 +167,9 @@ model_decomp <- function(model) {
   }
   
   ####################################################################
-  ###----grouping variables into decomp groups
+  #4. grouping variables into decomp groups
+
+  
   #converting decomped variables into long format
   decomp_final_long_df <- wide_decomp_w_subbase %>%
     pivot_longer(cols = -Date, names_to = "variable_name", values_to = "value")
@@ -175,8 +186,7 @@ model_decomp <- function(model) {
  
   
   #######################################################################
-  #-create stacked decomp chart
-  
+  #5. create stacked decomp chart
   
   # Reverse the order of decomp_group levels
   #merged_decomp_final$decomp_group <- forcats::fct_rev(merged_decomp_final$decomp_group)
@@ -196,7 +206,8 @@ model_decomp <- function(model) {
   print(ggplotly(p))
   
   ###################################################################
-  #-create decomps table with % of total for full period
+  #5. create decomps table with % of total for full period
+  
   #grouping and calculating decomp group contributions on total level, calculating shares
   summed_decomps <- merged_decomp_final %>%
     ungroup() %>%
@@ -212,16 +223,116 @@ model_decomp <- function(model) {
       formatStyle(c("total_value", "percent_share"), `border-radius` = '8px')
   )
   
+  
+  ################################################################
+  #6. Calculate Tails
+  
+  #For tails we need:
+  #1. raw media variables used in the model
+  #2. media weekly decomps
+  #3. adstocks for each media variable
+  #4. create input table for tails function
+  #5. tails calculation function
+  
+  #6.1. Get raw media variables used in the model
+  raw_media_colnames <- names(decomp_media_df) %>%
+    # Remove "_adstock" label if present in the column names
+    str_replace("_adstock.*$", "") %>%
+    # If no "_adstock" label, keep the name the same
+    ifelse(!grepl("_adstock", names(decomp_media_df)), names(decomp_media_df), .)
+    
+  raw_media_vars <- import_file %>%
+    select(all_of(raw_media_colnames))
+  
+  
+  #6.2. Media weekly decomps already calculated above in decomp_media_df but need to change var names to be consistent with raw variables
+  media_decomp_for_tails <- decomp_media_df %>%
+    rename_with(~ if_else(grepl("_adstock", .), str_replace(., "_adstock.*$", ""), .), .cols = everything())
+  
+  
+  #6.3. Get adstocks for each media variable
+  # Extract adstock values from column names of decomp_media_df
+  adstock_values <- sub(".*_adstock(\\d+)$", "\\1", names(decomp_media_df)[-1])
+  adstock_values[!grepl("_adstock", names(decomp_media_df)[-1])] <- 0
+  
+  # Extract column names from media_decomp_for_tails, skipping the Date column
+  adstock_colnames <- names(media_decomp_for_tails)[-1]
+  
+  # Convert vectors to data frames
+  adstock_colnames_df <- data.frame(adstock_colnames, stringsAsFactors = FALSE)
+  adstock_values_df <- data.frame(adstock_values, stringsAsFactors = FALSE)
+  
+  # Combine column names and values column-wise
+  adstocks <- cbind(adstock_colnames_df, adstock_values_df)
+  adstocks$adstock_values <- as.numeric(adstocks$adstock_values)
+  adstocks <- adstocks %>%
+    mutate(adstock_values = adstock_values/100)
+  
+  adstocks <- pivot_wider(adstocks, 
+                               names_from = adstock_colnames,
+                               values_from = adstock_values)
+
+  
+  #6.4. Use all input tables in the tails function (run tails function for each media variable)
+  
+  # Initialize an empty results table
+  decomp_tails <- data.frame(date = as.Date(character()))
+  
+  #specify column names that should be run through function
+  media_decomp_cols <- names(media_decomp_for_tails)[-1] # Exclude the Date column
+  raw_media_cols <- names(raw_media_vars)[-1] # Exclude the Date column
+  
+  # Iterate over the columns of media_decomp_for_tails and raw_media_vars
+  for (i in seq_along(media_decomp_cols)) {
+    # Extract the column name
+    #i=4
+    col_name <- media_decomp_cols[i]
+    
+    # Extract the corresponding columns from media_decomp_for_tails and raw_media_vars
+    media_decomp_col <- media_decomp_for_tails[c('Date', col_name)]
+    raw_media_col <- raw_media_vars[c('Date', raw_media_cols[i])]
+    adstock <- adstocks[[i]]
+    
+    # Rename columns
+    names(media_decomp_col)[2] <- 'decomp'
+    names(raw_media_col)[2] <- 'raw_grp'
+    
+    # Merge the columns
+    dataf <- merge(raw_media_col, media_decomp_col, by = 'Date')
+    names(dataf)[1] <- 'date'
+    
+    # Call out the function
+    tails_output <- get.tails(dataf, adstock)
+    
+    # Rename columns back to original names
+    names(tails_output)[names(tails_output) == 'decomp_tails'] <- col_name
+    
+    # Store the result of the current iteration in the results table
+    decomp_tails <- merge(decomp_tails, tails_output[c('date', col_name)], by = 'date', all = TRUE)
+  }
+    
+  # Replace column names in results with the column names from media_decomp_for_tails
+  colnames(decomp_tails)[-1] <- media_decomp_cols
+  colnames(decomp_tails)[-1] <- colnames(decomp_media_df)[-1]
+  
+  decomp_tails_long <- decomp_tails %>%
+    pivot_longer(cols = -date,
+                 names_to = "variable_name",
+                 values_to = "value_tails") %>%
+    rename(Date = date)  # Rename date column to Date
+  
+  
   #################################################################
-  #Create final decomp table
+  #7. Create final decomp table
+  
   model_name <- deparse(substitute(model))
   
   final_decomp_export <- merge(decomp_final_long_df, taxonomy, by = "variable_name") %>%
-    select(Date, variable_name, decomp_group, value) %>%
-    group_by(Date, variable_name, decomp_group) %>%
-    summarise(final_value = sum(value, na.rm = TRUE)) %>%
+    left_join(decomp_tails_long, by = c("Date", "variable_name")) %>%
+    mutate(value_tails = coalesce(value_tails, value)) %>%
+    select(Date, variable_name, decomp_group, value, value_tails) %>%
     mutate(model_name = model_name) %>%
-    select(model_name, variable_name, decomp_group, Date, value = final_value)
+    select(model_name, variable_name, decomp_group, Date, value, value_tails)
 
   
 }
