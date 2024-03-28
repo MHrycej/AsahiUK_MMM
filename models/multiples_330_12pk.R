@@ -1,10 +1,10 @@
 #MARKETING MIX MODELLING TOOL
+
+#------------------------------------------------------------------------------
+#--------------------Read in all necessary functions & files-------------------
+#------------------------------------------------------------------------------
+
 library(here)
-
-#-----------------------------------------------------------------
-#--------------------Read in all necessary functions & files------
-#-----------------------------------------------------------------
-
 source('functions/source_all_functions.R')
 
 # Specify the directory path
@@ -27,14 +27,10 @@ import_file <- merge(import_file, dates_file, by = "Date", all.x = TRUE)
 taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"))
 
 
-# Read the spends file
 
-
-
-
-#-----------------------------------------------------------------
-#-----------------------Variable creation-------------------------
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
+#-----------------------Variable creation--------------------------------------
+#------------------------------------------------------------------------------
 
 
 
@@ -44,14 +40,10 @@ import_file <- add_new_variable(import_file, new_var_name = "new_variable", star
 # Split variables
 import_file$test_var_new_var <- import_file$gt_peroni * import_file$new_variable
 
-
 # Create lag /lead vars: 1. specify variable name, 2. specify variable to lag/lead
 import_file$gt_peroni_lead1 <- lead(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
-
-
-#----------------------------------------------------------------
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
@@ -62,10 +54,9 @@ taxonomy <- dplyr::bind_rows(
 
 
 
-
-#-----------------------------------------------------------------
-#------------------------MODEL------------------------------------
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
+#------------------------MODEL-------------------------------------------------
+#------------------------------------------------------------------------------
 
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
@@ -92,7 +83,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   e_cci+
   e_unemployment+
-  bt_peroni_difference_ind+
+  #bt_peroni_difference_ind+
+  #bt_peroni_penetration+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_sp_adstock30/170000)+
   #atan(m_vod_peroni_im_adstock60/952130)+
@@ -100,28 +92,30 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   atan(m_spotify_peroni_im/420000)+
   dummy_20210627+
   dummy_20230402
+  #dummy_trend
+  #dummy_20211212+
+  #dummy_20211219
 
 
 #### end of formula def ####
+
+#----------------------- Model results-----------------------------------------
+
 #use the same name as in dependent variable without "mod_vol_"
 multiples_pna_glass_330ml_12pack <- lm(formula = formula.01, data = import_file)
-
-# Model results
 model_stats(multiples_pna_glass_330ml_12pack, date_var = import_file$Date)
 
 
-#-----------------------------------------------------------------
 
+#------------------------------------------------------------------------------
+#----------------------Functions-----------------------------------------------
+#------------------------------------------------------------------------------
 
-
-#-----------------------------------------------------------------
-#----------------------Functions----------------------------
-#-----------------------------------------------------------------
-
-
+# Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
+actual_vs_fitted_plot(multiples_pna_glass_330ml_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "dummy_")
+auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "bt_")
 
 # adstock & dr heatmap
 heatmap(
@@ -135,18 +129,16 @@ heatmap(
 
 # Chart variables
 plot_line1(import_file$mod_bp_multiples_pna_glass_330ml_12pack, import_file)
-plot_line2("mod_discount_multiples_pna_glass_330ml_12pack", "e_unemployment", import_file)
+plot_line2("mod_vol_multiples_pna_glass_330ml_12pack", "bt_brandvue_peroni_consideration", import_file)
 
-# Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(peroni_multiples_330_12pk, import_file, "mod_bp_multiples_pna_glass_330ml_12pack")
 
 # Residual plot
-residuals_vs_variable_plot(peroni_multiples_330_12pk, import_file, "gt_peroni")
+residuals_vs_variable_plot(multiples_pna_glass_330ml_12pack, import_file, "gt_peroni")
 
-create_residuals_histogram(peroni_multiples_330_12pk, import_file)
+create_residuals_histogram(multiples_pna_glass_330ml_12pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(peroni_multiples_330_12pk, "mod_vol_multiples_pna_glass_330ml_12pack", "mod_bp_multiples_pna_glass_330ml_12pack", import_file)
+calculate_price_elasticity(multiples_pna_glass_330ml_12pack, "mod_vol_multiples_pna_glass_330ml_12pack", "mod_bp_multiples_pna_glass_330ml_12pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_ret = 2000)
@@ -154,9 +146,9 @@ plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_r
 
 
 
-#-----------------------------------------------------------------
-#----------------------Decomposition------------------------------
-#-----------------------------------------------------------------
+#------------------------------------------------------------------------------
+#----------------------Decomposition-------------------------------------------
+#------------------------------------------------------------------------------
 
 model_decomp(multiples_pna_glass_330ml_12pack)
 
