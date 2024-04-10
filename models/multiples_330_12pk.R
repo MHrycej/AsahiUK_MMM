@@ -121,7 +121,7 @@ auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "bt_")
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "m_spotify_peroni_im",
+  expense_channel = "m_tv_peroni_total_tvr",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1), # c(.4)
