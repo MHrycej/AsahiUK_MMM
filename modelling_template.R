@@ -45,6 +45,11 @@ import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.
 import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
 import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
+# Create moving average variables
+window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
+import_file <- calculate_rolling_averages(import_file, "bt_brandvue_peroni_consideration", window_sizes)
+
+
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
@@ -66,46 +71,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   mod_discount_multiples_pna_glass_330ml_12pack+
   mod_featdisp_multiples_pna_glass_330ml_12pack+
   s_christmas+
-  s_christmas_lead1+
-  #s_christmas_lead2+
-  #s_new_years_day+
-  s_spring_bank_holiday+
-  s_good_friday+
-  w_wtd_max_temp_c+
-  w_deviation_rainfall+
-  gt_peroni+
-  #gt_lager+
-  events_peroni_uefa_21+
-  events_peroni_rugby_world_cup_23+
-  events_rugby_wc_sf+
-  events_rugby_wc_final+
-  #c_bp_multiples_corona_btl_330_ml_10_pack+
-  #c_bp_multiples_budweiser_btl_300_ml_6_pack+
-  #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
-  c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-  e_cci+
-  e_rpi+
-  #e_unemployment+
-  #bt_peroni_difference_ind+
-  #bt_peroni_penetration+
-  #bt_brandvue_peroni_spontawareness+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
-  atan(m_ooh_peroni_total_imp_adstock20/70000000)+
-  atan(m_sponsor_peroni_now_im_adstock30/5000000)+
-  #atan(m_vod_peroni_im_adstock60/952130)+
-  atan(m_social_peroni_total_im_adstock20/8000000)+
-  atan(m_digital_peroni_total_sp_adstock70/20000)+
-  atan(m_yt_peroni_im/10000000)+
-  #atan(m_spotify_peroni_im/420000)+
-  dummy_20210627+
-  dummy_month_jan+
-  dummy_month_may+
-  #dummy_trend
-  #dummy_trend
-  #dummy_20211212+
-  dummy_20211219+
-  dummy_20231029+
-  dummy_20230917
+
 
 
 #### end of formula def ####
