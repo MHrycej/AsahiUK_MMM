@@ -146,5 +146,24 @@ print(datatable(roi_table,
     border = '1px solid #CCCCCC'
   ))
 
+###############################################################################
+#Decomp groups % shares comparison
+raw_decomps <- stacked_data %>%
+  select(model_name, decomp_group, value) %>%
+  group_by(model_name, decomp_group) %>%
+  summarize(total_value = sum(value)) %>%
+  group_by(model_name) %>%
+  mutate(total_value_model = sum(total_value)) %>%
+  mutate(percent_share = total_value / total_value_model * 100) %>%
+  mutate(across(c(total_value, percent_share), ~round(., 1))) %>%
+  select(-total_value, -total_value_model)
+
+wide_decomps <- raw_decomps %>%
+  pivot_wider(names_from = model_name, values_from = percent_share) %>%
+  mutate(across(where(is.numeric), ~replace(., is.na(.), 0)))
+
+print(datatable(wide_decomps, options = list(dom = 't', pageLength = nrow(wide_decomps))) %>%
+  formatStyle(names(wide_decomps)[-1], `border-radius` = '8px'))
+
 
 }

@@ -58,8 +58,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_brandvue_peroni_consi
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead1'),
-  taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
+  taxonomy %>% filter(variable_name == 'bt_brandvue_peroni_consideration') %>% mutate(variable_name = 'bt_brandvue_peroni_consideration_3ma')
 )
 
 
@@ -76,6 +75,13 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   mod_discount_multiples_pna_glass_330ml_4pack+
   mod_featdisp_multiples_pna_glass_330ml_4pack+
   gt_peroni+
+  #dummy_month_sep+
+  #dummy_month_oct+
+  #dummy_month_nov+
+  #dummy_month_jun+
+  #dummy_month_jul+
+  #dummy_month_apr+
+  #dummy_month_dec+
   s_christmas+
   #s_christmas_lead1
   #s_new_years_day+
@@ -84,15 +90,29 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #s_fathers_day+
   w_wtd_avg_temp_c+
   e_rpi+
+  #e_cci+
   dummy_month_jan+
-  bt_brandvue_peroni_consideration+
+  #bt_brandvue_peroni_consideration+
+  bt_brandvue_peroni_consideration_3ma+
   events_peroni_uefa_21+
   events_peroni_howdens_xmas_raceday+
-  events_peroni_betfair_ascot_chase_raceday+
   covid_new_daily_deaths+
-  c_bp_multiples_budweiser_can_568_ml_4_pack+
-  c_discount_multiples_san_miguel_can_568_ml_4_pack+
-  c_discount_multiples_budweiser_can_440_ml_10_pack
+  #c_bp_multiples_budweiser_can_568_ml_4_pack+
+  #c_bp_multiples_stella_artois_btl_330_ml_6_pack+
+  #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
+  c_discount_multiples_stella_artois_btl_330_ml_12_pack+
+  c_discount_multiples_stella_artois_unfiltered_can_440_ml_4_pack+
+  #c_discount_multiples_heineken_silver_btl_330_ml_12_pack
+  atan(m_tv_peroni_total_tvr_adstock60/70)+
+  atan(m_ooh_peroni_total_imp_adstock30/70000000)+
+  atan(m_oohunscored_peroni_total_sp_adstock30/170000)+
+  atan(m_sponsor_peroni_now_sp/40000)+
+  atan(m_vod_peroni_im_adstock30/1900000)+
+  atan(m_cinema_peroni_ad/2700000)+
+  atan(m_social_peroni_total_im_adstock20/6500000)+
+  atan(m_digital_peroni_total_sp_adstock30/18000)+
+  atan(m_influencers_peroni_sp_adstock40/10000)+
+  atan(cm_total_san_miguel_sp_adstock60/300000)
 
 
 
@@ -112,26 +132,32 @@ model_stats(multiples_pna_glass_330ml_4pack, date_var = import_file$Date)
 #----------------------Functions----------------------------
 #-----------------------------------------------------------------
 
+# Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
+actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "")
+
+
+# Automatic variable selection
+auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "dummy_month")
+
+
 # adstock & dr heatmap
 
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "m_tv_peroni_total_tvr",
+  expense_channel = "m_influencers_peroni_sp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)
   criteria = c("t-stat")) # "R2", "t-stat"
 
-# Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "dummy_")
+
 
 # Chart variables
-plot_line1((import_file$c_discount_multiples_budweiser_can_440_ml_10_pack), import_file)
+plot_line1((import_file$e_rpi), import_file)
 plot_line2("bt_brandvue_peroni_consideration", "bt_brandvue_peroni_consideration_13ma", import_file)
 
-# Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "")
+
 
 # Residual plot
 residuals_vs_variable_plot(multiples_pna_glass_330ml_10pack, import_file, "gt_peroni")
@@ -153,7 +179,7 @@ plot_media_curve(import_file, media_var = "m_youtube_peroni_sp_adstock10", dim_r
 
 model_decomp(multiples_pna_glass_330ml_4pack)
 
-final_decomp_export <- model_decomp(multiples_pna_glass_330ml_10pack)
-write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_330ml_10pack.csv"), row.names = FALSE)
+final_decomp_export <- model_decomp(multiples_pna_glass_330ml_4pack)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_330ml_4pack.csv"), row.names = FALSE)
 
 generate_roi_table()

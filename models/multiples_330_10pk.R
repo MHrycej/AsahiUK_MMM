@@ -91,7 +91,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
   c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   c_discount_multiples_corona_btl_330_ml_24_pack+
-  #e_cci
+  #e_cci+
+  #e_rpi+
   #s_fathers_day+
   #s_school_christmas_holidays+
   #w_deviation_max_temp_c+
@@ -100,7 +101,9 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   atan(m_sponsor_peroni_now_im_adstock10/14500000)+
   atan(m_digital_peroni_total_im_adstock50/2000000)+
   atan(m_influencers_peroni_sp_adstock50/38000)+
-  dummy_20221218
+  dummy_20221218+
+  dummy_20210606+
+  dummy_20220424
 
 
 #### end of formula def ####
