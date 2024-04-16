@@ -78,9 +78,15 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   s_good_friday+
   dummy_month_may+
   dummy_month_apr+
-  # dummy_month_dec+
+  dummy_month_mar+
+  dummy_month_feb+
+  dummy_month_jul+
+  dummy_month_dec+
+  dummy_month_jun+
+  #dummy_month_dec+
   #w_wtd_max_temp_c+
-  gt_peroni+
+  w_wtd_max_temp_c+
+  #gt_peroni+
   covid_mobility_residential+
   events_peroni_uefa_21+
   events_peroni_all_racing+
@@ -89,16 +95,18 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   c_bp_multiples_corona_btl_330_ml_10_pack+
   #c_bp_multiples_budweiser_btl_300_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
-  c_discount_multiples_stella_artois_btl_284_ml_12_pack+
+  #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   c_discount_multiples_corona_btl_330_ml_24_pack+
   #e_cci+
   #e_rpi+
   #s_fathers_day+
   #s_school_christmas_holidays+
   #w_deviation_max_temp_c+
-  #atan(m_yt_peroni_sp_adstock10/10000)+
-  atan(m_oohunscored_peroni_total_sp_adstock70/75820)+
+  atan(m_yt_peroni_im_adstock10/5000000)+
+  atan(m_ooh_peroni_total_imp_adstock50/140000000)+
+  #atan(m_oohunscored_peroni_total_sp_adstock70/75820)+
   atan(m_sponsor_peroni_now_im_adstock10/14500000)+
+  atan(m_vod_peroni_im_adstock60/1000000)+
   atan(m_digital_peroni_total_im_adstock50/2000000)+
   atan(m_influencers_peroni_sp_adstock50/38000)+
   dummy_20221218+
@@ -127,14 +135,14 @@ model_stats(multiples_pna_glass_330ml_10pack, date_var = import_file$Date)
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "m_influencers_peroni_sp",
+  expense_channel = "m_yt_peroni_im",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
-  dr_divisors = c(.4, .5, .6, .7, .8, .9, 1, 1.1, 1.3, 1.5, 1.7, 1.9, 2.1), # c(.4)
+  dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)
   criteria = c("t-stat")) # "R2", "t-stat"
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "m_yt_peroni_")
+auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "m_twitter_peroni_")
 
 # Chart variables
 plot_line1((atan(import_file$m_youtube_peroni_sp_adstock10/30000)), import_file)

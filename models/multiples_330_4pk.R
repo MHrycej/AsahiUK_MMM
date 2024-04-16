@@ -73,44 +73,53 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #mod_dist_multiples_pna_glass_330ml_4pack+
   mod_bp_multiples_pna_glass_330ml_4pack+ #change price manually in master file
   mod_discount_multiples_pna_glass_330ml_4pack+
-  mod_featdisp_multiples_pna_glass_330ml_4pack+
-  gt_peroni+
-  #dummy_month_sep+
-  #dummy_month_oct+
-  #dummy_month_nov+
-  #dummy_month_jun+
-  #dummy_month_jul+
-  #dummy_month_apr+
-  #dummy_month_dec+
+  mod_feat_multiples_pna_glass_330ml_4pack+
+  #gt_lager+
+  dummy_month_sep+
+  dummy_month_oct+
+  dummy_month_nov+
+  dummy_month_jun+
+  dummy_month_jul+
+  dummy_month_apr+
+  dummy_month_dec+
+  dummy_month_jan+
   s_christmas+
+  s_new_years_day+
   #s_christmas_lead1
   #s_new_years_day+
-  s_spring_bank_holiday+
+  #s_spring_bank_holiday+
   s_good_friday+
   #s_fathers_day+
   w_wtd_avg_temp_c+
   e_rpi+
   #e_cci+
-  dummy_month_jan+
   #bt_brandvue_peroni_consideration+
-  bt_brandvue_peroni_consideration_3ma+
-  events_peroni_uefa_21+
+  #bt_peroni_consideration_13ma+
+  #events_peroni_uefa_21+
   events_peroni_howdens_xmas_raceday+
-  covid_new_daily_deaths+
+  #covid_new_daily_deaths+
+  covid_hospital_cases+
   #c_bp_multiples_budweiser_can_568_ml_4_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
-  c_discount_multiples_stella_artois_btl_330_ml_12_pack+
-  c_discount_multiples_stella_artois_unfiltered_can_440_ml_4_pack+
+  #c_bp_multiples_corona_can_330_ml_10_pack+
+  #c_bp_multiples_birra_moretti_btl_660_ml_single+
+  #c_bp_multiples_corona_btl_330_ml_12_pack+
+  #c_discount_multiples_stella_artois_btl_330_ml_12_pack+
+  #c_discount_multiples_stella_artois_unfiltered_can_440_ml_4_pack+
   #c_discount_multiples_heineken_silver_btl_330_ml_12_pack
+  #c_discount_multiples_stella_artois_unfiltered_can_440_ml_10_pack+
+  #c_discount_multiples_birra_moretti_btl_330_ml_18_pack+
+  c_discount_multiples_stella_artois_btl_660_ml_single+
+  c_discount_multiples_san_miguel_can_568_ml_4_pack+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock30/70000000)+
   atan(m_oohunscored_peroni_total_sp_adstock30/170000)+
-  atan(m_sponsor_peroni_now_sp/40000)+
+  #atan(m_sponsor_peroni_now_sp/40000)+
   atan(m_vod_peroni_im_adstock30/1900000)+
   atan(m_cinema_peroni_ad/2700000)+
   atan(m_social_peroni_total_im_adstock20/6500000)+
-  atan(m_digital_peroni_total_sp_adstock30/18000)+
+  #atan(m_digital_peroni_total_sp_adstock30/18000)+
   atan(m_influencers_peroni_sp_adstock40/10000)+
   atan(cm_total_san_miguel_sp_adstock60/300000)
 
@@ -137,7 +146,7 @@ actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "")
 
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "dummy_month")
+auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "covid_")
 
 
 # adstock & dr heatmap
@@ -154,8 +163,8 @@ heatmap(
 
 
 # Chart variables
-plot_line1((import_file$e_rpi), import_file)
-plot_line2("bt_brandvue_peroni_consideration", "bt_brandvue_peroni_consideration_13ma", import_file)
+plot_line1((import_file$c_discount_multiples_stella_artois_btl_660_ml_single), import_file)
+plot_line2("bt_brandvue_peroni_consideration", "c_discount_multiples_stella_artois_unfiltered_can_440_ml_10_pack", import_file)
 
 
 
