@@ -11,6 +11,7 @@ library(stringr)
 setwd(here())
 directory_path <- getwd()
 
+
 # Read the dates file
 dates_file <- read.csv(file.path(directory_path, "dates_lookup.csv"))
 dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
@@ -20,7 +21,7 @@ dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 source(paste(directory_path, "functions/sellout_data_read_v02.R", sep = "/")) # look into specific file for more details
 
 nielsen = nielsen.creation(
-  "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM", 
+  "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/nielsen_processing", 
   "all",  # selection of model
   c("ignore"), # BRAND aggregation brand strings to search for
   c("peroni", "moretti", "madri", "estrella", "asd", "san miguel", "heineken", "cruzcampo", "corona", "stella","budweiser"), # SKU aggregation brand strings to limit our SKUs
@@ -51,11 +52,12 @@ nielsen_data <- nielsen.bp %>%
 nielsen_data$Week <- as.numeric(nielsen_data$Week)
 nielsen_data$Date <- as.Date(ISOweek::ISOweek2date(paste(nielsen_data$Year, sprintf("W%02d", nielsen_data$Week), "1", sep="-")))-1
 
+nielsen_data <- nielsen_data %>%
+  select(-Year, -Week) %>%
+  mutate_all(~replace_na(., 0))
 
 nielsen_data <- left_join(dates_file, nielsen_data, by = "Date")
-nielsen_data <- nielsen_data %>%
-  select(-year, -Year, -Week) %>%
-  mutate_all(~replace_na(., 0))
+
 
 
 
@@ -154,3 +156,73 @@ nielsen_data_mapped <- nielsen_data %>%
 
 write_xlsx(taxonomy, path = file.path(directory_path, "nielsen_taxonomy.xlsx"))
 write_xlsx(nielsen_data_mapped, path = file.path(directory_path, "final_nielsen_data.xlsx"))
+
+
+############################################################################
+#aggregated competitor pricing
+
+nielsen_data_long <- pivot_longer(nielsen_data_mapped,
+                                  cols = -Date,
+                                  names_to = "variable_name",
+                                  values_to = "value")
+
+nielsen_data_long <- nielsen_data_long %>%
+  filter(grepl("c_bp_", variable_name))
+         
+         
+nielsen_data_long1 <- nielsen_data_long %>%
+  filter(!grepl("zero|cero|alcohol_free|0_0", variable_name))
+
+nielsen_data_long_zero <- nielsen_data_long %>%
+  filter(grepl("zero|cero|alcohol_free|0_0", variable_name))
+
+nielsen_data_long2 <- nielsen_data_long1 %>%
+  mutate(category = str_extract(variable_name, "^[^_]+_[^_]+_[^_]+"),
+         pack_size = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                            "single",
+                            str_extract(variable_name, "[^_]+_[^_]+$")),
+         btl_can = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                          str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*$)"),
+                          str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*_[^_]*$)")),
+         size = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                       str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*$)"),
+                       str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*$)")),
+         brand = str_extract(variable_name, paste0("(?<=", category, "_).*?(?=_", btl_can, "_)"))) %>%
+  select(-variable_name) %>%
+  group_by(Date, category, pack_size, btl_can, size) %>%
+  summarize(average_value = mean(value[value != 0])) %>%
+  mutate(average_value = ifelse(is.nan(average_value), 0, average_value)) %>%
+  mutate(variable = paste(category, "total", btl_can, size, pack_size, sep = "_")) %>%
+  ungroup() %>%
+  select(Date, variable, average_value)
+
+nielsen_data_long_zero2 <- nielsen_data_long_zero %>%
+  mutate(category = str_extract(variable_name, "^[^_]+_[^_]+_[^_]+"),
+         pack_size = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                            "single",
+                            str_extract(variable_name, "[^_]+_[^_]+$")),
+         btl_can = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                          str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*$)"),
+                          str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*_[^_]*$)")),
+         size = ifelse(str_extract(variable_name, "[^_]+$") == "single",
+                       str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*$)"),
+                       str_extract(variable_name, "(?<=_)[^_]+(?=_[^_]*_[^_]*_[^_]*$)")),
+         brand = str_extract(variable_name, paste0("(?<=", category, "_).*?(?=_", btl_can, "_)"))) %>%
+  select(-variable_name) %>%
+  group_by(Date, category, pack_size, btl_can, size) %>%
+  summarize(average_value = mean(value[value != 0])) %>%
+  mutate(average_value = ifelse(is.nan(average_value), 0, average_value)) %>%
+  mutate(variable = paste(category, "total00", btl_can, size, pack_size, sep = "_")) %>%
+  ungroup() %>%
+  select(Date, variable, average_value)
+
+nielsen_data_wide <- nielsen_data_long2 %>%
+  pivot_wider(names_from = variable, values_from = average_value)
+
+nielsen_data_wide_zero <- nielsen_data_long_zero2 %>%
+  pivot_wider(names_from = variable, values_from = average_value)
+
+write_xlsx(nielsen_data_wide, path = file.path(directory_path, "total_competitor_price_data.xlsx"))
+write_xlsx(nielsen_data_wide_zero, path = file.path(directory_path, "total_competitor_price_data_zero.xlsx"))
+
+
