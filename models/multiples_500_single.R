@@ -70,7 +70,7 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_500ml_1pack+
-  mod_bp_multiples_pna_glass_500ml_1pack+
+  #mod_bp_multiples_pna_glass_500ml_1pack+
   #mod_discount_multiples_pna_glass_500ml_1pack+
   mod_featdisp_multiples_pna_glass_500ml_1pack+
   dummy_month_jan+
@@ -101,7 +101,7 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   atan(m_ooh_peroni_total_imp_adstock20/140000000)+
   atan(m_sponsor_peroni_now_im_adstock10/8000000)+
   atan(m_social_peroni_total_im_adstock10/10000000)+
-  atan(m_influencers_peroni_im_adstock10/1000000)+
+  #atan(m_influencers_peroni_im_adstock10/1000000)+
   #atan(m_spotify_peroni_im_adstock20/250000)
   #atan(cm_total_estrella_sp_adstock20/200000)
   atan(cm_total_stella_sp_adstock20/100000)

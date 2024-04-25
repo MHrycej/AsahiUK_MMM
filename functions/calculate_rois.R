@@ -159,11 +159,22 @@ raw_decomps <- stacked_data %>%
   select(-total_value, -total_value_model)
 
 wide_decomps <- raw_decomps %>%
-  pivot_wider(names_from = model_name, values_from = percent_share) %>%
+  pivot_wider(names_from = decomp_group, values_from = percent_share) %>%
   mutate(across(where(is.numeric), ~replace(., is.na(.), 0)))
 
-print(datatable(wide_decomps, options = list(dom = 't', pageLength = nrow(wide_decomps))) %>%
-  formatStyle(names(wide_decomps)[-1], `border-radius` = '8px'))
-
-
+datatable(wide_decomps, 
+          options = list(
+            dom = 't', 
+            pageLength = nrow(wide_decomps),
+            searching = TRUE  # Add searching option for filtering
+          ), 
+          filter = 'top') %>%
+  formatStyle(columns = names(wide_decomps)[-1], `border-radius` = '8px') %>%
+  formatStyle(columns = 1, `border-right` = '2px solid #ddd') %>%
+  formatStyle(columns = 1, `font-weight` = 'bold') %>%
+  formatStyle(columns = 1, `background-color` = 'white') %>%
+  formatStyle(columns = 1, `position` = 'sticky', `left` = '0', `z-index` = '1') %>%
+  formatStyle(columns = 1, `background-color` = 'white', `border-top` = '0') %>%
+  formatStyle(columns = 1, `border-top-left-radius` = '8px') %>%
+  formatStyle(columns = 1, `border-bottom-left-radius` = '8px')
 }
