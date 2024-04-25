@@ -35,19 +35,22 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 
 
 # Create new dummy variable with 1s: specify name and range
-import_file <- add_new_variable(import_file, new_var_name = "new_variable", start_date = "2023-02-10", end_date = "2024-02-15")
+#import_file <- add_new_variable(import_file, new_var_name = "new_variable", start_date = "2023-02-10", end_date = "2024-02-15")
 
 # Split variables
-import_file$test_var_new_var <- import_file$gt_peroni * import_file$new_variable
+#import_file$test_var_new_var <- import_file$gt_peroni * import_file$new_variable
 
 # Create lag /lead vars: 1. specify variable name, 2. specify variable to lag/lead
 import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
 import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
-import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
+#import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
+
+# create relative pricing
+#import_file$rel_price_multiples_glass_330ml_10pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_10pack/import_file$c_bp_multiples_corona_btl_330_ml_10_pack
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
-import_file <- calculate_rolling_averages(import_file, "bt_brandvue_peroni_consideration", window_sizes)
+import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration", window_sizes)
 
 
 # Add custom variables to taxonomy file (decomping purpose)
