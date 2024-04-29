@@ -69,7 +69,7 @@ taxonomy <- dplyr::bind_rows(
 
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
-  mod_dist_multiples_pna_glass_330ml_12pack+
+  #mod_dist_multiples_pna_glass_330ml_12pack+
   mod_bp_multiples_pna_glass_330ml_12pack+
   mod_discount_multiples_pna_glass_330ml_12pack+
   mod_featdisp_multiples_pna_glass_330ml_12pack+
@@ -94,8 +94,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   c_discount_multiples_estrella_damm_barcelona_btl_330_ml_12_pack+
   c_discount_multiples_madri_exceptional_btl_330_ml_12_pack+
-  #e_cci+
-  e_rpi+
+  e_cci+
+  #e_rpi+
   #e_unemployment+
   #bt_peroni_difference_ind+
   #bt_peroni_penetration+
@@ -120,10 +120,10 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock20/70000000)+
   #atan(m_sponsor_peroni_now_im_adstock30/5000000)+
-  atan(m_vod_peroni_im_adstock60/1000000)+ #correlates with TV - CHECK
+  #atan(m_vod_peroni_im_adstock60/1000000)+ #correlates with TV - CHECK
   atan(m_social_peroni_total_im_adstock20/8000000)+
   #atan(m_digital_peroni_total_sp_adstock70/20000)+
-  atan(m_yt_peroni_im/10000000)+
+  #atan(m_yt_peroni_im/10000000)+
   #atan(m_spotify_peroni_im/420000)+
   atan(cm_total_stella_unf_sp_adstock20/300000)
 
@@ -147,7 +147,7 @@ model_stats(multiples_pna_glass_330ml_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_330ml_12pack, import_file, "mod_dist_multiples_pna_glass_330ml_12pack")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "bt_")
+auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "e_")
 
 # adstock & dr heatmap
 heatmap(

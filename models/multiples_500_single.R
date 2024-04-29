@@ -27,6 +27,12 @@ import_file <- merge(import_file, dates_file, by = "Date", all.x = TRUE)
 taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxonomy")
 
 
+# Set your desired start and end dates
+start_date <- as.Date("2021-06-06")
+end_date <- as.Date("2024-12-24")
+# Subset the data based on the date range
+import_file <- import_file[import_file$Date >= start_date & import_file$Date <= end_date, ]
+dates_file <- dates_file[dates_file$Date >= start_date & dates_file$Date <= end_date, ]
 
 #------------------------------------------------------------------------------
 #-----------------------Variable creation--------------------------------------
@@ -41,8 +47,8 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$test_var_new_var <- import_file$gt_peroni * import_file$new_variable
 
 # Create lag /lead vars: 1. specify variable name, 2. specify variable to lag/lead
-import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
-import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
+#import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
+#import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
@@ -56,7 +62,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_11ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_500_single') %>% mutate(variable_name = 'rel_price_multiples_glass_500ml_1pack_1')
 )
 
@@ -76,8 +82,8 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   dummy_month_jan+
   dummy_month_feb+
   dummy_month_mar+
-  dummy_month_apr+
-  #dummy_month_may+
+  #dummy_month_apr+
+  dummy_month_may+
   #dummy_month_jun+
   dummy_month_jul+
   dummy_month_aug+
@@ -90,7 +96,7 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   w_hourly_temperature_dev_dt+
   #e_rpi+
   #e_cci+
-  bt_peroni_consideration_5ma+
+  bt_peroni_consideration_11ma+
   events_peroni_royal_ascot+
   events_peroni_howdens_xmas_raceday+
   #c_bp_multiples_total_btl_500_single+
@@ -125,7 +131,7 @@ model_stats(multiples_pna_glass_500ml_1pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "cm_total")
+auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "dummy_month")
 
 # adstock & dr heatmap
 heatmap(

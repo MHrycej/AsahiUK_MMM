@@ -70,6 +70,8 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   mod_dist_multiples_pna00_glass_330ml_4_12pack+
+  own_dist_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
+  #own_dist_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #mod_bp_multiples_pna00_glass_330ml_4_12pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
@@ -106,7 +108,7 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   atan(m_vod_peroni0_total_im_adstock60/2000000)+
   atan(m_social_peroni0_total_im_adstock10/1300000)+
   atan(m_yt_peroni0_im_adstock40/150000)
-  #dummy_trend
+  #dummy_pna0_launch
 
 
 
@@ -128,7 +130,7 @@ model_stats(multiples_pna00_glass_330ml_4_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna00_glass_330ml_4_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna00_glass_330ml_4_12pack, import_file, "bt_")
+auto_variable_selection(multiples_pna00_glass_330ml_4_12pack, import_file, "own_dist_multiples")
 
 # adstock & dr heatmap
 heatmap(

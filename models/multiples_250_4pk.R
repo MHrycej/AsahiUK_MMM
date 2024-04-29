@@ -128,7 +128,7 @@ model_stats(multiples_pna_glass_250ml_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack")
+actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "")
 
 # Automatic variable selection
 auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "m_vod_peroni_")
