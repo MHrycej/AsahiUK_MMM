@@ -51,7 +51,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
-import_file$rel_price_multiples_glass_330ml_4pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_4pack/import_file$c_bp_multiples_stella_artois_btl_330_ml_6_pack
+import_file$rel_price_multiples_glass_330ml_4pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_4pack/import_file$c_bp_multiples_total_btl_300_4_pack
 
 
 # Create moving average variables
@@ -63,7 +63,7 @@ import_file$rel_price_multiples_glass_330ml_4pack_1 <- import_file$mod_bp_multip
 taxonomy <- dplyr::bind_rows(
   taxonomy,
   taxonomy %>% filter(variable_name == 'bt_brandvue_peroni_consideration') %>% mutate(variable_name = 'bt_brandvue_peroni_consideration_9ma'),
-  taxonomy %>% filter(variable_name == 'c_bp_multiples_stella_artois_btl_330_ml_6_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_330ml_4pack_1')
+  taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_4_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_330ml_4pack_1')
 )
 
 
@@ -78,7 +78,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   mod_dist_multiples_pna_glass_330ml_4pack+
   mod_bp_multiples_pna_glass_330ml_4pack+ #change price manually in master file
   mod_discount_multiples_pna_glass_330ml_4pack+
-  mod_feat_multiples_pna_glass_330ml_4pack+
+  #mod_disp_multiples_pna_glass_330ml_4pack+
   #gt_lager+
   dummy_month_sep+
   dummy_month_oct+
@@ -104,7 +104,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #w_wtd_sunhour+
   #w_deviation_min_temp_c+
   #e_rpi+
-  e_cci+
+  #e_cci+
   #bt_brandvue_peroni_consideration+
   #bt_brandvue_peroni_consideration_9ma+
   #bt_brandvue_peroni_love+
@@ -119,24 +119,26 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #c_bp_multiples_birra_moretti_btl_660_ml_single+
   #c_bp_multiples_corona_btl_330_ml_12_pack+
   #c_bp_multiples_birra_moretti_btl_330_ml_4_pack+
+  #c_bp_multiples_total_btl_300_4_pack+
   #rel_price_multiples_glass_330ml_4pack_1+
   #c_discount_multiples_stella_artois_btl_330_ml_12_pack+
   #c_discount_multiples_stella_artois_unfiltered_can_440_ml_4_pack+
   #c_discount_multiples_heineken_silver_btl_330_ml_12_pack
   #c_discount_multiples_stella_artois_unfiltered_can_440_ml_10_pack+
   #c_discount_multiples_birra_moretti_btl_330_ml_18_pack+
-  c_discount_multiples_stella_artois_btl_660_ml_single+
+  #c_discount_multiples_stella_artois_btl_660_ml_single+
   c_discount_multiples_san_miguel_can_568_ml_4_pack+
-  atan(m_tv_peroni_total_tvr_adstock60/70)+
-  atan(m_ooh_peroni_total_imp_adstock40/70000000)+
+  #atan(m_tv_peroni_total_tvr_adstock60/70)+
+  #atan(m_ooh_peroni_total_imp_adstock40/70000000)+
   #atan(m_oohunscored_peroni_total_sp_adstock30/170000)+
-  atan(m_sponsor_peroni_now_sp/40000)+
+  #atan(m_sponsor_peroni_now_sp/40000)+
   atan(m_vod_peroni_sp_adstock30/1900000)+
   #atan(m_cinema_peroni_ad_adstock30/2700000)+
   atan(m_social_peroni_total_im_adstock20/6500000)+
   #atan(m_digital_peroni_total_sp_adstock30/18000)+
-  atan(m_influencers_peroni_sp_adstock40/10000)
+  atan(m_influencers_peroni_sp_adstock40/10000)+
   #atan(cm_total_cruzcampo_sp_adstock40/120000)
+  atan(cm_total_stella_unf_sp_adstock30/340000)
 
 
 
@@ -157,7 +159,7 @@ model_stats(multiples_pna_glass_330ml_4pack, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "e_cci")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "")
 
 
 # Automatic variable selection
@@ -169,7 +171,7 @@ auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "cm_total"
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "cm_total_cruzcampo_sp",
+  expense_channel = "cm_total_stella_unf_sp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)

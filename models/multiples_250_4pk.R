@@ -93,7 +93,7 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   events_peroni_fifa_world_cup_22+
   #events_rugby_wc_japan+
   #events_peroni_rugby_world_cup_23+
-  e_cci+
+  #e_cci+
   w_hourly_cloudcover_dev_dt+
   #bt_peroni_consideration_13ma
   bt_peroni_consideration_5ma+
@@ -101,13 +101,13 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   #c_bp_multiples_budweiser_btl_300_ml_6_pack
   rel_price_multiples_glass_250ml_4pack_2+
   #c_bp_multiples_total_btl_300_6_pack+
-  c_discount_multiples_birra_moretti_btl_330_ml_4_pack+
+  #c_discount_multiples_birra_moretti_btl_330_ml_4_pack+
   c_discount_multiples_corona_btl_330_ml_4_pack+
   c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack+
   atan(m_ooh_peroni_total_imp_adstock50/130000000)+
-  atan(m_sponsor_peroni_now_im_adstock10/10000000)+
+  #atan(m_sponsor_peroni_now_im_adstock10/10000000)+
   atan(m_social_peroni_total_im_adstock30/10000000)+
-  atan(m_digital_peroni_total_im_adstock20/1600000)+
+  #atan(m_digital_peroni_total_im_adstock20/1600000)+
   atan(m_influencers_peroni_im_adstock40/500000)
   #atan(m_yt_peroni_im_adstock10/6000000)
 
@@ -128,10 +128,10 @@ model_stats(multiples_pna_glass_250ml_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack")
+actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "c_discount_multiples")
+auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "m_vod_peroni_")
 
 # adstock & dr heatmap
 heatmap(

@@ -46,7 +46,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
-#import_file$rel_price_multiples_glass_330ml_10pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_10pack/import_file$c_bp_multiples_corona_btl_330_ml_10_pack
+import_file$rel_price_impulse_pna00_glass_330ml_1_12pack_1 <- import_file$mod_bp_impulse_pna00_glass_330ml_1_12pack/import_file$c_bp_impulse_total00_btl_330_4_pack
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -56,8 +56,8 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma')
-  #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
+  taxonomy %>% filter(variable_name == 'c_bp_impulse_total00_btl_330_4_pack') %>% mutate(variable_name = 'rel_price_impulse_pna00_glass_330ml_1_12pack_1'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma')
 )
 
 
@@ -68,43 +68,47 @@ taxonomy <- dplyr::bind_rows(
 #------------------------------------------------------------------------------
 
 #### formula definition ####
-formula.01 = mod_vol_impulse_pna_glass_330ml_1_4pack~ #dependent variable
-  mod_dist_impulse_pna_glass_330ml_1_4pack+
-  #own_dist_impulse_peroni_nastro_azzurro_btl_330_ml_single+
-  #own_dist_impulse_peroni_nastro_azzurro_btl_330_ml_4_pack+
-  mod_bp_impulse_pna_glass_330ml_1_4pack+
-  mod_discount_impulse_pna_glass_330ml_1_4pack+
+formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
+  mod_dist_impulse_pna00_glass_330ml_1_12pack+
+  #mod_bp_impulse_pna00_glass_330ml_1_12pack+
+  #mod_discount_impulse_pna00_glass_330ml_1_12pack+
   #dummy_month_jan+
-  #dummy_month_feb+
+  dummy_month_feb+
   #dummy_month_mar+
-  dummy_month_apr+
-  dummy_month_may+
+  #dummy_month_apr+
+  #dummy_month_may+
   dummy_month_jun+
-  dummy_month_jul+
-  dummy_month_aug+
+  #dummy_month_jul+
+  #dummy_month_aug+
   #dummy_month_sep+
-  #dummy_month_oct+
-  dummy_month_nov+
-  #dummy_month_dec+
-  #s_all_bank_holiday+
-  s_good_friday+
-  s_spring_bank_holiday+
+  dummy_month_oct+
+  #dummy_month_nov+
+  #dummy_month_dec
   w_hourly_temperature_dev_dt+
-  w_hourly_wind_speed_dev_dt+
-  #e_cci+
-  covid_hospital_cases+
-  bt_peroni_consideration_9ma+
-  events_peroni_howdens_xmas_raceday+
-  events_peroni_uefa_21+
-  c_discount_impulse_corona_btl_330_ml_single+
-  c_discount_impulse_stella_artois_btl_330_ml_4_pack+
-  atan(m_tv_peroni_total_tvr_adstock60/70)+
-  #atan(m_ooh_peroni_total_imp_adstock10/140000000)+
-  #atan(m_sponsor_peroni_now_im_adstock20/8000000)+
-  atan(m_social_peroni_total_im_adstock10/10000000)+
-  atan(m_spotify_peroni_im_adstock10/300000)+
-  atan(cm_total_stella_unf_sp_adstock40/300000)+
-  atan(cm_total_budweiser_sp_adstock40/250000)
+  #events_peroni_rugby_world_cup_23+
+  events_rugby_wc_japan+
+  events_rugby_wc_argentina+
+  #events_peroni_bst+
+  #covid_hospital_cases+
+  #e_unemployment
+  bt_peroni_consideration_5ma+
+  #s_christmas+
+  #s_all_school_holidays+
+  s_all_bank_holiday+
+  rel_price_impulse_pna00_glass_330ml_1_12pack_1+
+  c_discount_impulse_corona_cero_btl_330_ml_12_pack+
+  c_discount_impulse_birra_moretti_zero_btl_330_ml_4_pack+
+  #dummy_trend
+  #c_bp_impulse_total00_btl_330_4_pack
+  #c_bp_impulse_total00_btl_330_12_pack
+  atan(m_tv_peroni0_total_tvr_adstock70/50)+
+  atan(m_ooh_peroni0_total_imp_adstock40/15000000)+
+  atan(m_sponsor_peroni0_firstdate_im_adstock10/2500000)+
+  atan(m_vod_peroni0_total_im_adstock20/2000000)+
+  #atan(m_social_peroni0_total_im_adstock10/1300000)+
+  atan(m_digital_peroni0_total_sp_adstock40/80000)+
+  atan(m_yt_peroni0_im_adstock40/150000)+
+  atan(m_spotify_peroni0_im_adstock20/600000)
 
 
 
@@ -113,8 +117,8 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_1_4pack~ #dependent variable
 #----------------------- Model results-----------------------------------------
 
 #use the same name as in dependent variable without "mod_vol_"
-impulse_pna_glass_330ml_1_4pack <- lm(formula = formula.01, data = import_file)
-model_stats(impulse_pna_glass_330ml_1_4pack, date_var = import_file$Date)
+impulse_pna00_glass_330ml_1_12pack <- lm(formula = formula.01, data = import_file)
+model_stats(impulse_pna00_glass_330ml_1_12pack, date_var = import_file$Date)
 
 
 
@@ -123,34 +127,34 @@ model_stats(impulse_pna_glass_330ml_1_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_1_4pack, import_file, "mod_bp_impulse_pna_glass_330ml_1_4pack")
+actual_vs_fitted_plot(impulse_pna00_glass_330ml_1_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_1_4pack, import_file, "own_dist_impulse")
+auto_variable_selection(impulse_pna00_glass_330ml_1_12pack, import_file, "m_spotify_peroni0_")
 
 # adstock & dr heatmap
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "cm_total_budweiser_sp",
+  expense_channel = "m_spotify_peroni0_im",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)
   criteria = c("t-stat")) # "R2", "t-stat"
 
 # Chart variables
-plot_line1(import_file$mod_discount_impulse_pna_glass_330ml_1_4pack, import_file)
+plot_line1(import_file$mod_discount_impulse_pna00_glass_330ml_1_12pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_impulse_pna_glass_330ml_1_4pack", "	gt_lager", import_file)
+plot_line2("mod_vol_impulse_pna00_glass_330ml_1_12pack", "	gt_lager", import_file)
 
 
 # Residual plot
-residuals_vs_variable_plot(impulse_pna_glass_330ml_1_4pack, import_file, "mod_discount_impulse_pna_glass_330ml_1_4pack")
+residuals_vs_variable_plot(impulse_pna00_glass_330ml_1_12pack, import_file, "mod_discount_impulse_pna00_glass_330ml_1_12pack")
 
-create_residuals_histogram(impulse_pna_glass_330ml_1_4pack, import_file)
+create_residuals_histogram(impulse_pna00_glass_330ml_1_12pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(impulse_pna_glass_330ml_1_4pack, "mod_vol_impulse_pna_glass_330ml_1_4pack", "mod_bp_impulse_pna_glass_330ml_1_4pack", import_file)
+calculate_price_elasticity(impulse_pna00_glass_330ml_1_12pack, "mod_vol_impulse_pna00_glass_330ml_1_12pack", "mod_bp_impulse_pna00_glass_330ml_1_12pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)
@@ -162,9 +166,9 @@ plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)
 #----------------------Decomposition-------------------------------------------
 #------------------------------------------------------------------------------
 
-model_decomp(impulse_pna_glass_330ml_1_4pack)
+model_decomp(impulse_pna00_glass_330ml_1_12pack)
 
-final_decomp_export <- model_decomp(impulse_pna_glass_330ml_1_4pack)
-write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_impulse_pna_glass_330ml_1_4pack.csv"), row.names = FALSE)
+final_decomp_export <- model_decomp(impulse_pna00_glass_330ml_1_12pack)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_impulse_pna00_glass_330ml_1_12pack.csv"), row.names = FALSE)
 
 generate_roi_table()

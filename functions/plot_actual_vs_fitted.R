@@ -4,10 +4,14 @@
 
 actual_vs_fitted_plot <- function(model, import_file, third_variable_name) {
   # getting variables used in the model
+  #model <- multiples_pna_glass_500ml_1pack
+  #third_variable_name <- "dummy_month_dec"
   model_augmented <- augment(model)
   
   model_augmented1 <- model_augmented %>%
-    select(actual = 1, predicted = .fitted)
+    mutate(actual = .fitted + .resid,
+           predicted = .fitted) %>%
+    select(actual, predicted)
   
   # Check if 'Date' is already present in import_file
   if ("Date" %in% colnames(import_file)) {

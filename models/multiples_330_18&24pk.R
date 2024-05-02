@@ -93,9 +93,10 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_18_24pack~ #dependent variable
   events_peroni_howdens_xmas_raceday+
   events_peroni_uefa_21+
   covid_hospital_cases+
-  c_bp_multiples_total_btl_300_24_pack
+  c_bp_multiples_total_btl_300_24_pack+
   #c_discount_multiples_san_miguel_btl_330_ml_12_pack
-  #atan(m_tv_peroni_total_tvr_adstock60/70)+
+  atan(m_tv_peroni_total_tvr_adstock20/80)+
+  atan(m_digital_peroni_total_sp_adstock20/20000)
 
 
 
@@ -114,16 +115,16 @@ model_stats(multiples_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "covid_hospital_cases")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "mod_bp_multiples_pna_glass_330ml_18_24pack")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "c_discount_multiples_")
+auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "m_spotify_peroni_")
 
 # adstock & dr heatmap
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "m_influencers_peroni_sp",
+  expense_channel = "m_digital_peroni_total_sp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)
