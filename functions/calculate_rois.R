@@ -3,7 +3,7 @@
 #Updated: 27/03/2024
 
 
-generate_roi_table <- function() {
+generate_roi_table <- function(label = NULL) {
 
 directory_path <- getwd()
 
@@ -26,6 +26,10 @@ media_file$Date <- as.Date(media_file$Date, format = "%d-%b-%y")
 subdirectory <- "decomps"
 # Get a list of decomp files in the subdirectory
 files <- list.files(path = file.path(directory_path, subdirectory), pattern = "\\.csv$", full.names = TRUE)
+if (!is.null(label)) {
+  files <- files[grep(label, files)]
+}
+
 all_data <- lapply(files, read.csv)
 
 ##################################################
