@@ -158,8 +158,20 @@ write_xlsx(taxonomy, path = file.path(directory_path, "nielsen_taxonomy.xlsx"))
 write_xlsx(nielsen_data_mapped, path = file.path(directory_path, "final_nielsen_data.xlsx"))
 
 
+
+
+
+
+
+
+
+
+
+
+
 ############################################################################
-#aggregated competitor pricing
+#aggregated competitor pricing - total competitor pricing variables
+###########################################################################
 
 nielsen_data_long <- pivot_longer(nielsen_data_mapped,
                                   cols = -Date,
@@ -226,3 +238,116 @@ write_xlsx(nielsen_data_wide, path = file.path(directory_path, "total_competitor
 write_xlsx(nielsen_data_wide_zero, path = file.path(directory_path, "total_competitor_price_data_zero.xlsx"))
 
 
+
+
+
+
+
+
+
+
+
+###############################################################################
+#Calculating total market distribution
+##############################################################################
+
+#DISTRIBUTION
+# Extracting needed columns from one big table
+distribution_data <- nielsen.bp %>%
+  select(matches("Year|Week|sku_Distribution_w"))
+
+# Convert 'Week' column to numeric, Format the week number with two digits; Trim the dates range by joining it with dates_file
+distribution_data$Week <- as.numeric(distribution_data$Week)
+distribution_data$Date <- as.Date(ISOweek::ISOweek2date(paste(distribution_data$Year, sprintf("W%02d", distribution_data$Week), "1", sep="-")))-1
+
+distribution_data <- distribution_data %>%
+  select(-Year, -Week) %>%
+  mutate_all(~replace_na(., 0))
+
+distribution_data <- left_join(dates_file, distribution_data, by = "Date")
+distribution_data <- distribution_data %>%
+  select(-Year, -Week)
+
+#make it long
+long_distribution_data <- distribution_data %>%
+  pivot_longer(cols = -c(Date),  # Specify columns to pivot (excluding Year and Week)
+               names_to = "sku_type",   # Name of the new column to store variable names
+               values_to = "distribution")  %>% # Name of the new column to store values
+  mutate(sku = gsub("^sku_Distribution_w_", "", sku_type)) %>%
+  select(-sku_type)
+
+
+
+# VOLUME data for WEIGHTS
+volume_data <- nielsen.bp %>%
+  select(matches("Year|Week|sku_Volume_"))
+
+# Convert 'Week' column to numeric, Format the week number with two digits; Trim the dates range by joining it with dates_file
+volume_data$Week <- as.numeric(volume_data$Week)
+volume_data$Date <- as.Date(ISOweek::ISOweek2date(paste(volume_data$Year, sprintf("W%02d", volume_data$Week), "1", sep="-")))-1
+
+volume_data <- volume_data %>%
+  select(-Year, -Week) %>%
+  mutate_all(~replace_na(., 0))
+
+volume_data <- left_join(dates_file, volume_data, by = "Date")
+volume_data <- volume_data %>%
+  select(-Year, -Week)
+
+# Calculate weights for impulse and multiples separately
+weight_data <- volume_data
+
+# Exclude the 'Date' column from calculation
+weight_data <- weight_data %>% select(-Date)
+
+# Identify columns for impulse and multiples
+impulse_columns <- grep("^sku_Volume_IMPULSE", names(weight_data), value = TRUE)
+multiples_columns <- grep("^sku_Volume_MULTIPLES", names(weight_data), value = TRUE)
+
+# Calculate weights
+weight_data[, impulse_columns] <- weight_data[, impulse_columns] / rowSums(weight_data[, impulse_columns], na.rm = TRUE)
+weight_data[, multiples_columns] <- weight_data[, multiples_columns] / rowSums(weight_data[, multiples_columns], na.rm = TRUE)
+
+# Replace NA values with 0
+weight_data[is.na(weight_data)] <- 0
+
+# Rename columns to indicate weights
+names(weight_data) <- gsub("^sku_Volume", "sku_Weight", names(weight_data))
+
+
+# Test line 
+weight_data <- weight_data %>% 
+  mutate(row_sum = rowSums(select(., starts_with("sku_Weight")))) 
+
+# Remove the helper column
+weight_data <- select(weight_data, -row_sum)
+
+# Add the 'Date' column back
+weight_data$Date <- volume_data$Date
+
+# Ensure that Date column is of Date type
+weight_data$Date <- as.Date(weight_data$Date)
+
+#make it long
+long_weights_data <- weight_data %>%
+  pivot_longer(cols = -c(Date),  # Specify columns to pivot (excluding Year and Week)
+               names_to = "sku_type",   # Name of the new column to store variable names
+               values_to = "weight")  %>% # Name of the new column to store values
+  mutate(sku = gsub("^sku_Weight_", "", sku_type)) %>%
+  select(-sku_type)
+
+#merge distribution and weights
+merged_data <- left_join(long_distribution_data, long_weights_data, by = c("Date", "sku"))
+
+#group by retailer, calculate total weighted distribution
+final_distribution <- merged_data %>%
+  mutate(retailer = str_extract(sku, "^[^_]+")) %>%
+  mutate(total_distribution = distribution * weight) %>%
+  select(Date, retailer, total_distribution) %>%
+  group_by(Date, retailer) %>%
+  summarize(total_distribution = sum(total_distribution))
+
+final_distribution_wide <- final_distribution %>%
+  pivot_wider(names_from = retailer, values_from = total_distribution, values_fill = 0)
+
+write_xlsx(final_distribution_wide, path = file.path(directory_path, "total_distribution.xlsx"))
