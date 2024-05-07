@@ -23,9 +23,13 @@ source(paste(directory_path, "functions/sellout_data_read_v02.R", sep = "/")) # 
 unique(flat_brand_retail$market_agg)
 
 variants = distinct(flat_sku_retail[, c("market_agg", "Market")])
+variants = variants[which(variants$market_agg %in% c("MULTIPLES", "IMPULSE")), ]
 
 for(i in 1:nrow(variants)){
-  i = 1
+  # i = 1
+  
+  unique(flat_model_retail[, c("model_agg")])
+  length(unique(flat_model_retail$`_Key_Period`)) * 7
   
   flat_brand_retail.input = flat_brand_retail[which(
     flat_brand_retail$market_agg == variants$market_agg[i] & 
@@ -47,14 +51,19 @@ for(i in 1:nrow(variants)){
     c("Peroni Nastro Azzurro Btl 620 Ml single", "Peroni Nastro Azzurro Btl 500 Ml single", "Peroni Nastro Azzurro Btl 330 Ml 4 pack", "Peroni Nastro Azzurro Btl 330 Ml single", "Peroni Nastro Azzurro Btl 330 Ml 10 pack", "Peroni Nastro Azzurro Btl 330 Ml 12 pack", "Peroni Nastro Azzurro Btl 330 Ml 18 pack", "Peroni Nastro Azzurro Btl 330 Ml 24 pack", "Peroni Nastro Azzurro Can 330 Ml 10 pack", "Peroni Nastro Azzurro Can 330 Ml 6 pack", "Peroni Nastro Azzurro Can 330 Ml single", "Peroni Nastro Azzurro 0.0% Btl 330 Ml 4 pack", "Peroni Nastro Azzurro 0.0% Btl 330 Ml 12 pack", "Peroni Nastro Azzurro 0.0% Btl 330 Ml single", "Peroni Nastro Azzurro Can 440 Ml 4 pack", "Peroni Nastro Azzurro Btl 250 Ml 4 pack","Birra Moretti Btl 660 Ml single","Heineken (5%) Btl 650 Ml single", "Stella Artois Btl 660 Ml single","San Miguel Btl 660 Ml single", "Corona Btl 620 Ml single","Madri Exceptional Btl 660 Ml single","Madri Exceptional Btl 660 Ml single", "Budweiser Btl 660 Ml single", "Stella Artois Unfiltered Btl 620 Ml single","Estrella Damm Barcelona Btl 660 Ml single", "Stella Artois Can 568 Ml 4 pack", "San Miguel Can 440 Ml 4 pack","Budweiser Can 440 Ml 4 pack","Corona Btl 330 Ml 4 pack","Madri Exceptional Can 440 Ml 4 pack","San Miguel Can 568 Ml 4 pack","Budweiser Can 568 Ml 4 pack","Birra Moretti Btl 330 Ml 4 pack","Birra Moretti Can 440 Ml 4 pack","Stella Artois Can 440 Ml 4 pack","Corona Cero Btl 330 Ml 4 pack","San Miguel 0.0% Btl 330 Ml 4 pack","Birra Moretti Zero Btl 330 Ml 4 pack","Budweiser Btl 300 Ml 4 pack","San Miguel Btl 330 Ml 4 pack","Corona Can 440 Ml 4 pack","Heineken (5%) Can 440 Ml 4 pack","Stella Artois Alcohol Free 0.0% Btl 330 Ml 4 pack","Peroni Libera 0.0% Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 4 pack","Heineken 0.0 Alcohol Free Can 330 Ml 6 pack","Heineken (5%) Can 330 Ml 6 pack","Birra Moretti Can 330 Ml 6 pack","Estrella Damm Barcelona Can 330 Ml 6 pack","Budweiser Btl 300 Ml 6 pack","Stella Artois Btl 330 Ml 6 pack","Corona Can 330 Ml 6 pack","Budweiser Budvar Can 330 Ml 6 pack","San Miguel Can 330 Ml 6 pack","Stella Artois Can 440 Ml 10 pack","San Miguel Can 440 Ml 10 pack","Birra Moretti Can 330 Ml 10 pack","Budweiser Can 440 Ml 10 pack","Cruzcampo Can 440 Ml 10 pack","Madri Exceptional Can 440 Ml 10 pack","Corona Can 330 Ml 10 pack","Peroni Nastro Azzurro Stile Capri Btl 330 Ml 10 pack","Stella Artois Unfiltered Can 440 Ml 10 pack","Corona Btl 330 Ml 12 pack","Birra Moretti Btl 330 Ml 12 pack","San Miguel Btl 330 Ml 12 pack","Madri Exceptional Btl 330 Ml 12 pack","Estrella Damm Barcelona Btl 330 Ml 12 pack","Stella Artois Btl 330 Ml 12 pack","Heineken (5%) Btl 330 Ml 12 pack","Heineken 0.0 Alcohol Free Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 12 pack","Stella Artois Unfiltered Btl 330 Ml 12 pack","Stella Artois Btl 284 Ml 12 pack","Stella Artois Can 440 Ml 18 pack","Corona Btl 330 Ml 18 pack","Budweiser Can 440 Ml 18 pack","Stella Artois Btl 284 Ml 18 pack","Birra Moretti Btl 330 Ml 18 pack","San Miguel Btl 330 Ml 18 pack","Corona Btl 330 Ml 24 pack","Stella Artois Can 568 Ml single","Budweiser Can 440 Ml single","Corona Btl 330 Ml single","Budweiser Can 568 Ml single","Budweiser Budvar Btl 500 Ml single","Peroni Red Btl 330 Ml single","Heineken Silver Btl 650 Ml single","Heineken (5%) Can 568 Ml 4 pack","San Miguel Can 500 Ml 4 pack","Stella Artois Unfiltered Can 440 Ml 4 pack","Estrella Damm Barcelona Btl 330 Ml 4 pack","Madri Exceptional Btl 330 Ml 4 pack","Stella Artois Btl 330 Ml 4 pack","Budweiser Zero Can 330 Ml 4 pack","Stella Artois Unfiltered Can 330 Ml 6 pack","Heineken (5%) Can 440 Ml 10 pack","Corona Btl 330 Ml 10 pack","Budweiser Btl 300 Ml 10 pack","Estrella Damm Barcelona Can 330 Ml 10 pack","Heineken Silver Btl 330 Ml 12 pack","Corona Cero Btl 330 Ml 12 pack","Cruzcampo Btl 330 Ml 12 pack","Budweiser Btl 300 Ml 24 pack","Birra Moretti Btl 330 Ml 24 pack","San Miguel 0.0% Btl 330 Ml 12 pack")                 # SKU aggregation SKU strings to search for
   )
   
-  colnames(nielsen.sub) = gsub("multiples", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
-  colnames(nielsen.sub) = gsub("impulse", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
+  colnames(nielsen.sub) = gsub("MULTIPLES", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
+  colnames(nielsen.sub)[1:5] = gsub("IMPULSE", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
   
   if(i == 1){
     nielsen = nielsen.sub
   }else{
-    nielsen = merge(x = nielsen, y = nielsen.sub, by.x = c("Date"), by.y = c("Date"), all.x = T, all.y = T)
+    nielsen = merge(x = nielsen, y = nielsen.sub, 
+                    by.x = c("_Key_Period", "Year", "Month", "Week"), by.y = c("_Key_Period", "Year", "Month", "Week"), 
+                    all.x = T, all.y = T)
   }
+  
+  print(i)
+  remove(nielsen.sub, flat_brand_retail.input, flat_sku_retail.input, flat_model_retail.input)
 }
 
 
