@@ -56,7 +56,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_13ma')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma')
   #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
 )
 
@@ -91,19 +91,24 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_10_12pack~ #dependent variable
   #w_sunhour_dev_dt+
   w_sunhour_smoothed+
   w_hourly_precip_dev_dt+
-  #e_cci+
-  bt_peroni_consideration_13ma+
+  e_cci+
+  #bt_peroni_consideration_7ma+
+  bt_peroni_consideration_9ma+
   events_peroni_all_racing+
   events_peroni_uefa_21+
-  covid_hospital_cases+
-  #c_discount_impulse_corona_btl_330_ml_10_pack+
-  c_discount_impulse_heineken_silver_btl_330_ml_12_pack+
-  c_discount_impulse_estrella_damm_barcelona_btl_330_ml_12_pack+
+  events_peroni_fifa_world_cup_22+
+  #covid_hospital_cases+
+  #covid_third_lockdown_decay+
+  c_discount_impulse_corona_btl_330_ml_10_pack+
+  c_discount_impulse_san_miguel_btl_330_ml_12_pack+
+  #c_discount_impulse_heineken_silver_btl_330_ml_12_pack+
+  #c_discount_impulse_estrella_damm_barcelona_btl_330_ml_12_pack+
+  #own_discount_impulse_peroni_nastro_azzurro_stile_capri_btl_330_ml_10_pack+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   #atan(m_sponsor_peroni_now_im_adstock40/8000000)+
   atan(m_social_peroni_total_im_adstock10/10000000)+
-  atan(cm_total_budweiser_sp_adstock30/200000)+
-  dummy_20231224
+  atan(cm_total_budweiser_sp_adstock30/200000)
+  #dummy_20231224
 
 
 
@@ -125,7 +130,7 @@ model_stats(impulse_pna_glass_330ml_10_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(impulse_pna_glass_330ml_10_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_10_12pack, import_file, "dummy_month")
+auto_variable_selection(impulse_pna_glass_330ml_10_12pack, import_file, "events_")
 
 # adstock & dr heatmap
 heatmap(

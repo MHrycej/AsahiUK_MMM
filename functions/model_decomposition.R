@@ -20,7 +20,7 @@ model_decomp <- function(model) {
   #######################################################
   #1. calculate non-media variable contributions
   
-  #model <- multiples_pna_glass_330ml_12pack
+  #model <- multiples_pna_glass_250ml_4pack
   #creating model coefficients table
   mod_coeffs <- broom::tidy(model) %>%
     select(term, estimate) %>%
@@ -183,7 +183,19 @@ model_decomp <- function(model) {
   wide_final_decomp <- merged_decomp_final %>%
     pivot_wider(names_from = decomp_group, values_from = final_value)
   
- 
+  # Pull actual values from the model
+  actuals <- model_augmented %>%
+    select(.fitted, .resid)
+  actuals <- bind_cols(dates_file, actuals)
+  actuals <- actuals %>%
+    select(-Year, -Week) %>%
+    mutate(actuals = .fitted + .resid) %>%
+    select(Date, actuals)
+  
+  decomp_w_actuals <- left_join(wide_decomp_w_subbase, actuals, by = "Date")
+  
+  decomp_w_actuals_long <- decomp_w_actuals %>%
+    pivot_longer(cols = -Date, names_to = "variable_name", values_to = "value")
   
   #######################################################################
   #5. create stacked decomp chart
@@ -324,12 +336,15 @@ model_decomp <- function(model) {
                    values_to = "value_tails") %>%
       rename(Date = date)  # Rename date column to Date
     
+
+    
+    
     #################################################################
     #7. Create final decomp table
     
     model_name <- deparse(substitute(model))
     
-    final_decomp_export <- merge(decomp_final_long_df, taxonomy, by = "variable_name") %>%
+    final_decomp_export <- merge(decomp_w_actuals_long, taxonomy, by = "variable_name") %>%
       left_join(decomp_tails_long, by = c("Date", "variable_name")) %>%
       mutate(value_tails = coalesce(value_tails, value)) %>%
       select(Date, variable_name, decomp_group, value, value_tails) %>%

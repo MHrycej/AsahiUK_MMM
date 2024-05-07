@@ -57,7 +57,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_11ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma'),
   taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead1'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_can_330_6_pack') %>% mutate(variable_name = 'rel_price_multiples_can_330ml_6_10pack_2')
 )
@@ -76,7 +76,7 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #own_bp_multiples_peroni_nastro_azzurro_can_330_ml_6_pack+
   mod_discount_multiples_pna_can_330ml_6_10pack+
   #mod_disp_multiples_pna_can_330ml_6_10pack+
-  #mod_feat_multiples_pna_can_330ml_6_10pack+
+  mod_featdisp_multiples_pna_can_330ml_6_10pack+
   #gt_lager+
   s_christmas+
   s_christmas_lead1+
@@ -93,26 +93,30 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #e_rpi+
   #e_cci+
   #bt_brandvue_peroni_love+
-  #bt_peroni_awareness_7ma+
-  bt_peroni_consideration_11ma+
+  #bt_peroni_awareness_5ma+
+  bt_peroni_consideration_5ma+
   #bt_peroni_consideration+
   #bt_peroni_consideration_5ma+
   #bt_peroni_consideration_13ma+
-  #events_peroni_rugby_world_cup_23+
+  events_peroni_rugby_world_cup_23+
+  events_rugby_wc_final+
+  events_peroni_royal_ascot+
   #events_rugby_wc_argentina+
   #events_peroni_race_wknd+
   #events_peroni_bst+
   #covid_new_daily_deaths+
   #covid_hospital_cases+
+  #covid_third_lockdown_decay+
   #dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
-  #dummy_month_jul+
-  #dummy_month_aug+
+  dummy_month_jul+
+  dummy_month_aug+
   #dummy_month_feb
+  dummy_month_dec+
   #c_bp_multiples_stella_artois_can_440_ml_10_pack+
   #c_bp_multiples_birra_moretti_can_330_ml_6_pack+
   #c_bp_multiples_budweiser_can_440_ml_10_pack+
@@ -121,6 +125,7 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #rel_price_multiples_can_330ml_6_10pack_1+
   #c_bp_multiples_total_can_330_6_pack+
   rel_price_multiples_can_330ml_6_10pack_2+
+  #own_bp_multiples_peroni_nastro_azzurro_btl_330_ml_10_pack+
   #c_discount_multiples_stella_artois_can_440_ml_18_pack+
   #c_discount_multiples_san_miguel_can_330_ml_6_pack+
   c_discount_multiples_corona_can_330_ml_6_pack+
@@ -137,10 +142,10 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #atan(m_yt_peroni_im_adstock30/7000000)+ #correlates with social and too strong? - CHECK
   #atan(m_spotify_peroni_im_adstock20/300000)+ #creates high VIF with many other variables
   atan(cm_total_heineken_sp_adstock10/7000)+
-  atan(cm_total_stella_unf_sp_adstock40/380000)+
+  atan(cm_total_stella_unf_sp_adstock40/380000)
   #dummy_20220605+
-  dummy_20210829+
-  dummy_20210207
+  #dummy_20210829+
+  #dummy_20210207
   #dummy_20220717+
   #dummy_20230521
   #dummy_20231029+
@@ -166,7 +171,7 @@ model_stats(multiples_pna_can_330ml_6_10pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_can_330ml_6_10pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_can_330ml_6_10pack, import_file, "dummy_month")
+auto_variable_selection(multiples_pna_can_330ml_6_10pack, import_file, "m_ooh_peroni_total")
 
 # adstock & dr heatmap
 heatmap(

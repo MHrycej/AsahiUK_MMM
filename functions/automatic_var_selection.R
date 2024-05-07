@@ -1,8 +1,12 @@
 # Automatic variable selection
-# Updated: 27/02/2024
+# Updated: 02/05/2024
 
 
 auto_variable_selection <- function(model, data, search_term) {
+  #model <- multiples_pna00_glass_330ml_4_12pack
+  #data <- import_file
+  #search_term <- "dummy_month"
+  
   # Extract column names
   column_names <- colnames(data)
   
@@ -29,11 +33,12 @@ auto_variable_selection <- function(model, data, search_term) {
                               estimate = numeric(),
                               t.stat = numeric(),
                               p.value = numeric(),
+                              dw.value = numeric(),
                               stringsAsFactors = FALSE)
   
   # Iterate through each variable in filtered_column_names
   for (variable_name in filtered_column_names$variable) {
-    
+    #variable_name <- "dummy_month_jan"
     # Skip if the variable is already in the model
     if (variable_name %in% existing_variables) {
       next
@@ -48,6 +53,9 @@ auto_variable_selection <- function(model, data, search_term) {
     # Extract the tidy results using broom::tidy
     tidy_results <- tidy(current_model)
     
+    #calculate Durbin Watson
+    DW <- car::durbinWatsonTest(model)$dw
+    
     # Extract the row for the variable of interest
     result_row <- tidy_results[tidy_results$term == variable_name, ]
     
@@ -61,6 +69,12 @@ auto_variable_selection <- function(model, data, search_term) {
         p.value = result_row$p.value
       )
       
+      # Calculate Durbin-Watson
+      DW <- durbinWatsonTest(current_model)$dw
+      
+      # Append Durbin-Watson value to the result_row
+      result_row$dw.value <- DW
+      
       # Append the current result to the results_table
       results_table <- rbind(results_table, result_row)
     }
@@ -68,7 +82,7 @@ auto_variable_selection <- function(model, data, search_term) {
   
   # Print the DataTable immediately after running the function
   datatable(results_table, class = "compact - hover",
-            colnames = c('term', 'estimate', 't.stat', 'p.value'),
+            colnames = c('term', 'estimate', 't.stat', 'p.value', 'dw.value'),
             options = list(
               dom = 't',
               scrolly = FALSE,
@@ -79,7 +93,7 @@ auto_variable_selection <- function(model, data, search_term) {
                 "}"
               )
             )) %>%
-    formatRound(c('estimate', 't.stat', 'p.value'), 2) %>%
+    formatRound(c('estimate', 't.stat', 'p.value', "dw.value"), 2) %>%
     formatStyle('estimate',
                 color = styleInterval(c(0),
                                       c("red", "green")))

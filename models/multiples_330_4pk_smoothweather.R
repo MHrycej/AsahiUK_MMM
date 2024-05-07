@@ -62,7 +62,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_brandvue_peroni_consideration') %>% mutate(variable_name = 'bt_brandvue_peroni_consideration_9ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_4_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_330ml_4pack_1')
 )
 
@@ -84,12 +84,12 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #dummy_month_oct+
   #dummy_month_nov+
   dummy_month_jun+
-  dummy_month_jul+
+  #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_apr+
   #dummy_month_may+
   dummy_month_dec+
-  #dummy_month_jan+
+  dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   s_christmas+
@@ -106,14 +106,16 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #w_wtd_sunhour+
   #w_deviation_min_temp_c+
   #e_rpi+
-  #e_cci+
+  e_cci+
   #bt_brandvue_peroni_consideration+
   #bt_brandvue_peroni_consideration_9ma+
   #bt_brandvue_peroni_love+
+  bt_peroni_consideration_5ma+
   #events_peroni_uefa_21+
   events_peroni_howdens_xmas_raceday+
   #covid_new_daily_deaths+
-  covid_hospital_cases+
+  #covid_hospital_cases+
+  covid_third_lockdown_decay+
   #c_bp_multiples_budweiser_can_568_ml_4_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
@@ -130,10 +132,12 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #c_discount_multiples_birra_moretti_btl_330_ml_18_pack+
   #c_discount_multiples_stella_artois_btl_660_ml_single+
   c_discount_multiples_san_miguel_can_568_ml_4_pack+
-  #atan(m_tv_peroni_total_tvr_adstock60/70)+
-  #atan(m_ooh_peroni_total_imp_adstock40/70000000)+
-  #atan(m_oohunscored_peroni_total_sp_adstock30/170000)+
-  #atan(m_sponsor_peroni_now_sp/40000)+
+  #c_discount_multiples_stella_artois_btl_330_ml_6_pack+
+  #own_discount_multiples_peroni_nastro_azzurro_btl_250_ml_4_pack+
+  atan(m_tv_peroni_total_tvr_adstock60/70)+
+  atan(m_ooh_peroni_total_imp_adstock40/70000000)+
+  atan(m_oohunscored_peroni_total_sp_adstock30/170000)+
+  atan(m_sponsor_peroni_now_sp/40000)+
   atan(m_vod_peroni_sp_adstock30/1900000)+
   #atan(m_cinema_peroni_ad_adstock30/2700000)+
   atan(m_social_peroni_total_im_adstock20/6500000)+
@@ -161,11 +165,11 @@ model_stats(multiples_pna_glass_330ml_4pack, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "own_discount_multiples_peroni_nastro_azzurro_btl_250_ml_4_pack")
 
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "bt_")
+auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "dummy_month")
 
 
 # adstock & dr heatmap
@@ -188,7 +192,7 @@ plot_line2("bt_brandvue_peroni_consideration", "c_discount_multiples_stella_arto
 
 
 # Residual plot
-residuals_vs_variable_plot(multiples_pna_glass_330ml_10pack, import_file, "gt_peroni")
+residuals_vs_variable_plot(multiples_pna_glass_330ml_4pack, import_file, "gt_peroni")
 
 create_residuals_histogram(multiples_pna_glass_330ml_4pack, import_file)
 

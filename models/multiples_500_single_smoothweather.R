@@ -87,7 +87,7 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   #dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
-  #dummy_month_jun+
+  dummy_month_jun+
   #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
@@ -99,14 +99,16 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   w_hourly_temperature_dev_dt+
   w_sunhour_smoothed+
   #e_rpi+
-  #e_cci+
-  bt_peroni_consideration_11ma+
-  #events_peroni_royal_ascot+
+  e_cci+
+  #covid_third_lockdown_decay+
+  bt_peroni_consideration_7ma+
+  events_peroni_royal_ascot+
   events_peroni_howdens_xmas_raceday+
   #c_bp_multiples_total_btl_500_single+
   rel_price_multiples_glass_500ml_1pack_1+
-  c_discount_multiples_san_miguel_btl_330_ml_4_pack+
-  c_discount_multiples_madri_exceptional_btl_660_ml_single+
+  #c_discount_multiples_san_miguel_btl_330_ml_4_pack+
+  c_discount_multiples_birra_moretti_btl_660_ml_single+
+  #c_discount_multiples_madri_exceptional_btl_660_ml_single+
   atan(m_tv_peroni_total_tvr_adstock20/70)+
   atan(m_ooh_peroni_total_imp_adstock20/140000000)+
   atan(m_sponsor_peroni_now_im_adstock10/8000000)
@@ -132,10 +134,10 @@ model_stats(multiples_pna_glass_500ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "c_discount_multiples_birra_moretti_btl_660_ml_single")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "dummy_month")
+auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "dummy_")
 
 # adstock & dr heatmap
 heatmap(
