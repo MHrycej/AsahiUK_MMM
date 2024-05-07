@@ -84,7 +84,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   s_good_friday+
   #w_wtd_avg_temp_c+
   w_hourly_temperature_dev_dt+
-  w_deviation_rainfall+
+  #w_deviation_rainfall+
   w_sunhour_smoothed+
   #gt_peroni+
   #gt_lager+
@@ -92,13 +92,17 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #events_peroni_rugby_world_cup_23+
   events_rugby_wc_sf+
   events_rugby_wc_final+
+  covid_third_lockdown_decay+
   #c_bp_multiples_corona_btl_330_ml_10_pack+
   #c_bp_multiples_budweiser_btl_300_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
   #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-  c_discount_multiples_estrella_damm_barcelona_btl_330_ml_12_pack+
+  #c_discount_multiples_estrella_damm_barcelona_btl_330_ml_12_pack+
+  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_18_pack+
+  c_discount_multiples_heineken_silver_btl_330_ml_12_pack+
+  c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   #c_discount_multiples_madri_exceptional_btl_330_ml_12_pack+
-  #e_cci+
+  e_cci+
   #e_rpi+
   #e_unemployment+
   #bt_peroni_difference_ind+
@@ -117,19 +121,20 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #dummy_month_aug+
   #dummy_trend+
   #dummy_20211212+
-  dummy_20210627+
-  dummy_20211219+
-  dummy_20231029+
-  dummy_20230917+
+  #dummy_20210627+
+  #dummy_20211219+
+  #dummy_20231029+
+  #dummy_20230917+ # to remove negative predicted value
   atan(m_tv_peroni_total_tvr_adstock60/70)+
-  #atan(m_ooh_peroni_total_imp_adstock20/70000000)+
-  #atan(m_sponsor_peroni_now_im_adstock30/5000000)+
+  atan(m_ooh_peroni_total_imp_adstock20/70000000)+
+  atan(m_sponsor_peroni_now_im_adstock30/5000000)+
   #atan(m_vod_peroni_im_adstock60/1000000)+ #correlates with TV - CHECK
   atan(m_social_peroni_total_im_adstock20/8000000)+
   #atan(m_digital_peroni_total_sp_adstock70/20000)+
-  #atan(m_yt_peroni_im/10000000)+
+  atan(m_yt_peroni_im/10000000)+
   #atan(m_spotify_peroni_im/420000)+
-  atan(cm_total_stella_unf_sp_adstock20/300000)
+  #atan(cm_total_stella_unf_sp_adstock20/300000)
+  atan(cm_total_budweiser_sp_adstock40/250000)
 
 
 
@@ -151,13 +156,13 @@ model_stats(multiples_pna_glass_330ml_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_330ml_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "dummy_month")
+auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "bt_")
 
 # adstock & dr heatmap
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "m_twitter_peroni_im",
+  expense_channel = "cm_total_budweiser_sp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)

@@ -82,24 +82,26 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   mod_featdisp_multiples_pna_glass_330ml_10pack+
   s_christmas+
   s_christmas_lead1+
-  #s_boxing_day+
+  s_boxing_day+
   #s_christmas_lead2+
   s_spring_bank_holiday+
   s_good_friday+
-  #dummy_month_may+
+  dummy_month_may+
   #dummy_month_apr+
   #dummy_month_mar+
   #dummy_month_feb+
   #dummy_month_jul+
   #dummy_month_dec+
-  #dummy_month_jun+
+  dummy_month_jun+
   #dummy_month_aug+
   #dummy_month_nov+
+  #dummy_month_dec+
   #w_wtd_max_temp_c+
   w_hourly_temperature_dev_dt+
   w_sunhour_smoothed+
   #gt_peroni+
   #covid_mobility_residential+
+  #covid_third_lockdown_decay+
   events_peroni_uefa_21+
   events_peroni_all_racing+
   events_peroni_fifa_world_cup_22+
@@ -107,24 +109,24 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   #bt_peroni_consideration_11ma+
   #c_bp_impulse_stella_artois_can_440_ml_10_pack+
   #c_bp_multiples_corona_btl_330_ml_10_pack+
-  rel_price_multiples_glass_330ml_10pack_1+
+  #rel_price_multiples_glass_330ml_10pack_1+ #takes away effect from distribution and probably it's coincidence that there's drop in relative pricing during same time while distribution increases significantly
   #c_bp_multiples_budweiser_btl_300_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
   #c_bp_multiples_total_btl_330_10_pack+
   #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-  c_discount_multiples_corona_btl_330_ml_24_pack+
+  #c_discount_multiples_corona_btl_330_ml_24_pack+
   #e_cci+
   #e_rpi+
   #atan(m_yt_peroni_im_adstock10/5000000)+
   #atan(m_ooh_peroni_total_imp_adstock50/140000000)+
   atan(m_oohunscored_peroni_total_sp_adstock70/75820)+
   #atan(m_sponsor_peroni_now_im_adstock10/14500000)+
-  atan(m_vod_peroni_im_adstock60/1000000)+
+  #atan(m_vod_peroni_im_adstock60/1000000)+
   atan(m_digital_peroni_total_im_adstock50/2000000)+
   atan(m_influencers_peroni_sp_adstock50/38000)+
-  atan(cm_total_stella_unf_sp_adstock20/300000)+
-  dummy_20221218+
-  dummy_20210606
+  atan(cm_total_stella_unf_sp_adstock20/300000)
+  #dummy_20221218+
+  #dummy_20210606
   #dummy_20220424
 
 
@@ -156,14 +158,14 @@ heatmap(
   criteria = c("t-stat")) # "R2", "t-stat"
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "s_")
+auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "m_tv_peroni_total")
 
 # Chart variables
 plot_line1((atan(import_file$m_youtube_peroni_sp_adstock10/30000)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_330ml_10pack", "bt_peroni_consideration_13ma", import_file)
+plot_line2("c_bp_multiples_total_btl_330_10_pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "mod_bp_multiples_pna_glass_330ml_10pack")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "c_discount_multiples_stella_artois_btl_330_ml_6_pack")
 
 # Residual plot
 residuals_vs_variable_plot(multiples_pna_glass_330ml_10pack, import_file, "gt_peroni")

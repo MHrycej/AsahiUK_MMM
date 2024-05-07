@@ -91,14 +91,17 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_18_24pack~ #dependent variable
   w_sunhour_smoothed+
   w_hourly_precip_dev_dt+
   #w_sunhour_dev_dt+
-  #e_cci+
+  e_cci+
   #events_peroni_howdens_xmas_raceday+
   #events_peroni_rugby_world_cup_23+
   #events_peroni_all_racing+
   events_peroni_uefa_21+
   #events_rugby_wc_argentina+
   #covid_hospital_cases+
+  #covid_third_lockdown_decay+
+  #c_bp_impulse_total_btl_330_18_pack+
   c_discount_impulse_san_miguel_btl_330_ml_18_pack+
+  c_discount_impulse_corona_btl_330_ml_18_pack+
   #c_discount_impulse_birra_moretti_btl_330_ml_24_pack+
   #c_discount_impulse_birra_moretti_btl_330_ml_18_pack
   #c_discount_impulse_stella_artois_btl_284_ml_18_pack
@@ -128,10 +131,10 @@ model_stats(impulse_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_18_24pack, import_file, "")
+actual_vs_fitted_plot(impulse_pna_glass_330ml_18_24pack, import_file, "mod_bp_impulse_pna_glass_330ml_18_24pack")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_18_24pack, import_file, "c_bp_impulse_total")
+auto_variable_selection(impulse_pna_glass_330ml_18_24pack, import_file, "own_bp_impulse_")
 
 # adstock & dr heatmap
 heatmap(

@@ -57,7 +57,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 taxonomy <- dplyr::bind_rows(
   taxonomy,
   taxonomy %>% filter(variable_name == 'c_bp_impulse_total00_btl_330_4_pack') %>% mutate(variable_name = 'rel_price_impulse_pna00_glass_330ml_1_12pack_1'),
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_3ma')
 )
 
 
@@ -70,6 +70,9 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   mod_dist_impulse_pna00_glass_330ml_1_12pack+
+  #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
+  #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_single+
+  #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
   mod_bp_impulse_pna00_glass_330ml_1_12pack+
   #mod_discount_impulse_pna00_glass_330ml_1_12pack+
   #dummy_month_jan+
@@ -82,36 +85,39 @@ formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   #dummy_month_aug+
   #dummy_month_sep+
   #dummy_month_oct+
-  dummy_month_nov+
+  #dummy_month_nov+
   #dummy_month_dec+
   w_hourly_temperature_dev_dt+
-  w_wtd_sunhour+
-  #w_sunhour_smoothed+
+  #w_wtd_sunhour+
+  w_sunhour_smoothed+
   #events_peroni_rugby_world_cup_23+
   events_rugby_wc_japan+
   events_rugby_wc_argentina+
   #events_peroni_bst+
   #covid_hospital_cases+
+  covid_third_lockdown_decay+
   #e_unemployment
-  bt_peroni_consideration_5ma+
+  bt_peroni_consideration_3ma+
   #s_christmas+
   s_christmas_impulse+
   #s_all_school_holidays+
   s_all_bank_holiday+
-  rel_price_impulse_pna00_glass_330ml_1_12pack_1+
+  #rel_price_impulse_pna00_glass_330ml_1_12pack_1+
   c_discount_impulse_corona_cero_btl_330_ml_12_pack+
   c_discount_impulse_birra_moretti_zero_btl_330_ml_4_pack+
-  #dummy_trend
+  dummy_trend+
   #c_bp_impulse_total00_btl_330_4_pack
   #c_bp_impulse_total00_btl_330_12_pack
+  #c_bp_impulse_stella_artois_alcohol_free_0_0_btl_330_ml_4_pack+
   #atan(m_tv_peroni0_total_tvr_adstock20/50)+
   atan(m_ooh_peroni0_total_imp_adstock40/15000000)+
   atan(m_sponsor_peroni0_firstdate_im_adstock10/2500000)+
-  atan(m_vod_peroni0_total_im_adstock20/2000000)+
+  #atan(m_vod_peroni0_total_im_adstock20/2000000)+
   #atan(m_social_peroni0_total_im_adstock10/1300000)+
   #atan(m_digital_peroni0_total_sp_adstock40/80000)+
-  atan(m_yt_peroni0_im_adstock40/150000)+
-  atan(m_spotify_peroni0_im_adstock20/600000)
+  #atan(m_yt_peroni0_im_adstock40/150000)+
+  atan(m_spotify_peroni0_im_adstock20/600000)+
+  dummy_pna0_launch
 
 
 
@@ -133,7 +139,7 @@ model_stats(impulse_pna00_glass_330ml_1_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(impulse_pna00_glass_330ml_1_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna00_glass_330ml_1_12pack, import_file, "s_")
+auto_variable_selection(impulse_pna00_glass_330ml_1_12pack, import_file, "w_")
 
 # adstock & dr heatmap
 heatmap(

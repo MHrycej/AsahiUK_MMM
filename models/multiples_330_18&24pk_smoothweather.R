@@ -56,7 +56,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_13ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_24_pack') %>% mutate(variable_name = 'rel_price_multiples_pna_glass_330ml_18_24pack_1')
 )
 
@@ -73,32 +73,33 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_18_24pack~ #dependent variable
   mod_bp_multiples_pna_glass_330ml_18_24pack+
   mod_discount_multiples_pna_glass_330ml_18_24pack+
   mod_featdisp_multiples_pna_glass_330ml_18_24pack+
-  #dummy_month_jan+
+  dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
-  #dummy_month_jul+
+  dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
   #dummy_month_oct+
   #dummy_month_nov+
-  #dummy_month_dec+
+  dummy_month_dec+
   s_christmas+
   s_all_bank_holiday+
   s_new_years_eve+
   w_hourly_temperature_dev_dt+
   w_sunhour_smoothed+
-  bt_peroni_consideration_13ma+
+  e_cci+
+  #bt_peroni_consideration_7ma+
   events_peroni_howdens_xmas_raceday+
   events_peroni_uefa_21+
-  covid_hospital_cases+
+  #covid_third_lockdown_decay+
   #c_bp_multiples_total_btl_300_24_pack+
   rel_price_multiples_pna_glass_330ml_18_24pack_1+
   #c_discount_multiples_san_miguel_btl_330_ml_12_pack
-  #atan(m_tv_peroni_total_tvr_adstock20/80)+
-  atan(m_ooh_peroni_total_imp_adstock50/110000000)+
+  atan(m_tv_peroni_total_tvr_adstock20/80)+
+  #atan(m_ooh_peroni_total_imp_adstock50/110000000)+
   atan(m_digital_peroni_total_sp_adstock20/20000)
 
 
@@ -118,10 +119,10 @@ model_stats(multiples_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "mod_bp_multiples_pna_glass_330ml_18_24pack")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "m_cinema_peroni_")
+auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "events_")
 
 # adstock & dr heatmap
 heatmap(

@@ -57,7 +57,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_6_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_250ml_4pack_2'),
   taxonomy %>% filter(variable_name == 'mod_dist_multiples_pna_glass_250ml_4pack') %>% mutate(variable_name = 'mod_dist_multiples_pna_glass_250ml_4pack_v2')
 )
@@ -71,15 +71,15 @@ taxonomy <- dplyr::bind_rows(
 
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
-  mod_dist_multiples_pna_glass_250ml_4pack_v2+
-  dummy_20210711+
-  dummy_20210912+
-  dummy_20211024+
-  dummy_20230212+
-  dummy_20221120+
+  mod_dist_multiples_pna_glass_250ml_4pack+
+  #dummy_20210711+ #distribution dip
+  #dummy_20210912+ #distribution dip
+  #dummy_20211024+ #distribution dip
+  #dummy_20230212+ #distribution increase ?
+  #dummy_20221120+ #distribution dip
   mod_bp_multiples_pna_glass_250ml_4pack+
   mod_discount_multiples_pna_glass_250ml_4pack+
-  mod_disp_multiples_pna_glass_250ml_4pack+
+  mod_featdisp_multiples_pna_glass_250ml_4pack+
   s_good_friday+
   #s_christmas_lead1+
   #s_all_school_holidays+
@@ -93,18 +93,22 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   dummy_month_mar+
   #dummy_month_sep+
   #dummy_month_oct+
-  #dummy_month_nov+
+  dummy_month_nov+
   #dummy_month_dec+
   #events_rugby_wc_argentina+
   events_peroni_fifa_world_cup_22+
   #events_rugby_wc_japan+
   #events_peroni_rugby_world_cup_23+
-  #e_cci+
+  e_cci+
+  #covid_hospital_cases+
+  covid_third_lockdown_decay+
   w_hourly_cloudcover_dev_dt+
+  w_hourly_cloudcover_smoothed+
   #w_hourly_temperature_smoothed+
-  w_sunhour_smoothed+
+  #w_sunhour_smoothed+
   #bt_peroni_consideration_13ma
-  bt_peroni_consideration_5ma+
+  bt_peroni_consideration_7ma+
+  #market_multiples_total_distribution+
   #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
   #c_bp_multiples_budweiser_btl_300_ml_6_pack
   rel_price_multiples_glass_250ml_4pack_2+
@@ -113,10 +117,12 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   #c_discount_multiples_birra_moretti_btl_330_ml_4_pack+
   c_discount_multiples_corona_btl_330_ml_4_pack+
   c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack+
-  #atan(m_ooh_peroni_total_imp_adstock50/130000000)+
-  #atan(m_sponsor_peroni_now_im_adstock10/10000000)+
-  atan(m_social_peroni_total_im_adstock30/10000000)+
-  #atan(m_digital_peroni_total_im_adstock20/1600000)+
+  #own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
+  atan(m_tv_peroni_total_tvr_adstock10/70)+
+  atan(m_ooh_peroni_total_imp_adstock50/130000000)+
+  atan(m_sponsor_peroni_now_im_adstock10/10000000)+
+  #atan(m_social_peroni_total_im_adstock30/10000000)+
+  atan(m_digital_peroni_total_im_adstock20/1600000)+
   atan(m_influencers_peroni_im_adstock40/500000)
   #atan(m_yt_peroni_im_adstock10/6000000)
 
@@ -137,10 +143,10 @@ model_stats(multiples_pna_glass_250ml_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "rel_price_multiples_glass_250ml_4pack_2")
+actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "")
 
-# Automatic variable selection
-auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "c_bp_multiples_total")
+ # Automatic variable selection
+auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "m_tv_peroni_total")
 
 # adstock & dr heatmap
 heatmap(
@@ -155,7 +161,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_250ml_4pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_discount_multiples_pna_glass_250ml_4pack", "mod_dist_multiples_pna_glass_250ml_4pack_v2", import_file)
+plot_line2("c_bp_multiples_total_btl_300_6_pack", "mod_bp_multiples_pna_glass_250ml_4pack", import_file)
 
 
 # Residual plot
@@ -181,4 +187,4 @@ model_decomp(multiples_pna_glass_250ml_4pack)
 final_decomp_export <- model_decomp(multiples_pna_glass_250ml_4pack)
 write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_250ml_4pack_smoothweather.csv"), row.names = FALSE)
 
-generate_roi_table()
+generate_roi_table("smoothweather")
