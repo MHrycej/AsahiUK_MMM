@@ -176,6 +176,6 @@ plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)
 model_decomp(multiples_pna_glass_500ml_1pack)
 
 final_decomp_export <- model_decomp(multiples_pna_glass_500ml_1pack)
-write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_500ml_1pack.csv"), row.names = FALSE)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_multiples_pna_glass_500ml_1pack_smoothweather.csv"), row.names = FALSE)
 
 generate_roi_table()
