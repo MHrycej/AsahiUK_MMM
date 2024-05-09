@@ -23,7 +23,7 @@ base_price = function(
   
   output.dataset = input.dataset
   
-  col.ns = grep(price.colname.substring, colnames(nielsen), ignore.case = TRUE)
+  col.ns = grep(price.colname.substring, colnames(input.dataset), ignore.case = TRUE)
   par(mfrow = c(3, 3))
   
   #### 1 Function to create base-price column                                   ####
