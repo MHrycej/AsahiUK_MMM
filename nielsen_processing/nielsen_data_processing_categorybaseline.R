@@ -52,7 +52,7 @@ for(i in 1:nrow(variants)){
   )
   
   colnames(nielsen.sub) = gsub("MULTIPLES", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
-  colnames(nielsen.sub)[1:5] = gsub("IMPULSE", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
+  colnames(nielsen.sub) = gsub("IMPULSE", gsub(" ", "_", variants$Market[i]), colnames(nielsen.sub))
   
   if(i == 1){
     nielsen = nielsen.sub
@@ -66,19 +66,21 @@ for(i in 1:nrow(variants)){
   remove(nielsen.sub, flat_brand_retail.input, flat_sku_retail.input, flat_model_retail.input)
 }
 
-
+colnames(nielsen)[1:50]
 
 # calculating base prices and discounts
 source(paste(directory_path, "functions/base_price_v01.R", sep = "/")) # look into specific file for more details
 
 nielsen.bp = base_price(
-  nielsen,     # input dataset
+  nielsen[, -c(6292)],     # input dataset # [, -c(6292)]
   "Price_pl",  # string defining (average) price variable
   0.001, 
   TRUE         # to plot or not to plot
 )
 
-
+grep("Price_pl", colnames(nielsen), ignore.case = T)[524]
+colnames(nielsen)[6280]
+nielsen[, 6280]
 
 # Extracting needed columns from one big table
 nielsen_data <- nielsen.bp %>%
