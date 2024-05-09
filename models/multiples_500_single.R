@@ -62,7 +62,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_11ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_500_single') %>% mutate(variable_name = 'rel_price_multiples_glass_500ml_1pack_1')
 )
 
@@ -77,11 +77,11 @@ taxonomy <- dplyr::bind_rows(
 formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_500ml_1pack+
   #mod_bp_multiples_pna_glass_500ml_1pack+
-  #mod_discount_multiples_pna_glass_500ml_1pack+
+  mod_discount_multiples_pna_glass_500ml_1pack+
   mod_featdisp_multiples_pna_glass_500ml_1pack+
   dummy_month_jan+
   dummy_month_feb+
-  dummy_month_mar+
+  #dummy_month_mar+
   #dummy_month_apr+
   dummy_month_may+
   #dummy_month_jun+
@@ -94,15 +94,16 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   s_new_years_day+
   #s_christmas+
   w_hourly_temperature_dev_dt+
+  #w_hourly_temperature_smoothed+
   #e_rpi+
-  #e_cci+
-  bt_peroni_consideration_11ma+
+  e_cci+
+  bt_peroni_consideration_7ma+
   events_peroni_royal_ascot+
   events_peroni_howdens_xmas_raceday+
   #c_bp_multiples_total_btl_500_single+
   rel_price_multiples_glass_500ml_1pack_1+
   c_discount_multiples_san_miguel_btl_330_ml_4_pack+
-  c_discount_multiples_madri_exceptional_btl_660_ml_single+
+  #c_discount_multiples_madri_exceptional_btl_660_ml_single+
   atan(m_tv_peroni_total_tvr_adstock20/70)+
   atan(m_ooh_peroni_total_imp_adstock20/140000000)+
   atan(m_sponsor_peroni_now_im_adstock10/8000000)+
@@ -131,7 +132,7 @@ model_stats(multiples_pna_glass_500ml_1pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "dummy_month")
+auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "own_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(

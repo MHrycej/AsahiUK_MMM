@@ -77,7 +77,7 @@ formula.01 = mod_vol_impulse_pna_glass_500_620ml_1pack~ #dependent variable
   dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
-  #dummy_month_jun+
+  dummy_month_jun+
   dummy_month_jul+
   dummy_month_aug+
   dummy_month_sep+
@@ -88,16 +88,25 @@ formula.01 = mod_vol_impulse_pna_glass_500_620ml_1pack~ #dependent variable
   s_new_years_eve+
   w_hourly_temperature_dev_dt+
   #e_cci+
-  #bt_peroni_consideration_11ma+
+  bt_peroni_consideration_7ma+
+  #dummy_trend+
   #events_peroni_all_racing+
-  covid_hospital_cases+
+  #covid_hospital_cases+
+  #covid_third_lockdown_decay+
+  #c_bp_impulse_total_btl_500_single+
+  #c_bp_impulse_total_can_568_single+
+  #rel_price_impulse_pna_glass_500_620ml_1pack_1+
   c_discount_impulse_san_miguel_btl_660_ml_single+
+  c_discount_impulse_budweiser_btl_660_ml_single+
+  #c_discount_impulse_estrella_damm_barcelona_btl_660_ml_single+
   #c_discount_impulse_corona_btl_620_ml_single
+  own_discount_impulse_peroni_nastro_azzurro_btl_330_ml_single+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock30/140000000)+
-  atan(m_sponsor_peroni_now_im_adstock20/8000000)+
-  atan(m_social_peroni_total_im_adstock10/10000000)+
+  #atan(m_sponsor_peroni_now_im_adstock20/8000000)+
+  #atan(m_social_peroni_total_im_adstock10/10000000)+
   atan(cm_total_stella_unf_sp_adstock30/300000)
+  #dummy_20231224
 
 
 
@@ -119,7 +128,7 @@ model_stats(impulse_pna_glass_500_620ml_1pack, date_var = import_file$Date)
 actual_vs_fitted_plot(impulse_pna_glass_500_620ml_1pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_500_620ml_1pack, import_file, "cm_total")
+auto_variable_selection(impulse_pna_glass_500_620ml_1pack, import_file, "dummy_month")
 
 # adstock & dr heatmap
 heatmap(

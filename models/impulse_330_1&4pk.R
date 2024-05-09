@@ -56,7 +56,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma')
   #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
 )
 
@@ -76,35 +76,37 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_1_4pack~ #dependent variable
   mod_discount_impulse_pna_glass_330ml_1_4pack+
   #dummy_month_jan+
   #dummy_month_feb+
-  #dummy_month_mar+
+  dummy_month_mar+
   dummy_month_apr+
   dummy_month_may+
   dummy_month_jun+
   dummy_month_jul+
   dummy_month_aug+
-  #dummy_month_sep+
+  dummy_month_sep+
   #dummy_month_oct+
-  dummy_month_nov+
+  #dummy_month_nov+
   #dummy_month_dec+
   #s_all_bank_holiday+
-  s_good_friday+
+  #s_good_friday+
   s_spring_bank_holiday+
   w_hourly_temperature_dev_dt+
   w_hourly_wind_speed_dev_dt+
   #e_cci+
-  covid_hospital_cases+
-  bt_peroni_consideration_9ma+
+  #covid_hospital_cases+
+  covid_third_lockdown_decay+
+  bt_peroni_consideration_7ma+
   events_peroni_howdens_xmas_raceday+
   events_peroni_uefa_21+
-  c_discount_impulse_corona_btl_330_ml_single+
+  events_peroni_rugby_world_cup_23+
+  #c_discount_impulse_corona_btl_330_ml_single+
   c_discount_impulse_stella_artois_btl_330_ml_4_pack+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   #atan(m_ooh_peroni_total_imp_adstock10/140000000)+
   #atan(m_sponsor_peroni_now_im_adstock20/8000000)+
   atan(m_social_peroni_total_im_adstock10/10000000)+
   atan(m_spotify_peroni_im_adstock10/300000)+
-  atan(cm_total_stella_unf_sp_adstock40/300000)+
-  atan(cm_total_budweiser_sp_adstock40/250000)
+  atan(cm_total_stella_unf_sp_adstock40/300000)
+  #atan(cm_total_budweiser_sp_adstock40/250000)
 
 
 
@@ -123,10 +125,10 @@ model_stats(impulse_pna_glass_330ml_1_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_1_4pack, import_file, "mod_bp_impulse_pna_glass_330ml_1_4pack")
+actual_vs_fitted_plot(impulse_pna_glass_330ml_1_4pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_1_4pack, import_file, "own_dist_impulse")
+auto_variable_selection(impulse_pna_glass_330ml_1_4pack, import_file, "events_")
 
 # adstock & dr heatmap
 heatmap(

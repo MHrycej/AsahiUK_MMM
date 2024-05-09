@@ -46,7 +46,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
-#import_file$rel_price_multiples_glass_330ml_10pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_10pack/import_file$c_bp_multiples_corona_btl_330_ml_10_pack
+import_file$rel_price_multiples_pna_glass_330ml_18_24pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_18_24pack/import_file$c_bp_multiples_total_btl_300_24_pack
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -56,8 +56,8 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_11ma')
-  #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
+  taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_24_pack') %>% mutate(variable_name = 'rel_price_multiples_pna_glass_330ml_18_24pack_1')
 )
 
 
@@ -77,23 +77,26 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_18_24pack~ #dependent variable
   dummy_month_feb+
   dummy_month_mar+
   #dummy_month_apr+
-  #dummy_month_may+
+  dummy_month_may+
   dummy_month_jun+
   dummy_month_jul+
-  #dummy_month_aug+
-  #dummy_month_sep+
+  dummy_month_aug+
+  dummy_month_sep+
   dummy_month_oct+
   dummy_month_nov+
   dummy_month_dec+
+  e_cci+
   s_christmas+
   s_all_bank_holiday+
   s_new_years_eve+
   w_hourly_temperature_dev_dt+
-  bt_peroni_consideration_11ma+
+  #bt_peroni_consideration_7ma+
   events_peroni_howdens_xmas_raceday+
   events_peroni_uefa_21+
-  covid_hospital_cases+
-  c_bp_multiples_total_btl_300_24_pack+
+  #covid_hospital_cases+
+  #covid_third_lockdown_decay+
+  #c_bp_multiples_total_btl_300_24_pack+
+  rel_price_multiples_pna_glass_330ml_18_24pack_1+
   #c_discount_multiples_san_miguel_btl_330_ml_12_pack
   atan(m_tv_peroni_total_tvr_adstock20/80)+
   atan(m_digital_peroni_total_sp_adstock20/20000)
@@ -118,7 +121,7 @@ model_stats(multiples_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "mod_bp_multiples_pna_glass_330ml_18_24pack")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "m_spotify_peroni_")
+auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "w_")
 
 # adstock & dr heatmap
 heatmap(

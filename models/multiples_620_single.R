@@ -94,6 +94,7 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   events_peroni_betfair_ascot_chase_raceday+
   #events_peroni_uefa_21+
   #covid_hospital_cases+
+  #covid_third_lockdown_decay+
   c_discount_multiples_estrella_damm_barcelona_btl_660_ml_single+
   c_discount_multiples_stella_artois_btl_660_ml_single+
   #c_bp_multiples_total_btl_330_single+

@@ -70,21 +70,21 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   mod_dist_multiples_pna00_glass_330ml_4_12pack+
-  own_dist_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
+  #own_dist_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
   #own_dist_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #mod_bp_multiples_pna00_glass_330ml_4_12pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
   mod_discount_multiples_pna00_glass_330ml_4_12pack+
   mod_featdisp_multiples_pna0_glass_330ml_4_12pack+
-  s_christmas+
+  #s_christmas+
   s_new_years_day+
   #s_all_bank_holiday+
-  #dummy_month_jan+
-  #dummy_month_feb+
+  dummy_month_jan+
+  dummy_month_feb+
   dummy_month_mar+
   #dummy_month_apr+
-  #dummy_month_may+
+  dummy_month_may+
   dummy_month_jun+
   dummy_month_jul+
   dummy_month_aug+
@@ -93,19 +93,21 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   dummy_month_nov+
   #dummy_month_dec+
   w_hourly_temperature_dev_dt+
-  e_cci+
+  #e_cci+
   #e_rpi+
-  bt_peroni_consideration_11ma+
+  #bt_peroni_consideration_7ma+
   #covid_hospital_cases+
+  covid_third_lockdown_decay+
   events_peroni_howdens_xmas_raceday+
   dummy_20231217+
+  dummy_trend+
   #c_bp_multiples_total00_btl_330_12_pack+
-  rel_price_multiples_pna00_glass_330ml_4_12pack_1+ #acting as a trend, CHECK
+  #rel_price_multiples_pna00_glass_330ml_4_12pack_1+ #acting as a trend, CHECK
   c_discount_multiples_corona_cero_btl_330_ml_4_pack+
   c_discount_multiples_heineken_0_0_alcohol_free_btl_330_ml_12_pack+
-  atan(m_tv_peroni0_total_tvr_adstock70/50)+
+ # atan(m_tv_peroni0_total_tvr_adstock70/50)+
   atan(m_sponsor_peroni0_firstdate_im_adstock10/2500000)+
-  atan(m_vod_peroni0_total_im_adstock60/2000000)+
+  #atan(m_vod_peroni0_total_im_adstock60/2000000)+
   atan(m_social_peroni0_total_im_adstock10/1300000)+
   atan(m_yt_peroni0_im_adstock40/150000)
   #dummy_pna0_launch
@@ -130,7 +132,7 @@ model_stats(multiples_pna00_glass_330ml_4_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna00_glass_330ml_4_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna00_glass_330ml_4_12pack, import_file, "own_dist_multiples")
+auto_variable_selection(multiples_pna00_glass_330ml_4_12pack, import_file, "dummy_month")
 
 # adstock & dr heatmap
 heatmap(

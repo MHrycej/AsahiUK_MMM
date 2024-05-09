@@ -81,23 +81,23 @@ formula.01 = mod_vol_impulse_pna_can_330ml_1_10pack~ #dependent variable
   own_discount_impulse_peroni_nastro_azzurro_can_330_ml_single+
   #own_discount_impulse_peroni_nastro_azzurro_can_330_ml_6_pack+
   #own_discount_impulse_peroni_nastro_azzurro_can_330_ml_10_pack+
-  #dummy_month_jan+
+  dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
   dummy_month_jul+
-  #dummy_month_aug+
+  dummy_month_aug+
   #dummy_month_sep+
   #dummy_month_oct+
-  #dummy_month_nov+
+  dummy_month_nov+
   dummy_month_dec+
   #dummy_trend+
   #s_christmas+
   e_cci+
   #w_hourly_cloudcover_dev_dt+
-  w_hourly_temperature_smoothed+
+  #w_hourly_temperature_smoothed+
   w_hourly_temperature_dev_dt+
   events_peroni_uefa_21+
   #covid_hospital_cases+
@@ -139,10 +139,10 @@ model_stats(impulse_pna_can_330ml_1_10pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_can_330ml_1_10pack, import_file, "own_dist_impulse_peroni_nastro_azzurro_can_440_ml_4_pack")
+actual_vs_fitted_plot(impulse_pna_can_330ml_1_10pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_can_330ml_1_10pack, import_file, "own_discount_impulse")
+auto_variable_selection(impulse_pna_can_330ml_1_10pack, import_file, "dummy_month")
 
 # adstock & dr heatmap
 heatmap(

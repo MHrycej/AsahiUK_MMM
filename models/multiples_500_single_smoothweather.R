@@ -62,7 +62,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_11ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_500_single') %>% mutate(variable_name = 'rel_price_multiples_glass_500ml_1pack_1')
 )
 
