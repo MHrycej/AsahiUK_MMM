@@ -18,10 +18,10 @@ dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 
 
 # read in Nielsen data
-source(paste(directory_path, "functions/sellout_data_read_v02.R", sep = "/")) # look into specific file for more details
+source(paste(directory_path, "functions/sellout_data_read_v03.R", sep = "/")) # look into specific file for more details
 
 nielsen = nielsen.creation(
-  "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/nielsen_processing", 
+  "C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/", 
   "all",  # selection of model
   c("ignore"), # BRAND aggregation brand strings to search for
   c("peroni", "moretti", "madri", "estrella", "asd", "san miguel", "heineken", "cruzcampo", "corona", "stella","budweiser"), # SKU aggregation brand strings to limit our SKUs
