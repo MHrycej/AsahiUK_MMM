@@ -84,6 +84,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   s_good_friday+
   #w_wtd_avg_temp_c+
   w_hourly_temperature_dev_dt+
+  #w_hourly_precip_dev_dt+
   #w_deviation_rainfall+
   w_sunhour_smoothed+
   #gt_peroni+
@@ -92,16 +93,19 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #events_peroni_rugby_world_cup_23+
   events_rugby_wc_sf+
   events_rugby_wc_final+
+  #bt_peroni_consideration_11ma+
   covid_third_lockdown_decay+
   #c_bp_multiples_corona_btl_330_ml_10_pack+
   #c_bp_multiples_budweiser_btl_300_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_284_ml_18_pack+
+  #c_bp_multiples_stella_artois_btl_330_ml_12_pack+
+  c_discount_multiples_estrella_damm_barcelona_btl_330_ml_12_pack+
+  #c_discount_multiples_san_miguel_btl_330_ml_12_pack+
+  #own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_18_pack+
+  #c_discount_multiples_heineken_silver_btl_330_ml_12_pack+
   #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-  #c_discount_multiples_estrella_damm_barcelona_btl_330_ml_12_pack+
-  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_18_pack+
-  c_discount_multiples_heineken_silver_btl_330_ml_12_pack+
-  c_discount_multiples_stella_artois_btl_284_ml_12_pack+
-  #c_discount_multiples_madri_exceptional_btl_330_ml_12_pack+
+  c_discount_multiples_madri_exceptional_btl_330_ml_12_pack+
+  #c_discount_multiples_stella_artois_unfiltered_btl_330_ml_12_pack+
   e_cci+
   #e_rpi+
   #e_unemployment+
@@ -110,6 +114,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #bt_brandvue_peroni_spontawareness+
   #dummy_month_jan+
   #dummy_month_feb+
+  dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_jul+
   dummy_month_sep+
@@ -122,9 +127,9 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_12pack~ #dependent variable
   #dummy_trend+
   #dummy_20211212+
   #dummy_20210627+
-  #dummy_20211219+
-  #dummy_20231029+
-  #dummy_20230917+ # to remove negative predicted value
+  dummy_20211219+ # to capture Xmas better
+  dummy_20231029+ # to remove negative fitted value
+  dummy_20230917+ # to remove negative fitted value
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock20/70000000)+
   atan(m_sponsor_peroni_now_im_adstock30/5000000)+
@@ -156,7 +161,7 @@ model_stats(multiples_pna_glass_330ml_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_330ml_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "bt_")
+auto_variable_selection(multiples_pna_glass_330ml_12pack, import_file, "c_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -171,11 +176,11 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_330ml_12pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_330ml_12pack", "	gt_lager", import_file)
+plot_line2("c_bp_multiples_heineken_silver_btl_330_ml_12_pack", "c_avp_multiples_heineken_silver_btl_330_ml_12_pack", import_file)
 
 
 # Residual plot
-residuals_vs_variable_plot(multiples_pna_glass_330ml_12pack, import_file, "mod_discount_multiples_pna_glass_330ml_12pack")
+residuals_vs_variable_plot(multiples_pna_glass_330ml_12pack, import_file, "e_cci")
 
 create_residuals_histogram(multiples_pna_glass_330ml_12pack, import_file)
 

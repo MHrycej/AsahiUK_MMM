@@ -28,7 +28,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 
 
 # Set your desired start and end dates
-start_date <- as.Date("2021-06-06")
+start_date <- as.Date("2021-06-13")
 end_date <- as.Date("2024-12-24")
 # Subset the data based on the date range
 import_file <- import_file[import_file$Date >= start_date & import_file$Date <= end_date, ]
@@ -62,7 +62,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_500_single') %>% mutate(variable_name = 'rel_price_multiples_glass_500ml_1pack_1')
 )
 
@@ -76,38 +76,43 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_500ml_1pack+
-  dummy_20210606+ #drop in distribution
   dummy_20211114+ #drop in distribution
   dummy_20220102+ #drop in distribution
-  #mod_bp_multiples_pna_glass_500ml_1pack+
-  mod_discount_multiples_pna_glass_500ml_1pack+
+  mod_bp_multiples_pna_glass_500ml_1pack+
+  #mod_discount_multiples_pna_glass_500ml_1pack+
   mod_featdisp_multiples_pna_glass_500ml_1pack+
-  #dummy_month_jan+
+  dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
-  #dummy_month_apr+
+  dummy_month_apr+
   #dummy_month_may+
   dummy_month_jun+
   #dummy_month_jul+
   #dummy_month_aug+
-  #dummy_month_sep+
-  #dummy_month_oct+
+  dummy_month_sep+
+  dummy_month_oct+
   #dummy_month_nov+
   #dummy_month_dec+
   s_new_years_day+
   #s_christmas+
+  s_boxing_day+
+  s_all_school_holidays+
   w_hourly_temperature_dev_dt+
+  w_hourly_cloudcover_dev_dt+
   w_sunhour_smoothed+
   #e_rpi+
   e_cci+
   #covid_third_lockdown_decay+
-  bt_peroni_consideration_7ma+
+  bt_peroni_consideration_9ma+
   events_peroni_royal_ascot+
   events_peroni_howdens_xmas_raceday+
   #c_bp_multiples_total_btl_500_single+
-  rel_price_multiples_glass_500ml_1pack_1+
+  #c_bp_multiples_budweiser_btl_660_ml_single+
+  #c_bp_multiples_madri_exceptional_btl_660_ml_single+
+  #c_bp_multiples_total_btl_660_single+
+  #rel_price_multiples_glass_500ml_1pack_1+
   #c_discount_multiples_san_miguel_btl_330_ml_4_pack+
-  c_discount_multiples_birra_moretti_btl_660_ml_single+
+  #c_discount_multiples_birra_moretti_btl_660_ml_single+
   #c_discount_multiples_madri_exceptional_btl_660_ml_single+
   atan(m_tv_peroni_total_tvr_adstock20/70)+
   atan(m_ooh_peroni_total_imp_adstock20/140000000)+
@@ -134,10 +139,10 @@ model_stats(multiples_pna_glass_500ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "c_discount_multiples_birra_moretti_btl_660_ml_single")
+actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "mod_bp_multiples_pna_glass_500ml_1pack")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "dummy_")
+auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "bt_")
 
 # adstock & dr heatmap
 heatmap(
@@ -152,7 +157,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_500ml_1pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_500ml_1pack", "	gt_lager", import_file)
+plot_line2("c_bp_multiples_birra_moretti_btl_660_ml_single", "c_avp_multiples_birra_moretti_btl_660_ml_single", import_file)
 
 
 # Residual plot

@@ -72,13 +72,13 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   mod_dist_multiples_pna_glass_250ml_4pack+
-  #dummy_20210711+ #distribution dip
-  #dummy_20210912+ #distribution dip
-  #dummy_20211024+ #distribution dip
-  #dummy_20230212+ #distribution increase ?
+  dummy_20210711+ #distribution dip
+  dummy_20210912+ #distribution dip
+  dummy_20211024+ #distribution dip
+  #dummy_20231224+ #distribution dip
   #dummy_20221120+ #distribution dip
   mod_bp_multiples_pna_glass_250ml_4pack+
-  mod_discount_multiples_pna_glass_250ml_4pack+
+  #mod_discount_multiples_pna_glass_250ml_4pack+
   mod_featdisp_multiples_pna_glass_250ml_4pack+
   s_good_friday+
   #s_christmas_lead1+
@@ -115,8 +115,8 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   #c_bp_multiples_total_btl_300_6_pack+
   #c_bp_multiples_total_btl_300_4_pack+
   #c_discount_multiples_birra_moretti_btl_330_ml_4_pack+
-  c_discount_multiples_corona_btl_330_ml_4_pack+
-  c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack+
+  #c_discount_multiples_corona_btl_330_ml_4_pack+
+  #c_discount_multiples_estrella_damm_barcelona_btl_330_ml_4_pack+
   #own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
   atan(m_tv_peroni_total_tvr_adstock10/70)+
   atan(m_ooh_peroni_total_imp_adstock50/130000000)+

@@ -46,7 +46,7 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
-import_file$rel_price_multiples_can_330ml_1_10pack_1 <- import_file$mod_bp_impulse_pna_can_330ml_1_10pack/import_file$c_bp_impulse_total_can_440_single
+import_file$rel_price_impulse_pna_glass_500_620ml_1pack_1 <- import_file$mod_bp_impulse_pna_glass_500_620ml_1pack/import_file$c_bp_impulse_total_btl_500_single
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -56,8 +56,8 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'c_bp_impulse_total_can_440_single') %>% mutate(variable_name = 'rel_price_multiples_can_330ml_1_10pack_1'),
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma')
+  #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
 )
 
 
@@ -68,62 +68,56 @@ taxonomy <- dplyr::bind_rows(
 #------------------------------------------------------------------------------
 
 #### formula definition ####
-formula.01 = mod_vol_impulse_pna_can_330ml_1_10pack~ #dependent variable
-  mod_dist_impulse_pna_can_330ml_1_10pack+
-  #own_dist_impulse_peroni_nastro_azzurro_can_330_ml_single+
-  #own_dist_impulse_peroni_nastro_azzurro_can_330_ml_6_pack+
-  #own_dist_impulse_peroni_nastro_azzurro_can_330_ml_10_pack+
-  #mod_bp_impulse_pna_can_330ml_1_10pack+
-  #own_bp_impulse_peroni_nastro_azzurro_can_330_ml_single+
-  #own_bp_impulse_peroni_nastro_azzurro_can_330_ml_6_pack+
-  own_bp_impulse_peroni_nastro_azzurro_can_330_ml_10_pack+
-  #mod_discount_impulse_pna_can_330ml_1_10pack+
-  #own_discount_impulse_peroni_nastro_azzurro_can_330_ml_single+
-  #own_discount_impulse_peroni_nastro_azzurro_can_330_ml_6_pack+
-  #own_discount_impulse_peroni_nastro_azzurro_can_330_ml_10_pack+
+formula.01 = mod_vol_impulse_pna_glass_500_620ml_1pack~ #dependent variable
+  mod_dist_impulse_pna_glass_500_620ml_1pack+
+  mod_bp_impulse_pna_glass_500_620ml_1pack+
+  #mod_discount_impulse_pna_glass_500_620ml_1pack+
   dummy_month_jan+
-  #dummy_month_feb+
-  #dummy_month_mar+
-  dummy_month_apr+
-  #dummy_month_may+
-  dummy_month_jun+
+  dummy_month_feb+
+  dummy_month_mar+
+  #dummy_month_apr+
+  dummy_month_may+
+  #dummy_month_jun+
   #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
   #dummy_month_oct+
-  dummy_month_nov+
+  #dummy_month_nov+
   dummy_month_dec+
-  #dummy_trend+
   #s_christmas+
-  #e_cci+
-  #w_hourly_cloudcover_dev_dt+
-  #w_hourly_temperature_smoothed+
+  s_boxing_day+
+  s_boxing_day_lag1+
+  s_spring_bank_holiday+
   w_hourly_temperature_dev_dt+
-  events_peroni_uefa_21+
+  w_hourly_wind_speed_dev_dt+
+  w_sunhour_smoothed+
+  #e_cci+ #multicollinearity
+  #bt_peroni_consideration_11ma+
+  bt_peroni_consideration_7ma+
+  cat_smooth_vol_impulse_glass_single_v1+
+  #dummy_trend+
+  #events_peroni_all_racing+
+  #events_peroni_fireworks_raceday+
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
-  bt_peroni_consideration_9ma+
-  cat_smooth_vol_impulse_can_1_10pack+
-  #dummy_trend+
-  #c_bp_impulse_total_can_500_4_pack
-  #c_bp_impulse_total_can_440_single+
-  #rel_price_multiples_can_330ml_1_10pack_1+
-  #c_discount_impulse_birra_moretti_can_330_ml_10_pack+
-  c_discount_impulse_san_miguel_can_500_ml_4_pack+
-  #c_discount_impulse_san_miguel_can_568_ml_4_pack+
-  #c_discount_impulse_estrella_damm_barcelona_can_330_ml_6_pack
-  c_discount_impulse_budweiser_can_440_ml_10_pack+
-  #c_discount_impulse_budweiser_budvar_can_330_ml_6_pack+
-  #own_discount_impulse_peroni_nastro_azzurro_btl_500_ml_single+
-  own_dist_impulse_peroni_nastro_azzurro_can_440_ml_4_pack+
-  atan(m_tv_peroni_total_tvr_adstock60/70)+
-  #atan(m_ooh_peroni_total_imp_adstock50/120000000)+
-  atan(m_vod_peroni_im_adstock30/1200000)+
-  atan(m_social_peroni_total_im_adstock10/10000000)
-  #atan(m_cinema_peroni_ad_adstock60/1500000)+
-  #atan(m_digital_peroni_total_im_adstock60/18000)+
-  #atan(m_yt_peroni_im_adstock30/7000000)+
-  #atan(m_spotify_peroni_im_adstock20/300000) 
+  #c_bp_impulse_total_btl_500_single+
+  #c_bp_impulse_total_can_568_single+
+  #rel_price_impulse_pna_glass_500_620ml_1pack_1+
+  #c_discount_impulse_san_miguel_btl_660_ml_single+
+  #c_discount_impulse_budweiser_btl_660_ml_single+
+  #c_discount_impulse_estrella_damm_barcelona_btl_660_ml_single+
+  #c_discount_impulse_corona_btl_620_ml_single
+  #c_avp_impulse_budweiser_budvar_btl_500_ml_single+
+  #c_avp_impulse_san_miguel_btl_660_ml_single+
+  #c_avp_impulse_corona_btl_620_ml_single+
+  #own_discount_impulse_peroni_nastro_azzurro_btl_330_ml_single+
+  #atan(m_tv_peroni_total_tvr_adstock60/70)+
+  atan(m_ooh_peroni_total_imp_adstock30/140000000)+
+  #atan(m_sponsor_peroni_now_im_adstock20/8000000)+
+  #atan(m_social_peroni_total_im_adstock10/10000000)+
+  atan(cm_total_stella_unf_sp_adstock30/300000)
+  #dummy_20231224
+
 
 
 #### end of formula def ####
@@ -131,8 +125,8 @@ formula.01 = mod_vol_impulse_pna_can_330ml_1_10pack~ #dependent variable
 #----------------------- Model results-----------------------------------------
 
 #use the same name as in dependent variable without "mod_vol_"
-impulse_pna_can_330ml_1_10pack <- lm(formula = formula.01, data = import_file)
-model_stats(impulse_pna_can_330ml_1_10pack, date_var = import_file$Date)
+impulse_pna_glass_500_620ml_1pack <- lm(formula = formula.01, data = import_file)
+model_stats(impulse_pna_glass_500_620ml_1pack, date_var = import_file$Date)
 
 
 
@@ -141,10 +135,10 @@ model_stats(impulse_pna_can_330ml_1_10pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_can_330ml_1_10pack, import_file, "cat_smooth_vol_impulse_can_1_10pack")
+actual_vs_fitted_plot(impulse_pna_glass_500_620ml_1pack, import_file, "covid_mobility_grocer_pharm")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_can_330ml_1_10pack, import_file, "covid_")
+auto_variable_selection(impulse_pna_glass_500_620ml_1pack, import_file, "covid")
 
 # adstock & dr heatmap
 heatmap(
@@ -157,18 +151,18 @@ heatmap(
   criteria = c("t-stat")) # "R2", "t-stat"
 
 # Chart variables
-plot_line1(import_file$mod_discount_impulse_pna_can_330ml_1_10pack, import_file)
+plot_line1(import_file$mod_discount_impulse_pna_glass_500_620ml_1pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_impulse_san_miguel_can_500_ml_4_pack", "c_avp_impulse_san_miguel_can_500_ml_4_pack", import_file)
+plot_line2("own_discount_impulse_peroni_nastro_azzurro_btl_330_ml_single", "own_avp_impulse_peroni_nastro_azzurro_btl_330_ml_single", import_file)
 
 
 # Residual plot
-residuals_vs_variable_plot(impulse_pna_can_330ml_1_10pack, import_file, "mod_discount_impulse_pna_can_330ml_1_10pack")
+residuals_vs_variable_plot(impulse_pna_glass_500_620ml_1pack, import_file, "mod_discount_impulse_pna_glass_500_620ml_1pack")
 
-create_residuals_histogram(impulse_pna_can_330ml_1_10pack, import_file)
+create_residuals_histogram(impulse_pna_glass_500_620ml_1pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(impulse_pna_can_330ml_1_10pack, "mod_vol_impulse_pna_can_330ml_1_10pack", "own_bp_impulse_peroni_nastro_azzurro_can_330_ml_10_pack", import_file)
+calculate_price_elasticity(impulse_pna_glass_500_620ml_1pack, "mod_vol_impulse_pna_glass_500_620ml_1pack", "mod_bp_impulse_pna_glass_500_620ml_1pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)
@@ -180,9 +174,9 @@ plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)
 #----------------------Decomposition-------------------------------------------
 #------------------------------------------------------------------------------
 
-model_decomp(impulse_pna_can_330ml_1_10pack)
+model_decomp(impulse_pna_glass_500_620ml_1pack)
 
-final_decomp_export <- model_decomp(impulse_pna_can_330ml_1_10pack)
-write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_impulse_pna_can_330ml_1_10pack_smoothweather.csv"), row.names = FALSE)
+final_decomp_export <- model_decomp(impulse_pna_glass_500_620ml_1pack)
+write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_impulse_pna_glass_500_620ml_1pack_smoothweather.csv"), row.names = FALSE)
 
-generate_roi_table()
+generate_roi_table("smoothweather")

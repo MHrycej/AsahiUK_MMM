@@ -158,14 +158,14 @@ heatmap(
   criteria = c("t-stat")) # "R2", "t-stat"
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "m_tv_peroni_total")
+auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "c_discount_multiples")
 
 # Chart variables
 plot_line1((atan(import_file$m_youtube_peroni_sp_adstock10/30000)), import_file)
 plot_line2("c_bp_multiples_total_btl_330_10_pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "c_discount_multiples_stella_artois_btl_330_ml_6_pack")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "")
 
 # Residual plot
 residuals_vs_variable_plot(multiples_pna_glass_330ml_10pack, import_file, "gt_peroni")

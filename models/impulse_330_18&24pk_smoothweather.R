@@ -100,7 +100,7 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_18_24pack~ #dependent variable
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
   #c_bp_impulse_total_btl_330_18_pack+
-  c_discount_impulse_san_miguel_btl_330_ml_18_pack+
+  #c_discount_impulse_san_miguel_btl_330_ml_18_pack+
   c_discount_impulse_corona_btl_330_ml_18_pack+
   #c_discount_impulse_birra_moretti_btl_330_ml_24_pack+
   #c_discount_impulse_birra_moretti_btl_330_ml_18_pack
@@ -108,11 +108,11 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_18_24pack~ #dependent variable
   #atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock40/130000000)+
   #atan(m_oohunscored_peroni_total_sp_adstock40/130000)+
-  atan(m_cinema_peroni_ad_adstock40/2500000)+
+  atan(m_cinema_peroni_ad_adstock40/2500000)
   #atan(m_spotify_peroni_im_adstock10/300000)
   #atan(cm_total_stella_unf_sp_adstock40/300000)+
-  dummy_20231217+
-  dummy_20231224
+  #dummy_20231217+
+  #dummy_20231224
   #dummy_trend
 
 
@@ -131,7 +131,7 @@ model_stats(impulse_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_18_24pack, import_file, "mod_bp_impulse_pna_glass_330ml_18_24pack")
+actual_vs_fitted_plot(impulse_pna_glass_330ml_18_24pack, import_file, "")
 
 # Automatic variable selection
 auto_variable_selection(impulse_pna_glass_330ml_18_24pack, import_file, "own_bp_impulse_")
@@ -149,7 +149,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_impulse_pna_glass_330ml_18_24pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_impulse_pna_glass_330ml_18_24pack", "	gt_lager", import_file)
+plot_line2("c_bp_impulse_corona_btl_330_ml_18_pack", "c_avp_impulse_corona_btl_330_ml_18_pack", import_file)
 
 
 # Residual plot

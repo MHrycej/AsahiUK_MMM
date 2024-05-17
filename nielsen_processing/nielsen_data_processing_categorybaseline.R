@@ -1,5 +1,5 @@
 #Process Nielsen data: pull needed skus and metrics we need for modelling
-
+install.packages("dataiku")
 library(dataiku)
 library(writexl)
 library(readxl)

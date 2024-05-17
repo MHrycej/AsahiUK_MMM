@@ -72,7 +72,8 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_1_4pack~ #dependent variable
   mod_dist_impulse_pna_glass_330ml_1_4pack+
   #own_dist_impulse_peroni_nastro_azzurro_btl_330_ml_single+
   #own_dist_impulse_peroni_nastro_azzurro_btl_330_ml_4_pack+
-  mod_bp_impulse_pna_glass_330ml_1_4pack+
+  #mod_bp_impulse_pna_glass_330ml_1_4pack+
+  own_bp_impulse_peroni_nastro_azzurro_btl_330_ml_4_pack_v1+
   mod_discount_impulse_pna_glass_330ml_1_4pack+
   #dummy_month_jan+
   #dummy_month_feb+
@@ -129,10 +130,10 @@ model_stats(impulse_pna_glass_330ml_1_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_1_4pack, import_file, "mod_bp_impulse_pna_glass_330ml_1_4pack")
+actual_vs_fitted_plot(impulse_pna_glass_330ml_1_4pack, import_file, "own_bp_impulse_peroni_nastro_azzurro_btl_330_ml_4_pack")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_1_4pack, import_file, "dummy_month")
+auto_variable_selection(impulse_pna_glass_330ml_1_4pack, import_file, "own_bp_impulse")
 
 # adstock & dr heatmap
 heatmap(
@@ -156,7 +157,7 @@ residuals_vs_variable_plot(impulse_pna_glass_330ml_1_4pack, import_file, "mod_di
 create_residuals_histogram(impulse_pna_glass_330ml_1_4pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(impulse_pna_glass_330ml_1_4pack, "mod_vol_impulse_pna_glass_330ml_1_4pack", "mod_bp_impulse_pna_glass_330ml_1_4pack", import_file)
+calculate_price_elasticity(impulse_pna_glass_330ml_1_4pack, "mod_vol_impulse_pna_glass_330ml_1_4pack", "own_bp_impulse_peroni_nastro_azzurro_btl_330_ml_4_pack_v1", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)

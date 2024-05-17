@@ -101,6 +101,7 @@ formula.01 = mod_vol_impulse_pna_glass_330ml_10_12pack~ #dependent variable
   #covid_third_lockdown_decay+
   c_discount_impulse_corona_btl_330_ml_10_pack+
   c_discount_impulse_san_miguel_btl_330_ml_12_pack+
+  #c_discount_impulse_estrella_damm_barcelona_btl_330_ml_12_pack+
   #c_discount_impulse_heineken_silver_btl_330_ml_12_pack+
   #c_discount_impulse_estrella_damm_barcelona_btl_330_ml_12_pack+
   #own_discount_impulse_peroni_nastro_azzurro_stile_capri_btl_330_ml_10_pack+
@@ -127,10 +128,10 @@ model_stats(impulse_pna_glass_330ml_10_12pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(impulse_pna_glass_330ml_10_12pack, import_file, "")
+actual_vs_fitted_plot(impulse_pna_glass_330ml_10_12pack, import_file, "c_discount_impulse_san_miguel_btl_330_ml_12_pack")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna_glass_330ml_10_12pack, import_file, "events_")
+auto_variable_selection(impulse_pna_glass_330ml_10_12pack, import_file, "c_discount_impulse")
 
 # adstock & dr heatmap
 heatmap(
@@ -145,7 +146,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_impulse_pna_glass_330ml_10_12pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_impulse_pna_glass_330ml_10_12pack", "	gt_lager", import_file)
+plot_line2("c_avp_impulse_san_miguel_btl_330_ml_12_pack", "c_bp_impulse_san_miguel_btl_330_ml_12_pack", import_file)
 
 
 # Residual plot
@@ -171,4 +172,4 @@ model_decomp(impulse_pna_glass_330ml_10_12pack)
 final_decomp_export <- model_decomp(impulse_pna_glass_330ml_10_12pack)
 write.csv(final_decomp_export, file = file.path(directory_path, "/decomps/decomp_impulse_pna_glass_330ml_10_12pack_smoothweather.csv"), row.names = FALSE)
 
-generate_roi_table("smoothweather")
+  generate_roi_table("smoothweather")

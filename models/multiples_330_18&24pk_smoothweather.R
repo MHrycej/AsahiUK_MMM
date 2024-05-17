@@ -122,7 +122,7 @@ model_stats(multiples_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "events_")
+auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "c_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(

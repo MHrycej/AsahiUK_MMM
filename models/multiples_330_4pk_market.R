@@ -125,6 +125,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #c_bp_multiples_birra_moretti_btl_330_ml_4_pack+
   #c_bp_multiples_total_btl_300_4_pack+
   rel_price_multiples_glass_330ml_4pack_1+
+  cat_smooth_vol_multiples_glass_4_pack+
   #c_discount_multiples_stella_artois_btl_330_ml_12_pack+
   #c_discount_multiples_stella_artois_unfiltered_can_440_ml_4_pack+
   #c_discount_multiples_heineken_silver_btl_330_ml_12_pack
@@ -165,11 +166,11 @@ model_stats(multiples_pna_glass_330ml_4pack, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "own_discount_multiples_peroni_nastro_azzurro_btl_250_ml_4_pack")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "cat_smooth_vol_multiples_glass_4.pack")
 
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "c_discount_multiples")
+auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "cat_smooth_vol_multiples")
 
 
 # adstock & dr heatmap
@@ -187,7 +188,7 @@ heatmap(
 
 # Chart variables
 plot_line1((import_file$c_discount_multiples_stella_artois_btl_660_ml_single), import_file)
-plot_line2("c_avp_multiples_stella_artois_can_568_ml_4_pack", "c_bp_multiples_stella_artois_can_568_ml_4_pack", import_file)
+plot_line2("bt_brandvue_peroni_consideration", "c_discount_multiples_stella_artois_unfiltered_can_440_ml_10_pack", import_file)
 
 
 

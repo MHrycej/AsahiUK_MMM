@@ -71,7 +71,7 @@ taxonomy <- dplyr::bind_rows(
 formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_620ml_1pack+
   mod_bp_multiples_pna_glass_620ml_1pack+
-  mod_discount_multiples_pna_glass_620ml_1pack+
+  mod_discount_multiples_pna_glass_620ml_1pack_v1+
   mod_featdisp_multiples_pna_glass_620ml_1pack+
   dummy_month_jan+
   #dummy_month_feb+
@@ -82,13 +82,14 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
-  #dummy_month_oct+
+  dummy_month_oct+
   #dummy_month_nov
   #dummy_month_dec+
   s_christmas+
-  #s_boxing_day+
+  s_boxing_day+
   #w_sunhour_dev_dt+
   w_hourly_temperature_dev_dt+
+  w_hourly_wind_speed_dev_dt+
   w_sunhour_smoothed+
   e_cci+
   bt_peroni_consideration_7ma+
@@ -98,7 +99,10 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
   c_discount_multiples_estrella_damm_barcelona_btl_660_ml_single+
+  #c_discount_multiples_budweiser_btl_660_ml_single+
+  #c_discount_multiples_heineken_silver_btl_650_ml_single+
   #c_discount_multiples_stella_artois_btl_660_ml_single+
+  #c_dist_multiples_heineken_silver_btl_650_ml_single+
   #c_bp_multiples_total_btl_330_single+
   #rel_price_multiples_glass_620ml_1pack_1+
   #atan(m_tv_peroni_total_tvr_adstock70/80)+
@@ -126,10 +130,10 @@ model_stats(multiples_pna_glass_620ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "c_discount_multiples_estrella_damm_barcelona_btl_660_ml_single")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "events_")
+auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "c_dist_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -144,7 +148,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_620ml_1pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_620ml_1pack", "	gt_lager", import_file)
+plot_line2("mod_discount_multiples_pna_glass_620ml_1pack_v1", "mod_featdisp_multiples_pna_glass_620ml_1pack", import_file)
 
 
 # Residual plot
