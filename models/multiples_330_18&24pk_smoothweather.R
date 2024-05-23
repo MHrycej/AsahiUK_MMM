@@ -41,12 +41,14 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$test_var_new_var <- import_file$gt_peroni * import_file$new_variable
 
 # Create lag /lead vars: 1. specify variable name, 2. specify variable to lag/lead
-#import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
+import_file$mod_discount_multiples_pna_glass_330ml_18_24pack_lag2 <- lag(import_file$mod_discount_multiples_pna_glass_330ml_18_24pack,2) %>% replace(is.na(.), 0)
 #import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
 import_file$rel_price_multiples_pna_glass_330ml_18_24pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_18_24pack/import_file$c_bp_multiples_total_btl_300_24_pack
+import_file$mod_distdisc_multiples_pna_glass_330ml_18_24pack <- import_file$mod_dist_multiples_pna_glass_330ml_18_24pack*import_file$mod_discount_multiples_pna_glass_330ml_18_24pack
+
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -56,7 +58,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_24_pack') %>% mutate(variable_name = 'rel_price_multiples_pna_glass_330ml_18_24pack_1')
 )
 
@@ -70,37 +72,41 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_330ml_18_24pack~ #dependent variable
   mod_dist_multiples_pna_glass_330ml_18_24pack+
+  #mod_distdisc_multiples_pna_glass_330ml_18_24pack+
   mod_bp_multiples_pna_glass_330ml_18_24pack+
   mod_discount_multiples_pna_glass_330ml_18_24pack+
+  #mod_discount_multiples_pna_glass_330ml_18_24pack_lag+
   mod_featdisp_multiples_pna_glass_330ml_18_24pack+
-  dummy_month_jan+
+  #dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
-  dummy_month_jul+
+  #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
   #dummy_month_oct+
-  #dummy_month_nov+
+  dummy_month_nov+
   dummy_month_dec+
   s_christmas+
-  s_all_bank_holiday+
+  #s_all_bank_holiday+
   s_new_years_eve+
+  s_spring_bank_holiday+
   w_hourly_temperature_dev_dt+
   w_sunhour_smoothed+
-  e_cci+
-  #bt_peroni_consideration_7ma+
+  #e_cci+
+  #bt_peroni_consideration_9ma+
   events_peroni_howdens_xmas_raceday+
   events_peroni_uefa_21+
   #covid_third_lockdown_decay+
   #c_bp_multiples_total_btl_300_24_pack+
-  rel_price_multiples_pna_glass_330ml_18_24pack_1+
-  #c_discount_multiples_san_miguel_btl_330_ml_12_pack
-  atan(m_tv_peroni_total_tvr_adstock20/80)+
+  #rel_price_multiples_pna_glass_330ml_18_24pack_1+
+  c_discount_multiples_san_miguel_btl_330_ml_12_pack+
+  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_12_pack+
+  atan(m_tv_peroni_total_tvr_adstock20/80)
   #atan(m_ooh_peroni_total_imp_adstock50/110000000)+
-  atan(m_digital_peroni_total_sp_adstock20/20000)
+  #atan(m_digital_peroni_total_sp_adstock20/20000)
 
 
 
@@ -119,10 +125,10 @@ model_stats(multiples_pna_glass_330ml_18_24pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_18_24pack, import_file, "mod_distdisc_multiples_pna_glass_330ml_18_24pack")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "c_discount_multiples")
+auto_variable_selection(multiples_pna_glass_330ml_18_24pack, import_file, "cat_smooth_vol_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -137,7 +143,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_330ml_18_24pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_vol_multiples_pna_glass_330ml_18_24pack", "	gt_lager", import_file)
+plot_line2("c_bp_multiples_san_miguel_btl_330_ml_12_pack", "c_avp_multiples_san_miguel_btl_330_ml_12_pack", import_file)
 
 
 # Residual plot

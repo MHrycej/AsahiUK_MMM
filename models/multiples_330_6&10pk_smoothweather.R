@@ -72,6 +72,7 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   mod_dist_multiples_pna_can_330ml_6_10pack+
+  #mod_dist_tesco_pna_can_330ml_6_10pack+
   #mod_bp_multiples_pna_can_330ml_6_10pack+
   #own_bp_multiples_peroni_nastro_azzurro_can_330_ml_6_pack+
   own_bp_multiples_peroni_nastro_azzurro_can_330_ml_10_pack+
@@ -99,28 +100,28 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #bt_peroni_consideration+
   #bt_peroni_consideration_5ma+
   #bt_peroni_consideration_13ma+
-  events_peroni_rugby_world_cup_23+
+  #events_peroni_rugby_world_cup_23+
   #events_rugby_wc_final+
-  events_peroni_royal_ascot+
+  #events_peroni_royal_ascot+
   #events_rugby_wc_argentina+
   #events_peroni_race_wknd+
   #events_peroni_bst+
   #covid_new_daily_deaths+
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
-  dummy_month_jan+
-  #dummy_month_sep+
+  #dummy_month_jan+
+  dummy_month_sep+
   #dummy_month_feb+
   #dummy_month_mar+
   #dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
-  dummy_month_jul+
-  dummy_month_aug+
+  #dummy_month_jul+
+  #dummy_month_aug+
   #dummy_month_feb
   #dummy_month_dec+
   #dummy_trend+
-  cat_smooth_vol_multiples_can_medium_pack+
+  cat_smooth_vol_multiples_can_medium_pack_v1+
   #c_bp_multiples_stella_artois_can_440_ml_10_pack+
   #c_bp_multiples_birra_moretti_can_330_ml_6_pack+
   #c_bp_multiples_budweiser_can_440_ml_10_pack+
@@ -133,11 +134,15 @@ formula.01 = mod_vol_multiples_pna_can_330ml_6_10pack~ #dependent variable
   #c_discount_multiples_stella_artois_can_440_ml_18_pack+
   #c_discount_multiples_san_miguel_can_330_ml_6_pack+
   #c_discount_multiples_corona_can_330_ml_6_pack+
-  c_discount_multiples_san_miguel_can_440_ml_10_pack+
+  #c_discount_multiples_corona_can_330_ml_10_pack+
+  #c_discount_multiples_san_miguel_can_440_ml_10_pack+
   #c_discount_multiples_budweiser_can_440_ml_10_pack+
   #c_discount_multiples_stella_artois_btl_330_ml_12_pack+
   #c_discount_multiples_madri_exceptional_can_440_ml_10_pack+
+  #c_discount_multiples_madri_exceptional_can_440_ml_4_pack+
   #c_discount_multiples_san_miguel_can_440_ml_10_pack
+  #c_discount_multiples_stella_artois_btl_330_ml_12_pack+
+  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_18_pack+
   atan(m_tv_peroni_total_tvr_adstock60/70)+
   atan(m_ooh_peroni_total_imp_adstock50/120000000)+
   #atan(m_vod_peroni_im_adstock30/1200000)+
@@ -173,7 +178,7 @@ model_stats(multiples_pna_can_330ml_6_10pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_can_330ml_6_10pack, import_file, "c_discount_multiples_corona_can_330_ml_6_pack")
+actual_vs_fitted_plot(multiples_pna_can_330ml_6_10pack, import_file, "c_discount_multiples_corona_can_330_ml_10_pack")
 
 # Automatic variable selection
 auto_variable_selection(multiples_pna_can_330ml_6_10pack, import_file, "c_discount_multiples")
@@ -191,7 +196,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_bp_multiples_pna_can_330ml_6_10pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_multiples_corona_can_330_ml_6_pack", "c_avp_multiples_corona_can_330_ml_6_pack", import_file)
+plot_line2("c_bp_multiples_corona_can_330_ml_10_pack", "c_avp_multiples_corona_can_330_ml_10_pack", import_file)
 
 
 # Residual plot

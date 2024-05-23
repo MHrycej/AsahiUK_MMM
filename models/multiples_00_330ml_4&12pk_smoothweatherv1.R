@@ -47,6 +47,8 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 
 # create relative pricing
 import_file$rel_price_multiples_pna00_glass_330ml_4_12pack_1 <- import_file$mod_bp_multiples_pna00_glass_330ml_4_12pack/import_file$c_bp_multiples_total00_btl_330_12_pack
+import_file$mod_discount_multiples_pna0_glass_330ml_4_12pack <- import_file$mod_discount_multiples_pna00_glass_330ml_4_12pack_v1*import_file$dummy_pna0_launch
+import_file$mod_discount_multiples_libera0_glass_330ml_4_12pack <- import_file$mod_discount_multiples_pna00_glass_330ml_4_12pack_v1*import_file$dummy_pna0_launch_reversed
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -56,7 +58,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_13ma'),
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma'),
   taxonomy %>% filter(variable_name == 'c_bp_multiples_total00_btl_330_12_pack') %>% mutate(variable_name = 'rel_price_multiples_pna00_glass_330ml_4_12pack_1')
 )
 
@@ -75,7 +77,9 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   #mod_bp_multiples_pna00_glass_330ml_4_12pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #own_bp_multiples_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
-  mod_discount_multiples_pna00_glass_330ml_4_12pack+
+  #mod_discount_multiples_pna00_glass_330ml_4_12pack_v1+
+  mod_discount_multiples_pna0_glass_330ml_4_12pack+
+  mod_discount_multiples_libera0_glass_330ml_4_12pack+
   mod_featdisp_multiples_pna0_glass_330ml_4_12pack+
   #s_christmas+
   s_new_years_day+
@@ -84,7 +88,7 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   dummy_month_jan+
   dummy_month_feb+
   #dummy_month_mar+
-  #dummy_month_apr+
+  dummy_month_apr+
   #dummy_month_may+
   dummy_month_jun+
   dummy_month_jul+
@@ -95,13 +99,14 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   dummy_month_dec+
   w_hourly_temperature_dev_dt+
   w_hourly_temperature_smoothed+
-  cat_smooth_vol00_multiples_glass_4_12_v1+
+  #cat_smooth_vol00_multiples_glass_4_12_v1+
   #market_multiples_total_distribution+
   e_cci+
   #e_rpi+
   #bt_peroni_consideration_13ma+
+  #bt_peroni_consideration_9ma+
   #covid_hospital_cases+
-  covid_third_lockdown_decay+
+  #covid_third_lockdown_decay+
   events_peroni_howdens_xmas_raceday+
   #events_peroni_rugby_world_cup_23+
   #events_peroni_uefa_21+
@@ -111,12 +116,13 @@ formula.01 = mod_vol_multiples_pna00_glass_330ml_4_12pack~ #dependent variable
   #rel_price_multiples_pna00_glass_330ml_4_12pack_1+ #acting as a trend, CHECK
   #c_discount_multiples_corona_cero_btl_330_ml_4_pack+
   c_discount_multiples_heineken_0_0_alcohol_free_btl_330_ml_12_pack+
+  c_discount_multiples_corona_cero_btl_330_ml_4_pack+
   #atan(m_tv_peroni0_total_tvr_adstock70/50)+
   atan(m_sponsor_peroni0_firstdate_im_adstock10/2500000)+
   #atan(m_vod_peroni0_total_im_adstock60/2000000)+
   atan(m_social_peroni0_total_im_adstock10/1300000)
   #atan(m_yt_peroni0_im_adstock40/150000)
-  #dummy_pna0_launch
+  #dummy_trend_pna0
 
 
 
@@ -135,7 +141,8 @@ model_stats(multiples_pna00_glass_330ml_4_12pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna00_glass_330ml_4_12pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna00_glass_330ml_4_12pack, import_file, "cat_smooth_vol00_multiples_glass_4_12_v1")
+
 
 # Automatic variable selection
 auto_variable_selection(multiples_pna00_glass_330ml_4_12pack, import_file, "dummy_month")
@@ -153,7 +160,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_bp_multiples_pna00_glass_330ml_4_12pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_multiples_heineken_0_0_alcohol_free_btl_330_ml_12_pack", "c_avp_multiples_heineken_0_0_alcohol_free_btl_330_ml_12_pack", import_file)
+plot_line2("c_bp_multiples_corona_cero_btl_330_ml_4_pack", "c_avp_multiples_corona_cero_btl_330_ml_4_pack", import_file)
 
 
 # Residual plot

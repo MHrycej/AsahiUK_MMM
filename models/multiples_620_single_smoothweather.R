@@ -70,7 +70,7 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_620ml_1pack+
-  mod_bp_multiples_pna_glass_620ml_1pack+
+  mod_bp_multiples_pna_glass_620ml_1pack_v1+
   mod_discount_multiples_pna_glass_620ml_1pack_v1+
   mod_featdisp_multiples_pna_glass_620ml_1pack+
   dummy_month_jan+
@@ -87,14 +87,16 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   #dummy_month_dec+
   s_christmas+
   s_boxing_day+
+  s_boxing_day_lag1+
   #w_sunhour_dev_dt+
   w_hourly_temperature_dev_dt+
-  w_hourly_wind_speed_dev_dt+
-  w_sunhour_smoothed+
-  e_cci+
+  #w_hourly_wind_speed_dev_dt+
+ # w_sunhour_smoothed+
+  #e_cci+
   bt_peroni_consideration_7ma+
-  events_peroni_betfair_ascot_chase_raceday+
+  #events_peroni_betfair_ascot_chase_raceday+
   events_peroni_fifa_world_cup_22+
+  cat_smooth_vol_multiples_glass_single+
   #events_peroni_uefa_21+
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
@@ -104,8 +106,10 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   #c_discount_multiples_stella_artois_btl_660_ml_single+
   #c_dist_multiples_heineken_silver_btl_650_ml_single+
   #c_bp_multiples_total_btl_330_single+
+  #own_bp_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
+  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
   #rel_price_multiples_glass_620ml_1pack_1+
-  #atan(m_tv_peroni_total_tvr_adstock70/80)+
+  atan(m_tv_peroni_total_sp_adstock70/130000)+
   atan(m_vod_peroni_im_adstock40/2000000)+
   atan(m_social_peroni_total_sp_adstock20/30000)+
   atan(m_digital_peroni_total_sp/23000)+
@@ -130,16 +134,16 @@ model_stats(multiples_pna_glass_620ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "c_discount_multiples_estrella_damm_barcelona_btl_660_ml_single")
+actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "c_dist_multiples")
+auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "own_discount_multiples_")
 
 # adstock & dr heatmap
 heatmap(
   dataset = import_file,
   formula.input = paste(formula.01[2], formula.01[1], formula.01[3], sep = " "), # please remember that the formula should not include analysed expense channel
-  expense_channel = "cm_total_cruzcampo_sp",
+  expense_channel = "m_tv_peroni_total_sp",
   adstocks = c(0, .1, .2, .3, .4, .5, .6, .7, .8, .9), #c(.1)
   dr_type = "atan",
   dr_divisors = c(.4, .5, .6, .7, .8, .9, 1), # c(.4)
@@ -157,7 +161,7 @@ residuals_vs_variable_plot(multiples_pna_glass_620ml_1pack, import_file, "mod_di
 create_residuals_histogram(multiples_pna_glass_620ml_1pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(multiples_pna_glass_620ml_1pack, "mod_vol_multiples_pna_glass_620ml_1pack", "mod_bp_multiples_pna_glass_620ml_1pack", import_file)
+calculate_price_elasticity(multiples_pna_glass_620ml_1pack, "mod_vol_multiples_pna_glass_620ml_1pack", "mod_bp_multiples_pna_glass_620ml_1pack_v1", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)

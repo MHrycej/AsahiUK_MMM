@@ -49,10 +49,11 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 #import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
 #import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
+import_file$mod_discount_multiples_pna_glass_330ml_4pack_lag3 <- lag(import_file$mod_discount_multiples_pna_glass_330ml_4pack,3) %>% replace(is.na(.), 0)
 
 # create relative pricing
 import_file$rel_price_multiples_glass_330ml_4pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_4pack/import_file$c_bp_multiples_total_btl_300_4_pack
-
+import_file$mod_distdisc_multiples_glass_330ml_4pack <- import_file$mod_dist_multiples_pna_glass_330ml_4pack*import_file$mod_discount_multiples_pna_glass_330ml_4pack
 
 # Create moving average variables
 window_sizes <- c(3, 5, 7, 9, 11, 13) #specify week ranges you want to create moving averages
@@ -62,8 +63,9 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_5ma'),
-  taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_4_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_330ml_4pack_1')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma'),
+  taxonomy %>% filter(variable_name == 'c_bp_multiples_total_btl_300_4_pack') %>% mutate(variable_name = 'rel_price_multiples_glass_330ml_4pack_1'),
+  taxonomy %>% filter(variable_name == 'mod_discount_multiples_pna_glass_330ml_4pack') %>% mutate(variable_name = 'mod_discount_multiples_pna_glass_330ml_4pack_lag3')
 )
 
 
@@ -78,6 +80,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   mod_dist_multiples_pna_glass_330ml_4pack+
   mod_bp_multiples_pna_glass_330ml_4pack+ #change price manually in master file
   mod_discount_multiples_pna_glass_330ml_4pack+
+  mod_discount_multiples_pna_glass_330ml_4pack_lag3+
+  #mod_distdisc_multiples_glass_330ml_4pack+
   #mod_featdisp_multiples_pna_glass_330ml_4pack+
   #gt_lager+
   #dummy_month_sep+
@@ -110,12 +114,14 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_4pack~ #dependent variable
   #bt_brandvue_peroni_consideration+
   #bt_brandvue_peroni_consideration_9ma+
   #bt_brandvue_peroni_love+
-  bt_peroni_consideration_5ma+
+  bt_peroni_consideration_7ma+
   #events_peroni_uefa_21+
   events_peroni_howdens_xmas_raceday+
   #covid_new_daily_deaths+
   #covid_hospital_cases+
   covid_third_lockdown_decay+
+  #cat_smooth_vol_multiples_glass_small_pack_v1+
+  #cat_smooth_vol_multiples_glass_4_pack+
   #c_bp_multiples_budweiser_can_568_ml_4_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_6_pack+
   #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
@@ -165,11 +171,11 @@ model_stats(multiples_pna_glass_330ml_4pack, date_var = import_file$Date)
 #-----------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "own_discount_multiples_peroni_nastro_azzurro_btl_250_ml_4_pack")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_4pack, import_file, "mod_dist_multiples_pna_glass_330ml_4pack")
 
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "c_discount_multiples")
+auto_variable_selection(multiples_pna_glass_330ml_4pack, import_file, "cat_smooth_vol_multiples")
 
 
 # adstock & dr heatmap
@@ -187,7 +193,7 @@ heatmap(
 
 # Chart variables
 plot_line1((import_file$c_discount_multiples_stella_artois_btl_660_ml_single), import_file)
-plot_line2("c_avp_multiples_stella_artois_can_568_ml_4_pack", "c_bp_multiples_stella_artois_can_568_ml_4_pack", import_file)
+plot_line2("mod_dist_multiples_pna_glass_330ml_4pack", "mod_discount_multiples_pna_glass_330ml_4pack", import_file)
 
 
 

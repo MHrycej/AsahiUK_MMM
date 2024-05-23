@@ -47,11 +47,12 @@ taxonomy <- read_excel(file.path(directory_path, "taxonomy.xlsx"), sheet = "taxo
 
 # Create lag /lead vars: 1. specify variable name, 2. specify variable to lag/lead
 import_file$s_christmas_lead1 <- lead(import_file$s_christmas,1) %>% replace(is.na(.), 0)
-#import_file$s_christmas_lead2 <- lead(import_file$s_christmas,2) %>% replace(is.na(.), 0)
+import_file$mod_discount_multiples_pna_glass_330ml_10pack_lag2 <- lag(import_file$mod_discount_multiples_pna_glass_330ml_10pack,2) %>% replace(is.na(.), 0)
 #import_file$gt_peroni_lag1 <- lag(import_file$gt_peroni,1) %>% replace(is.na(.), 0)
 
 # create relative pricing
 import_file$rel_price_multiples_glass_330ml_10pack_1 <- import_file$mod_bp_multiples_pna_glass_330ml_10pack/import_file$c_bp_multiples_total_btl_330_10_pack
+import_file$mod_distdisc_multiples_pna_glass_330ml_10pack <- import_file$mod_dist_multiples_pna_glass_330ml_10pack*import_file$mod_discount_multiples_pna_glass_330ml_10pack
 
  
 # Create moving average variables
@@ -79,10 +80,12 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   mod_dist_multiples_pna_glass_330ml_10pack+
   mod_bp_multiples_pna_glass_330ml_10pack+
   mod_discount_multiples_pna_glass_330ml_10pack+
+  #mod_distdisc_multiples_pna_glass_330ml_10pack+
+  #mod_discount_multiples_pna_glass_330ml_10pack_lag2+
   mod_featdisp_multiples_pna_glass_330ml_10pack+
   s_christmas+
   s_christmas_lead1+
-  s_boxing_day+
+  #s_boxing_day+
   #s_christmas_lead2+
   s_spring_bank_holiday+
   s_good_friday+
@@ -95,7 +98,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   dummy_month_jun+
   #dummy_month_aug+
   #dummy_month_nov+
-  #dummy_month_dec+
+  dummy_month_dec+
   #w_wtd_max_temp_c+
   w_hourly_temperature_dev_dt+
   w_sunhour_smoothed+
@@ -104,7 +107,7 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   #covid_third_lockdown_decay+
   events_peroni_uefa_21+
   events_peroni_all_racing+
-  events_peroni_fifa_world_cup_22+
+  #events_peroni_fifa_world_cup_22+
   #events_peroni_rugby_world_cup_23+
   #bt_peroni_consideration_11ma+
   #c_bp_impulse_stella_artois_can_440_ml_10_pack+
@@ -115,7 +118,8 @@ formula.01 = mod_vol_multiples_pna_glass_330ml_10pack~ #dependent variable
   #c_bp_multiples_total_btl_330_10_pack+
   #c_discount_multiples_stella_artois_btl_284_ml_12_pack+
   #c_discount_multiples_corona_btl_330_ml_24_pack+
-  #e_cci+
+  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
+  e_cci+
   #e_rpi+
   #atan(m_yt_peroni_im_adstock10/5000000)+
   #atan(m_ooh_peroni_total_imp_adstock50/140000000)+
@@ -162,10 +166,10 @@ auto_variable_selection(multiples_pna_glass_330ml_10pack, import_file, "c_discou
 
 # Chart variables
 plot_line1((atan(import_file$m_youtube_peroni_sp_adstock10/30000)), import_file)
-plot_line2("c_bp_multiples_total_btl_330_10_pack", "mod_bp_multiples_pna_glass_330ml_10pack", import_file)
+plot_line2("c_avp_multiples_stella_artois_btl_330_ml_6_pack", "c_bp_multiples_stella_artois_btl_330_ml_6_pack", import_file)
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_330ml_10pack, import_file, "mod_dist_multiples_pna_glass_330ml_10pack")
 
 # Residual plot
 residuals_vs_variable_plot(multiples_pna_glass_330ml_10pack, import_file, "gt_peroni")

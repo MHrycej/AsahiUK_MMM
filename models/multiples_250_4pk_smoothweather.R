@@ -86,6 +86,7 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   #s_christmas+
   dummy_month_jan+
   dummy_month_feb+
+  dummy_month_apr+
   #dummy_month_may+
   #dummy_month_jun+
   #dummy_month_jul+
@@ -93,7 +94,7 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   dummy_month_mar+
   #dummy_month_sep+
   #dummy_month_oct+
-  dummy_month_nov+
+  #dummy_month_nov+
   #dummy_month_dec+
   #events_rugby_wc_argentina+
   events_peroni_fifa_world_cup_22+
@@ -102,16 +103,17 @@ formula.01 = mod_vol_multiples_pna_glass_250ml_4pack~ #dependent variable
   e_cci+
   #covid_hospital_cases+
   covid_third_lockdown_decay+
-  w_hourly_cloudcover_dev_dt+
+  #w_hourly_cloudcover_dev_dt+
   w_hourly_cloudcover_smoothed+
+  w_hourly_precip_dev_dt+
   #w_hourly_temperature_smoothed+
   #w_sunhour_smoothed+
   #bt_peroni_consideration_13ma
-  bt_peroni_consideration_7ma+
+  #bt_peroni_consideration_9ma+
   #market_multiples_total_distribution+
   #c_bp_multiples_stella_artois_btl_330_ml_4_pack+
   #c_bp_multiples_budweiser_btl_300_ml_6_pack
-  rel_price_multiples_glass_250ml_4pack_2+
+  #rel_price_multiples_glass_250ml_4pack_2+
   #c_bp_multiples_total_btl_300_6_pack+
   #c_bp_multiples_total_btl_300_4_pack+
   #c_discount_multiples_birra_moretti_btl_330_ml_4_pack+
@@ -143,10 +145,10 @@ model_stats(multiples_pna_glass_250ml_4pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_250ml_4pack, import_file, "c_discount_multiples_birra_moretti_btl_660_ml_single")
 
  # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "m_tv_peroni_total")
+auto_variable_selection(multiples_pna_glass_250ml_4pack, import_file, "c_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -161,7 +163,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_250ml_4pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_multiples_total_btl_300_6_pack", "mod_bp_multiples_pna_glass_250ml_4pack", import_file)
+plot_line2("c_avp_multiples_birra_moretti_btl_330_ml_4_pack", "c_bp_multiples_birra_moretti_btl_330_ml_4_pack", import_file)
 
 
 # Residual plot

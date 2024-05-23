@@ -13,6 +13,7 @@ setwd("C:/Users/MHrycej/OneDrive - ABEG/Martin/Projects/MMM/R GIT/AsahiUK_MMM/")
 directory_path <- getwd()
 
 # Read the dates file
+Sys.setlocale("LC_TIME", "C")
 dates_file <- read.csv(file.path(directory_path, "dates_lookup.csv"))
 dates_file$Date <- as.Date(dates_file$Date, format = "%d-%b-%y")
 
@@ -78,14 +79,13 @@ nielsen.bp = base_price(
   TRUE         # to plot or not to plot
 )
 
-grep("Price_pl", colnames(nielsen), ignore.case = T)[524]
-colnames(nielsen)[6280]
-nielsen[, 6280]
+# grep("Price_pl", colnames(nielsen), ignore.case = T)[524]
+# colnames(nielsen)[6280]
+# nielsen[, 6280]
 
 # Extracting needed columns from one big table
 nielsen_data <- nielsen.bp %>%
   select(matches("Year|Week|_distribution_w|Price_pl|baseprice|mod_Volume_|discount")) %>%
-  select(-matches("OTHER")) %>%
   rename_all(
     ~ ifelse(grepl("Peroni Nastro", .), str_replace(., "^sku_", "own_"), .)) %>%   # change peroni sku level data prefix to "own_"
   rename_all(~str_replace(., "^sku_", "c_")) # everything else is competitors "c_"
@@ -99,11 +99,6 @@ nielsen_data <- nielsen_data %>%
   mutate_all(~replace_na(., 0))
 
 nielsen_data <- left_join(dates_file, nielsen_data, by = "Date")
-
-
-
-
-
 
 
 
@@ -195,20 +190,25 @@ nielsen_data_mapped <- nielsen_data %>%
   rename_with(~taxonomy$variable_name[match(., taxonomy$Variable)], -1) %>%
   select(Date, sort(names(.)[-1]))
 
+nielsen_retail = nielsen_data_mapped
+
+remove(nielsen_data, nielsen_data_mapped)
+
+#### MHR NIELSEN RETAILER ENDS HERE IN nielsen_retail ####
+
+
+
+
+
+
+
+
+
+
+
 
 write_xlsx(taxonomy, path = file.path(directory_path, "nielsen_taxonomy.xlsx"))
 write_xlsx(nielsen_data_mapped, path = file.path(directory_path, "final_nielsen_data.xlsx"))
-
-
-
-
-
-
-
-
-
-
-
 
 
 ############################################################################
