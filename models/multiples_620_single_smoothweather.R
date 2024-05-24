@@ -56,7 +56,7 @@ import_file <- calculate_rolling_averages(import_file, "bt_peroni_consideration"
 # Add custom variables to taxonomy file (decomping purpose)
 taxonomy <- dplyr::bind_rows(
   taxonomy,
-  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_7ma')
+  taxonomy %>% filter(variable_name == 'bt_peroni_consideration') %>% mutate(variable_name = 'bt_peroni_consideration_9ma')
   #taxonomy %>% filter(variable_name == 's_christmas') %>% mutate(variable_name = 's_christmas_lead2')
 )
 
@@ -74,15 +74,15 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   mod_discount_multiples_pna_glass_620ml_1pack_v1+
   mod_featdisp_multiples_pna_glass_620ml_1pack+
   dummy_month_jan+
-  #dummy_month_feb+
+  dummy_month_feb+
   #dummy_month_mar+
-  #dummy_month_apr+
+  dummy_month_apr+
   #dummy_month_may+
-  #dummy_month_jun+
+  dummy_month_jun+
   #dummy_month_jul+
   #dummy_month_aug+
   #dummy_month_sep+
-  dummy_month_oct+
+  #dummy_month_oct+
   #dummy_month_nov
   #dummy_month_dec+
   s_christmas+
@@ -92,29 +92,31 @@ formula.01 = mod_vol_multiples_pna_glass_620ml_1pack~ #dependent variable
   w_hourly_temperature_dev_dt+
   #w_hourly_wind_speed_dev_dt+
  # w_sunhour_smoothed+
+  w_wtd_sunhour+
   #e_cci+
-  bt_peroni_consideration_7ma+
+  bt_peroni_consideration_9ma+
   #events_peroni_betfair_ascot_chase_raceday+
-  events_peroni_fifa_world_cup_22+
-  cat_smooth_vol_multiples_glass_single+
+  #events_peroni_fifa_world_cup_22+
+  cat_smooth_vol_multiples_glass_single_v1+
   #events_peroni_uefa_21+
   #covid_hospital_cases+
   #covid_third_lockdown_decay+
   c_discount_multiples_estrella_damm_barcelona_btl_660_ml_single+
+  c_discount_multiples_stella_artois_can_440_ml_4_pack+
   #c_discount_multiples_budweiser_btl_660_ml_single+
   #c_discount_multiples_heineken_silver_btl_650_ml_single+
   #c_discount_multiples_stella_artois_btl_660_ml_single+
   #c_dist_multiples_heineken_silver_btl_650_ml_single+
   #c_bp_multiples_total_btl_330_single+
   #own_bp_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
-  own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
+  #own_discount_multiples_peroni_nastro_azzurro_btl_330_ml_4_pack+
   #rel_price_multiples_glass_620ml_1pack_1+
   atan(m_tv_peroni_total_sp_adstock70/130000)+
-  atan(m_vod_peroni_im_adstock40/2000000)+
-  atan(m_social_peroni_total_sp_adstock20/30000)+
-  atan(m_digital_peroni_total_sp/23000)+
-  atan(cm_total_budweiser_sp_adstock20/290000)+
-  atan(cm_total_cruzcampo_sp_adstock20/120000)
+  #atan(m_vod_peroni_im_adstock40/2000000)+
+  atan(m_social_peroni_total_sp_adstock20/30000)
+  #atan(m_digital_peroni_total_sp/23000)
+  #atan(cm_total_budweiser_sp_adstock20/290000)+
+  #atan(cm_total_cruzcampo_sp_adstock20/120000)
   #dummy_trend
 
 
@@ -134,10 +136,10 @@ model_stats(multiples_pna_glass_620ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "")
+actual_vs_fitted_plot(multiples_pna_glass_620ml_1pack, import_file, "cat_smooth_vol_multiples_glass_single_v1")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "own_discount_multiples_")
+auto_variable_selection(multiples_pna_glass_620ml_1pack, import_file, "own_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -152,7 +154,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_620ml_1pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("mod_discount_multiples_pna_glass_620ml_1pack_v1", "mod_featdisp_multiples_pna_glass_620ml_1pack", import_file)
+plot_line2("c_bp_multiples_stella_artois_can_440_ml_4_pack", "c_avp_multiples_stella_artois_can_440_ml_4_pack", import_file)
 
 
 # Residual plot

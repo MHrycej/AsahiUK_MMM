@@ -73,11 +73,11 @@ formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
   #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_single+
   #own_dist_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_12_pack+
-  mod_bp_impulse_pna00_glass_330ml_1_12pack+
-  #own_bp_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
-  #mod_discount_impulse_pna00_glass_330ml_1_12pack+
-  own_discount_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
-  #dummy_month_jan+
+  #mod_bp_impulse_pna00_glass_330ml_1_12pack+
+  own_bp_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
+  mod_discount_impulse_pna00_glass_330ml_1_12pack+
+  #own_discount_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack+
+  dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
   #dummy_month_apr+
@@ -90,6 +90,7 @@ formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   dummy_month_nov+
   #dummy_month_dec+
   w_hourly_temperature_dev_dt+
+  w_hourly_cloudcover_dev_dt+
   #w_hourly_precip_dev_dt+
   #w_wtd_sunhour+
   w_sunhour_smoothed+
@@ -101,13 +102,14 @@ formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   #covid_third_lockdown_decay+
   #e_unemployment
   #e_cci+
-  bt_peroni_consideration_5ma+
+  bt_peroni_consideration+
   #cat_smooth_vol00_impulse_glass_medium_pack+
-  cat_smooth_vol00_impulse_glass_1_12_v1+
+  #cat_smooth_vol00_impulse_glass_1_12_v1+
   #s_christmas+
   s_christmas_impulse+
+  s_spring_bank_holiday+
   #s_all_school_holidays+
-  s_all_bank_holiday+
+  #s_all_bank_holiday+
   #rel_price_impulse_pna00_glass_330ml_1_12pack_1+
   #c_discount_impulse_corona_cero_btl_330_ml_12_pack+
   #dummy_trend+
@@ -119,12 +121,12 @@ formula.01 = mod_vol_impulse_pna00_glass_330ml_1_12pack~ #dependent variable
   atan(m_ooh_peroni0_total_imp_adstock40/15000000)+
   atan(m_sponsor_peroni0_firstdate_im_adstock10/2500000)+
   #atan(m_vod_peroni0_total_im_adstock20/2000000)+
-  #atan(m_social_peroni0_total_im_adstock10/1300000)
-  #atan(m_digital_peroni0_total_sp_adstock40/80000)+
+  #atan(m_social_peroni0_total_im_adstock10/1300000)+
+  atan(m_digital_peroni0_total_sp_adstock40/80000)
   #atan(m_yt_peroni0_im_adstock40/150000)
   #atan(m_spotify_peroni0_im_adstock20/600000)
   #dummy_pna0_launch
-  dummy_20230604 #increases dW
+
 
 
 
@@ -146,7 +148,7 @@ model_stats(impulse_pna00_glass_330ml_1_12pack, date_var = import_file$Date)
 actual_vs_fitted_plot(impulse_pna00_glass_330ml_1_12pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(impulse_pna00_glass_330ml_1_12pack, import_file, "dummy_month")
+auto_variable_selection(impulse_pna00_glass_330ml_1_12pack, import_file, "s_")
 
 # adstock & dr heatmap
 heatmap(
@@ -161,7 +163,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_impulse_pna00_glass_330ml_1_12pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_impulse_birra_moretti_zero_btl_330_ml_4_pack", "c_avp_impulse_birra_moretti_zero_btl_330_ml_4_pack", import_file)
+plot_line2("c_avp_impulse_corona_cero_btl_330_ml_12_pack", "c_bp_impulse_corona_cero_btl_330_ml_12_pack", import_file)
 
 
 # Residual plot
@@ -170,7 +172,7 @@ residuals_vs_variable_plot(impulse_pna00_glass_330ml_1_12pack, import_file, "mod
 create_residuals_histogram(impulse_pna00_glass_330ml_1_12pack, import_file)
 
 # Price elasticity
-calculate_price_elasticity(impulse_pna00_glass_330ml_1_12pack, "mod_vol_impulse_pna00_glass_330ml_1_12pack", "mod_bp_impulse_pna00_glass_330ml_1_12pack", import_file)
+calculate_price_elasticity(impulse_pna00_glass_330ml_1_12pack, "mod_vol_impulse_pna00_glass_330ml_1_12pack", "own_bp_impulse_peroni_nastro_azzurro_0_0_btl_330_ml_4_pack", import_file)
 
 # Plot media curve
 plot_media_curve(import_file, media_var = "m_tv_peroni_total_tvr", dim_ret = 30)

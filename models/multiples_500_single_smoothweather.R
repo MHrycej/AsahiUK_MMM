@@ -76,17 +76,17 @@ taxonomy <- dplyr::bind_rows(
 #### formula definition ####
 formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   mod_dist_multiples_pna_glass_500ml_1pack+
-  dummy_20211114+ #drop in distribution
-  dummy_20220102+ #drop in distribution
+  #dummy_20211114+ #drop in distribution
+  #dummy_20220102+ #drop in distribution
   mod_bp_multiples_pna_glass_500ml_1pack+
   #mod_discount_multiples_pna_glass_500ml_1pack+
   mod_featdisp_multiples_pna_glass_500ml_1pack+
-  dummy_month_jan+
+  #dummy_month_jan+
   #dummy_month_feb+
   #dummy_month_mar+
-  dummy_month_apr+
+  #dummy_month_apr+
   #dummy_month_may+
-  dummy_month_jun+
+  #dummy_month_jun+
   #dummy_month_jul+
   #dummy_month_aug+
   dummy_month_sep+
@@ -98,7 +98,7 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   s_boxing_day+
   s_all_school_holidays+
   w_hourly_temperature_dev_dt+
-  w_hourly_cloudcover_dev_dt+
+  #w_hourly_cloudcover_dev_dt+
   w_sunhour_smoothed+
   #e_rpi+
   e_cci+
@@ -114,6 +114,7 @@ formula.01 = mod_vol_multiples_pna_glass_500ml_1pack~ #dependent variable
   #c_discount_multiples_san_miguel_btl_330_ml_4_pack+
   #c_discount_multiples_birra_moretti_btl_660_ml_single+
   #c_discount_multiples_madri_exceptional_btl_660_ml_single+
+  c_discount_multiples_san_miguel_can_440_ml_4_pack+
   atan(m_tv_peroni_total_tvr_adstock20/70)+
   atan(m_ooh_peroni_total_imp_adstock20/140000000)+
   atan(m_sponsor_peroni_now_im_adstock10/8000000)
@@ -139,10 +140,10 @@ model_stats(multiples_pna_glass_500ml_1pack, date_var = import_file$Date)
 #------------------------------------------------------------------------------
 
 # Actual vs. predicted chart vs. variable. Use "" to see just actual vs. predicted
-actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "mod_bp_multiples_pna_glass_500ml_1pack")
+actual_vs_fitted_plot(multiples_pna_glass_500ml_1pack, import_file, "")
 
 # Automatic variable selection
-auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "bt_")
+auto_variable_selection(multiples_pna_glass_500ml_1pack, import_file, "own_discount_multiples")
 
 # adstock & dr heatmap
 heatmap(
@@ -157,7 +158,7 @@ heatmap(
 # Chart variables
 plot_line1(import_file$mod_discount_multiples_pna_glass_500ml_1pack, import_file)
 plot_line1((atan(import_file$m_tv_peroni_total_tvr/50)), import_file)
-plot_line2("c_bp_multiples_birra_moretti_btl_660_ml_single", "c_avp_multiples_birra_moretti_btl_660_ml_single", import_file)
+plot_line2("c_bp_multiples_san_miguel_can_440_ml_4_pack", "c_avp_multiples_san_miguel_can_440_ml_4_pack", import_file)
 
 
 # Residual plot
